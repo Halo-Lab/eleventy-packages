@@ -1,0 +1,48 @@
+{
+  "name": "eleventy-packages",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Group of eleventy plugins.",
+  "scripts": {
+    "build:common": "npm run build -w common",
+    "build:image": "npm run build -w eleventy-shortcode-image",
+    "build:workbox": "npm run build -w eleventy-plugin-workbox",
+    "build:styles": "npm run build -w eleventy-plugin-styles",
+    "build:scripts": "npm run build -w eleventy-plugin-scripts",
+    "build:icons": "npm run build -w eleventy-plugin-pwa-icons",
+    "build:compress": "npm run build -w eleventy-plugin-compress",
+    "prebuild": "npm run build:common",
+    "build": "npm run build:image; npm run build:workbox; npm run build:styles; npm run build:scripts; npm run build:icons; npm run build:compress"
+  },
+  "keywords": [],
+  "author": "Kapelianovych Yevhen",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.2",
+    "@rollup/plugin-sucrase": "^4.0.0",
+    "@types/cssnano": "^4.0.0",
+    "@types/debug": "^4.1.6",
+    "@types/jest": "^27.0.1",
+    "@types/sass": "^1.16.0",
+    "@types/semver": "^7.3.4",
+    "@types/svgo": "^2.4.1",
+    "@types/tar": "^4.0.4",
+    "@types/workbox-build": "^5.0.0",
+    "cpy-cli": "^3.1.1",
+    "jest": "^27.1.0",
+    "lerna": "^4.0.0",
+    "prettier": "^2.3.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.56.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^27.0.3",
+    "tslib": "^2.3.1",
+    "typescript": "4.3.5"
+  },
+  "dependencies": {
+    "@fluss/core": "^0.35.0"
+  }
+}

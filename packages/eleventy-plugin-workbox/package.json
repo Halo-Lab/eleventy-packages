@@ -1,0 +1,37 @@
+{
+  "name": "eleventy-plugin-workbox",
+  "version": "1.4.0",
+  "description": "Plugin for creating service worker that caches built assets by Eleventy",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./index": "./index.js",
+    "./index.js": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Halo-Lab/eleventy-plugin-workbox.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "prebuild": "rimraf build",
+    "build": "rollup -c",
+    "postbuild": "npm run copy:package; npm run copy:readme; npm run copy:license",
+    "copy:package": "cpy package.json build",
+    "copy:readme": "cpy README.md build",
+    "copy:license": "cpy LICENSE build",
+    "prerelease": "npm run build",
+    "release": "npm publish build/ --access public"
+  },
+  "keywords": [
+    "Eleventy",
+    "workbox",
+    "PWA"
+  ],
+  "author": "Kapelianovych Yevhen",
+  "license": "ISC",
+  "peerDependencies": {
+    "chalk": "^4.1.0",
+    "workbox-build": "^6.1.0"
+  }
+}

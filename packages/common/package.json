@@ -1,0 +1,28 @@
+{
+  "name": "common",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Common code for other packages.",
+  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./index": "./build/index.js",
+    "./index.js": "./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "directory": "packages/common"
+  },
+  "scripts": {
+    "test": "jest",
+    "prebuild": "rm -rf build",
+    "build": "rollup -c"
+  },
+  "keywords": [
+    "Eleventy",
+    "plugins",
+    "common"
+  ],
+  "author": "Kapelianovych Yevhen",
+  "license": "ISC"
+}

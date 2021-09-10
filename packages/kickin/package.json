@@ -1,0 +1,40 @@
+{
+  "name": "kickin",
+  "version": "0.4.0",
+  "description": "CLI for starting project with Eleventy.",
+  "bin": {
+    "kickin": "./bin/cli.js"
+  },
+  "type": "module",
+  "scripts": {
+    "prebuild": "rimraf build",
+    "build": "rollup -c",
+    "prerelease": "npm run build",
+    "release": "npm publish --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Halo-Lab/kickin.git"
+  },
+  "files": [
+    "bin",
+    "build",
+    "templates"
+  ],
+  "keywords": [
+    "Eleventy",
+    "starter",
+    "CLI"
+  ],
+  "author": "Kapelianovych Yevhen",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "commander": "^7.2.0",
+    "ora": "^5.4.0",
+    "semver": "^7.3.5"
+  },
+  "devDependencies": {
+    "@rollup/plugin-json": "^4.1.0"
+  }
+}
