@@ -34,7 +34,7 @@
     "chalk": "^4.1.0",
     "workbox-build": "^6.3.0"
   },
-  "dependencies": {
+  "devDependencies": {
     "common": "^0.0.1"
   }
 }
