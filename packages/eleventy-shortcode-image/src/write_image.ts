@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import { Readable } from 'stream';
 
-import { unit } from 'common';
 import { pipe, sequentially } from '@fluss/core';
+import { makeDirectories, unit } from 'common';
 
 /**
  * Writes image from _sourcePath_ to _outputPath_.
@@ -15,13 +16,9 @@ export const writeImage = (
   isData = false,
 ) =>
   sequentially(
-    pipe(
-      () => path.dirname(outputPath),
-      (directory: string) => fs.promises.mkdir(directory, { recursive: true }),
-      unit,
-    ),
-    pipe(
-      () => (isData ? source : fs.promises.readFile(source)),
-      (data: Buffer | string) => fs.promises.writeFile(outputPath, data),
-    ),
-  )();
+    pipe(() => path.dirname(outputPath), makeDirectories),
+    () =>
+      (isData ? Readable.from(source) : fs.createReadStream(source)).pipe(
+        fs.createWriteStream(outputPath),
+      ),
+  )().then(unit);

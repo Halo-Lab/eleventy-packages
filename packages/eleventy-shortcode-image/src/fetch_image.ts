@@ -1,6 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 
+import { makeDirectories } from 'common';
 import { sequentially, when } from '@fluss/core';
 
 import { Source, SourceUrl } from './path_converter';
@@ -13,10 +14,11 @@ const download = async (url: string, to: string): Promise<void> =>
 
       res.pipe(fileStream);
 
-      fileStream.on('error', reject).on('finish', () => {
-        fileStream.close();
-        resolve();
-      });
+      // We don't need to close the _fileStream_ manually because
+      // `autoClose` option in `fs.createWriteStream` is set to
+      // `true`, by default.
+      // [See options here](https://nodejs.org/dist/latest-v14.x/docs/api/fs.html#fs_fs_createwritestream_path_options)
+      fileStream.on('error', reject).on('finish', resolve);
     }),
   );
 
@@ -28,8 +30,7 @@ export const fetchImage = when(
   // Because we have checked in predicate that source is URL,
   // so we can safely type source parameter as SourceUrl.
   sequentially(
-    (source: Source) =>
-      fs.promises.mkdir(source.sourceDir, { recursive: true }),
+    (source: Source) => makeDirectories(source.sourceDir),
     (source: SourceUrl) => download(source.sourceUrl, source.sourcePath),
   ),
   () => Promise.resolve<ReadonlyArray<string | void>>([]),

@@ -1,4 +1,14 @@
-# [1.5.3] - 2021-07-29
+# [1.6.0] - 2021-09-13
+
+### Changed
+
+- In non-production mode all images are moved to the _output_ folder as is. It is done in order to speed-up start of development server.
+
+### Fixed
+
+- Overriding build-in plugins with a [new `preset-default` Plugin API](https://github.com/svg/svgo#configuration).
+
+## [1.5.3] - 2021-07-29
 
 ### Added
 

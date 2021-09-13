@@ -1,8 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "declarationDir": "build"
-  },
+  "compilerOptions": {},
   "include": ["src"],
   "exclude": ["node_modules", "build", "**/*.spec.ts"]
 }

@@ -1,12 +1,7 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "declarationDir": "build",
-    "paths": {
-      "common": ["../common/build/src"]
-    }
-  },
-  "include": ["./src"],
+  "compilerOptions": {},
+  "include": ["src"],
   "exclude": ["node_modules", "build", "**/*.spec.ts"],
   "references": [{ "path": "../common" }]
 }

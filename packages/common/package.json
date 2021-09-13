@@ -16,7 +16,8 @@
   "scripts": {
     "test": "jest",
     "prebuild": "rm -rf build",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "declarations": "tsc --project ./tsconfig.build.json"
   },
   "keywords": [
     "Eleventy",

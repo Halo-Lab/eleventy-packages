@@ -1,4 +1,15 @@
-import { DefaultPlugin, OptimizeOptions } from 'svgo';
+import { OptimizeOptions, PresetDefault } from 'svgo';
+
+const overrideDefaultPlugins = (): PresetDefault => ({
+  name: 'preset-default',
+  params: {
+    overrides: {
+      // Preserve view-box attribute on <svg> for proper resizing of SVG
+      // through CSS.
+      removeViewBox: false,
+    },
+  },
+});
 
 /** Build options for SVG optimizer. */
 export const getVectorOptimizerOptions = (
@@ -8,26 +19,7 @@ export const getVectorOptimizerOptions = (
 ): OptimizeOptions => ({
   path: input,
   plugins: [
-    {
-      name: 'preset-default',
-      params: {
-        overrrides: {
-          addClassesToSVGElement: {
-            active: classNames.length > 0,
-            params: {
-              classNames,
-            },
-          },
-        },
-        // TS complains that `object` is not assignable to `object | undefined`.
-      } as DefaultPlugin<'addClassesToSVGElement', object>['params'],
-    },
-    // Preserve view-box attribute on <svg> for proper resizing of SVG
-    // through CSS.
-    {
-      name: 'removeViewBox',
-      active: false,
-    },
+    overrideDefaultPlugins(),
     // Remove width and height attributes from <svg>
     {
       name: 'removeDimensions',
@@ -37,6 +29,16 @@ export const getVectorOptimizerOptions = (
     {
       name: 'prefixIds',
       active: true,
+    },
+    {
+      name: 'addClassesToSVGElement',
+      active: classNames.length > 0,
+      params: {
+        classNames,
+        // We need this hack in order to get rid of TS error.
+        // In svgo typings "addClassesToSVGElement" plugin
+        // hasn't got params property.
+      } as never,
     },
   ],
   ...options,

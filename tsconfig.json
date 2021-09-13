@@ -2,11 +2,14 @@
   "compilerOptions": {
     "strict": true,
     "target": "ES2018",
+    "baseUrl": "./",
     "composite": true,
-    "declaration": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "*": ["./packages/*/src"]
+    }
   }
 }

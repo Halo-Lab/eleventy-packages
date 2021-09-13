@@ -12,7 +12,8 @@
     "build:icons": "npm run build -w eleventy-plugin-pwa-icons",
     "build:compress": "npm run build -w eleventy-plugin-compress",
     "prebuild": "npm run build:common",
-    "build": "npm run build:image; npm run build:workbox; npm run build:styles; npm run build:scripts; npm run build:icons; npm run build:compress"
+    "build": "npm run build:image; npm run build:workbox; npm run build:styles; npm run build:scripts; npm run build:icons; npm run build:compress",
+    "test": "jest"
   },
   "keywords": [],
   "author": "Kapelianovych Yevhen",
@@ -20,6 +21,8 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.6",
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.2",
     "@rollup/plugin-sucrase": "^4.0.0",
@@ -40,7 +43,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^27.0.3",
     "tslib": "^2.3.1",
-    "typescript": "4.3.5"
+    "typescript": "^4.4.3"
   },
   "dependencies": {
     "@fluss/core": "^0.35.0"
