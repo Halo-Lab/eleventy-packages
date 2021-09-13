@@ -36,6 +36,6 @@
     "svgo": "^2.3.0"
   },
   "devDependencies": {
-    "common": "^0.0.1"
+    "common": "^0.0.2"
   }
 }

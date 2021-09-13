@@ -1,6 +1,6 @@
 {
   "name": "eleventy-plugin-styles",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Plugin for handling stylesheets from HTML.",
   "main": "index.js",
   "exports": {
@@ -37,9 +37,9 @@
     "autoprefixer": "^10.2.0",
     "browserslist": "^4.16.0",
     "chalk": "^4.1.0",
+    "critical": "^4.0.0",
     "cssnano": "^5.0.0",
     "postcss": "^8.2.0",
-    "sass": "^1.32.0",
-    "critical": "^4.0.0"
+    "sass": "^1.32.0"
   }
 }

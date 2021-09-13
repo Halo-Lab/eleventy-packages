@@ -1,6 +1,6 @@
 {
   "name": "eleventy-plugin-workbox",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Plugin for creating service worker that caches built assets by Eleventy",
   "main": "index.js",
   "exports": {
@@ -35,6 +35,6 @@
     "workbox-build": "^6.3.0"
   },
   "devDependencies": {
-    "common": "^0.0.1"
+    "common": "^0.0.2"
   }
 }
