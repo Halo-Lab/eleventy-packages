@@ -1,5 +1,5 @@
 {
-  "name": "common",
+  "name": "@eleventy-packages/common",
   "version": "0.0.2",
   "private": true,
   "description": "Common code for other packages.",

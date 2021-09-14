@@ -35,6 +35,6 @@
     "workbox-build": "^6.3.0"
   },
   "devDependencies": {
-    "common": "^0.0.2"
+    "@eleventy-packages/common": "^0.0.2"
   }
 }
