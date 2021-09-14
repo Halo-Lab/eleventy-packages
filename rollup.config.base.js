@@ -18,7 +18,7 @@ export default {
     commonjs(),
     nodeResolve({
       extensions: ['.js', '.ts'],
-      resolveOnly: [/@fluss\/core/, 'common'],
+      resolveOnly: [/@fluss\/core/, '@eleventy-packages/common'],
       moduleDirectories: ['node_modules', 'packages'],
     }),
     terser(),

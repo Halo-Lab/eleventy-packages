@@ -1,7 +1,7 @@
 import { existsSync } from 'fs';
 import { dirname, sep, resolve } from 'path';
 
-import { UP_LEVEL_GLOB, URL_DELIMITER } from 'common';
+import { UP_LEVEL_GLOB, URL_DELIMITER } from '@eleventy-packages/common';
 
 const isAbsolute = (url: string) => url.startsWith(URL_DELIMITER);
 

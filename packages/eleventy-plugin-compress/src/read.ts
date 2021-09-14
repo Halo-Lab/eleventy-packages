@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { promises } from 'fs';
 
-import { oops } from 'common';
+import { oops } from '@eleventy-packages/common';
 
 import { RawContentInfo } from './types';
 

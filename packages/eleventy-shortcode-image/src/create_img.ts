@@ -1,4 +1,4 @@
-import { last } from 'common';
+import { last } from '@eleventy-packages/common';
 import { isJust, list } from '@fluss/core';
 import { ImageMetadata, Metadata } from '@11ty/eleventy-img';
 

@@ -6,11 +6,12 @@
     "kickin": "./bin/cli.js"
   },
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "prebuild": "rimraf build",
-    "build": "rollup -c",
-    "prerelease": "npm run build",
-    "release": "npm publish --access public"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",

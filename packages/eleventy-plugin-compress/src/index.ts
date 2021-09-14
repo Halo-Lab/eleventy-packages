@@ -1,6 +1,6 @@
 import { sep } from 'path';
 
-import { definePluginName, isProduction } from 'common';
+import { definePluginName, isProduction } from '@eleventy-packages/common';
 
 import { CompressAlgorithm } from './types';
 import { compressHTMLWithLinks } from './compress_html_with_links';

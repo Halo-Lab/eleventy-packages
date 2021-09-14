@@ -1,6 +1,6 @@
 import { join, dirname } from 'path';
 
-import { done, oops, start, makeDirectories } from 'common';
+import { done, oops, start, makeDirectories } from '@eleventy-packages/common';
 
 import { rip } from './rip';
 import { read } from './read';

@@ -1,4 +1,4 @@
-import { toRootUrl } from 'common';
+import { toRootUrl } from '@eleventy-packages/common';
 
 /**
  * Builds link tag of manifest file to be

@@ -1,7 +1,7 @@
 import { promises } from 'fs';
 import { resolve, join } from 'path';
 
-import { makeDirectories } from 'common';
+import { makeDirectories } from '@eleventy-packages/common';
 
 import { startProcess } from './spinner';
 

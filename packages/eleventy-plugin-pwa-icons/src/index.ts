@@ -1,4 +1,4 @@
-import { isProduction, definePluginName } from 'common';
+import { isProduction, definePluginName } from '@eleventy-packages/common';
 
 import { getOutputDirectory } from './get_build_directory';
 import { generateAndInsertIcons, PWAIconsOptions } from './transform_html';

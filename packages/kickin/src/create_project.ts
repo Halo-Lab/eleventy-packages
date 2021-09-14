@@ -2,7 +2,7 @@ import { resolve } from 'path';
 
 import chalk from 'chalk';
 import { sequentially } from '@fluss/core';
-import { makeDirectories } from 'common';
+import { makeDirectories } from '@eleventy-packages/common';
 
 import { copyTemplate } from './template';
 import { generateEnvFile } from './env_file';

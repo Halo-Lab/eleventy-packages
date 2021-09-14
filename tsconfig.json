@@ -9,7 +9,8 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "*": ["./packages/*/src"]
+      "*": ["./packages/*/src"],
+      "@eleventy-packages/*": ["./packages/*/src"]
     }
   }
 }

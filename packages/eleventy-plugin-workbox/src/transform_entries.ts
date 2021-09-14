@@ -1,6 +1,6 @@
 import { ManifestTransform } from 'workbox-build';
 
-import { toRootUrl } from 'common';
+import { toRootUrl } from '@eleventy-packages/common';
 
 export const makeManifestURlsAbsolute: ManifestTransform = async (
   manifestEntries,

@@ -23,7 +23,7 @@ import {
   DEFAULT_IMAGES_DIRECTORY,
   DEFAULT_SOURCE_DIRECTORY,
   isProduction,
-} from 'common';
+} from '@eleventy-packages/common';
 
 export interface ImageShortCodeOptions {
   /**

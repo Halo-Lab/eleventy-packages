@@ -1,4 +1,10 @@
 {
   "version": "independent",
-  "packages": ["packages/*"]
+  "packages": ["packages/*"],
+  "ignoreChanges": [
+    "**/*.md",
+    "**/test/**",
+    "**/__tests__/**",
+    "**/__fixtures__/**"
+  ]
 }

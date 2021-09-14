@@ -9,7 +9,7 @@ import {
   toRootUrl,
   DEFAULT_MANIFEST,
   DEFAULT_SOURCE_DIRECTORY,
-} from 'common';
+} from '@eleventy-packages/common';
 
 import { buildPublicUrl } from './build_public_url';
 import { TransformOptions } from './types';

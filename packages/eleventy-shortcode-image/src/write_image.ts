@@ -3,7 +3,7 @@ import path from 'path';
 import { Readable } from 'stream';
 
 import { pipe, sequentially } from '@fluss/core';
-import { makeDirectories, unit } from 'common';
+import { makeDirectories, unit } from '@eleventy-packages/common';
 
 /**
  * Writes image from _sourcePath_ to _outputPath_.

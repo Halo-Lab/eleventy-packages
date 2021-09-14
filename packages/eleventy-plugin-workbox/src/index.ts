@@ -10,7 +10,7 @@ import {
   isProduction,
   URL_DELIMITER,
   definePluginName,
-} from 'common';
+} from '@eleventy-packages/common';
 
 import { toMegabytes } from './to_megabytes';
 import { joinUrlParts } from './url';

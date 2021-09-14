@@ -5,7 +5,7 @@ import {
   definePluginName,
   DEFAULT_SOURCE_DIRECTORY,
   DEFAULT_STYLES_DIRECTORY,
-} from 'common';
+} from '@eleventy-packages/common';
 
 import { bundle, transformStylesheet } from './bundle';
 import type { StylesPluginOptions } from './types';

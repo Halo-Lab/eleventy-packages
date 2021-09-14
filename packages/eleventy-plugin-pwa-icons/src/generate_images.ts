@@ -12,7 +12,7 @@ import {
   makeDirectories,
   DEFAULT_ICONS_DIRECTORY,
   DEFAULT_SOURCE_DIRECTORY,
-} from 'common';
+} from '@eleventy-packages/common';
 
 import { TransformOptions } from './types';
 

@@ -1,4 +1,4 @@
-import { URL_DELIMITER } from 'common';
+import { URL_DELIMITER } from '@eleventy-packages/common';
 
 export const joinUrlParts = (...parts: ReadonlyArray<string>): string =>
   parts

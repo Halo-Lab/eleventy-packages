@@ -12,7 +12,7 @@ import {
   isProduction,
   URL_DELIMITER,
   makeDirectories,
-} from 'common';
+} from '@eleventy-packages/common';
 
 import { rip } from './rip';
 import { compile } from './compile';

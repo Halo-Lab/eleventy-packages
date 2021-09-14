@@ -1,4 +1,4 @@
-import { toRootUrl } from 'common';
+import { toRootUrl } from '@eleventy-packages/common';
 
 /**
  * Build script for service worker registration

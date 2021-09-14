@@ -5,7 +5,7 @@ import {
   definePluginName,
   DEFAULT_SOURCE_DIRECTORY,
   DEFAULT_SCRIPTS_DIRECTORY,
-} from 'common';
+} from '@eleventy-packages/common';
 
 import { ScriptsPluginOptions } from './types';
 import { bundle, transformFile } from './bundle';

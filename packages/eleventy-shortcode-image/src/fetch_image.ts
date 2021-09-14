@@ -1,7 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 
-import { makeDirectories } from 'common';
+import { makeDirectories } from '@eleventy-packages/common';
 import { sequentially, when } from '@fluss/core';
 
 import { Source, SourceUrl } from './path_converter';

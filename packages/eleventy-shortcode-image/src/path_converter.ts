@@ -1,7 +1,7 @@
 import path from 'path';
 
 import { isGif, isSVG } from './image_formats';
-import { URL_DELIMITER, isUrl, urlToPath } from 'common';
+import { URL_DELIMITER, isUrl, urlToPath } from '@eleventy-packages/common';
 
 const prependURLDelimiter = (to: string): string =>
   to.startsWith(URL_DELIMITER) ? to : URL_DELIMITER + to;

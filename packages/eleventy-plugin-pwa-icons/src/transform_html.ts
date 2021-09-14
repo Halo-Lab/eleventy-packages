@@ -1,4 +1,4 @@
-import { done } from 'common';
+import { done } from '@eleventy-packages/common';
 
 import { handleManifest } from './update_manifest';
 import { TransformOptions } from './types';

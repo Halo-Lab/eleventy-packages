@@ -11,9 +11,11 @@
     "build:scripts": "npm run build -w eleventy-plugin-scripts",
     "build:icons": "npm run build -w eleventy-plugin-pwa-icons",
     "build:compress": "npm run build -w eleventy-plugin-compress",
+    "build:kickin": "npm run build -w kickin",
     "prebuild": "npm run build:common",
-    "build": "npm run build:image; npm run build:workbox; npm run build:styles; npm run build:scripts; npm run build:icons; npm run build:compress",
-    "test": "jest"
+    "build": "npm run build:image; npm run build:workbox; npm run build:styles; npm run build:scripts; npm run build:icons; npm run build:compress; npm run build:kickin",
+    "test": "jest",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Kapelianovych Yevhen",
@@ -23,6 +25,9 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.6",
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@commitlint/config-lerna-scopes": "^13.1.0",
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.2",
     "@rollup/plugin-sucrase": "^4.0.0",
@@ -35,6 +40,7 @@
     "@types/tar": "^4.0.4",
     "@types/workbox-build": "^5.0.0",
     "cpy-cli": "^3.1.1",
+    "husky": "^7.0.2",
     "jest": "^27.1.0",
     "lerna": "^4.0.0",
     "prettier": "^2.3.0",
