@@ -239,7 +239,7 @@ module.exports = (eleventyConfig) => {
 
 ### criticalOptions
 
-[critical](https://github.com/addyosmani/critical) is included. By default, it works in `production` mode.
+[critical](https://github.com/addyosmani/critical) is included. By default, it works in `production` mode and if `criticalOptions` property is explicitly initialized (at least, empty object).
 
 ```js
 // .eleventy.js

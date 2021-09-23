@@ -3,7 +3,7 @@ import { join, resolve, dirname } from 'path';
 
 // @ts-ignore
 import * as critical from 'critical';
-import { memoize } from '@fluss/core';
+import { memoize, SomePartial } from '@fluss/core';
 import {
   done,
   oops,
@@ -21,7 +21,10 @@ import { STYLESHEET_LINK_REGEXP } from './constants';
 import { Asset, StylesPluginOptions } from './types';
 import { buildOutputUrl, pathStats, resolveFile } from './url';
 
-type BundleOptions = Required<Omit<StylesPluginOptions, 'addWatchTarget'>>;
+type BundleOptions = SomePartial<
+  Required<Omit<StylesPluginOptions, 'addWatchTarget'>>,
+  'criticalOptions'
+>;
 
 interface TransformParameters extends Omit<BundleOptions, 'criticalOptions'> {
   readonly html: string;
@@ -168,7 +171,7 @@ export const bundle = async (
     .then((html) => {
       const [buildDirectory] = pathStats(outputPath).directories;
 
-      return isProduction()
+      return isProduction() && criticalOptions !== undefined
         ? critical.generate({
             html,
             base: buildDirectory,

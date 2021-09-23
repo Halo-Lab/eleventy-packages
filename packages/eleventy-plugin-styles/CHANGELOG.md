@@ -1,4 +1,10 @@
-# [1.2.0] - 2021-08-09
+# [1.3.0] - 2021-09-23
+
+### Changed
+
+- By default, `critical` library won't process stylesheets. To enable it provide at least empty object (`{}`) to `criticalOptions` property.
+
+## [1.2.0] - 2021-08-09
 
 ### Added
 
