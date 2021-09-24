@@ -26,6 +26,7 @@ dist
 *.swo
 *.tsbuildinfo
 
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

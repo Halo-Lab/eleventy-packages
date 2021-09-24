@@ -1,6 +1,6 @@
 {
   "name": "eleventy-shortcode-image",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Shortcode for image transformation, optimization and building its HTML representation.",
   "main": "index.js",
   "exports": {
@@ -38,6 +38,6 @@
     "svgo": "^2.3.0"
   },
   "devDependencies": {
-    "@eleventy-packages/common": "^0.0.2"
+    "@eleventy-packages/common": "^0.0.3"
   }
 }
