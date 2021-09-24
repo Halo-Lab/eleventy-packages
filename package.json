@@ -15,7 +15,14 @@
     "prebuild": "npm run build:common",
     "build": "npm run build:image; npm run build:workbox; npm run build:styles; npm run build:scripts; npm run build:icons; npm run build:compress; npm run build:kickin",
     "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "release:image": "npm run release -w eleventy-shortcode-image",
+    "release:workbox": "npm run release -w eleventy-plugin-workbox",
+    "release:styles": "npm run release -w eleventy-plugin-styles",
+    "release:scripts": "npm run release -w eleventy-plugin-scripts",
+    "release:icons": "npm run release -w eleventy-plugin-pwa-icons",
+    "release:compress": "npm run release -w eleventy-plugin-compress",
+    "release:kickin": "npm run release -w kickin"
   },
   "keywords": [],
   "author": "Kapelianovych Yevhen",

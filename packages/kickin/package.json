@@ -11,7 +11,9 @@
   },
   "scripts": {
     "prebuild": "rimraf build",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "prerelease": "npm run build",
+    "release": "npm publish"
   },
   "repository": {
     "type": "git",

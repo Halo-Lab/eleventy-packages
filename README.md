@@ -31,13 +31,9 @@ npm run build
 
 ### Publishing
 
-For publishing packages to `npm` use;
+For publishing a package use `release:*` commands.
 
-```
-npx lerna publish
-```
-
-> This command will call [`lerna version`](https://github.com/lerna/lerna/tree/main/commands/version) under the hood. Please, refer to its documentation for more information.
+> Don't forget to bump a version of the package.
 
 ### Commits
 
