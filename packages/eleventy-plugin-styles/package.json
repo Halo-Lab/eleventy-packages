@@ -43,5 +43,8 @@
     "cssnano": "^5.0.0",
     "postcss": "^8.2.0",
     "sass": "^1.32.0"
+  },
+  "devDependencies": {
+    "@eleventy-packages/common": "^0.0.2"
   }
 }

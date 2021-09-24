@@ -5,6 +5,7 @@ import { join, resolve, dirname } from 'path';
 import * as critical from 'critical';
 import { memoize, SomePartial } from '@fluss/core';
 import {
+  rip,
   done,
   oops,
   start,
@@ -14,7 +15,6 @@ import {
   makeDirectories,
 } from '@eleventy-packages/common';
 
-import { rip } from './rip';
 import { compile } from './compile';
 import { normalize } from './normalize';
 import { STYLESHEET_LINK_REGEXP } from './constants';
