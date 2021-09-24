@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "target": "ES2018",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "composite": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -12,5 +12,10 @@
       "*": ["./packages/*/src"],
       "@eleventy-packages/*": ["./packages/*/src"]
     }
-  }
+  },
+  "references": [
+    {
+      "path": "./packages/common"
+    }
+  ]
 }

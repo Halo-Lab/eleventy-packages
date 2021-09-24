@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "Group of eleventy plugins.",
   "scripts": {
-    "build:common": "npm run build -w common",
+    "build:common": "npm run build -w @eleventy-packages/common",
     "build:image": "npm run build -w eleventy-shortcode-image",
     "build:workbox": "npm run build -w eleventy-plugin-workbox",
     "build:styles": "npm run build -w eleventy-plugin-styles",
@@ -31,6 +31,8 @@
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.2",
     "@rollup/plugin-sucrase": "^4.0.0",
+    "@rollup/plugin-typescript": "^8.2.5",
+    "@rollup/plugin-json": "^4.1.0",
     "@types/cssnano": "^4.0.0",
     "@types/debug": "^4.1.6",
     "@types/jest": "^27.0.1",

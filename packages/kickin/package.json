@@ -1,6 +1,6 @@
 {
   "name": "kickin",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "CLI for starting project with Eleventy.",
   "bin": {
     "kickin": "./bin/cli.js"
@@ -30,12 +30,13 @@
   "author": "Kapelianovych Yevhen",
   "license": "ISC",
   "dependencies": {
+    "@fluss/core": "^0.35.0",
     "chalk": "^4.1.0",
     "commander": "^7.2.0",
     "ora": "^5.4.0",
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "@rollup/plugin-json": "^4.1.0"
+    "@eleventy-packages/common": "^0.0.2"
   }
 }

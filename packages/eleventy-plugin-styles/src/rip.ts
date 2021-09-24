@@ -7,7 +7,7 @@ export const rip = (text: string, pattern: RegExp) => {
   const links = [];
 
   let match = null;
-  while ((match = pattern.exec(text)) !== null) {
+  while ((match = pattern.exec(text)) !== null && !/^https?/.test(match[1])) {
     links.push(match[1]);
   }
 
