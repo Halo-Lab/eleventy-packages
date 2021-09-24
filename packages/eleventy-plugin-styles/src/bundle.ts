@@ -34,6 +34,8 @@ interface TransformParameters extends Omit<BundleOptions, 'criticalOptions'> {
   readonly publicSourcePathToStyle: string;
 }
 
+const notRemoteStyle = (value: string) => !/^https?/.test(value);
+
 export const transformStylesheet = memoize(
   async ({
     html,
@@ -103,7 +105,7 @@ const findAndProcessFiles = (
 ) => {
   const [buildDirectory, ...nestedHTMLPath] = pathStats(outputPath).directories;
 
-  return rip(html, STYLESHEET_LINK_REGEXP).map((link) =>
+  return rip(html, STYLESHEET_LINK_REGEXP, notRemoteStyle).map((link) =>
     transformStylesheet({
       html,
       inputPath,
