@@ -4,16 +4,18 @@ import { join, dirname, resolve } from 'path';
 import { memoize, pipe } from '@fluss/core';
 import { build, BuildResult } from 'esbuild';
 import {
+  rip,
+  not,
+  bold,
   done,
   oops,
   start,
-  bold,
+  isRemoteLink,
   isProduction,
   URL_DELIMITER,
   makeDirectories,
 } from '@eleventy-packages/common';
 
-import { rip } from './rip';
 import { pathStats } from './path_stats';
 import { SCRIPTS_LINK_REGEXP } from './constants';
 import { ScriptsPluginOptions } from './types';
@@ -96,7 +98,7 @@ const findAndProcessFiles = (
 ) => {
   const [buildDirectory, ...nestedHTMLPath] = pathStats(outputPath).directories;
 
-  return rip(html, SCRIPTS_LINK_REGEXP).map((link) =>
+  return rip(html, SCRIPTS_LINK_REGEXP, pipe(isRemoteLink, not)).map((link) =>
     transformFile({
       inputDirectory,
       publicDirectory,

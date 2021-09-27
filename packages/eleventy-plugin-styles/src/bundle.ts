@@ -3,13 +3,15 @@ import { join, resolve, dirname } from 'path';
 
 // @ts-ignore
 import * as critical from 'critical';
-import { memoize, SomePartial } from '@fluss/core';
+import { memoize, pipe, SomePartial } from '@fluss/core';
 import {
+  not,
   rip,
   done,
   oops,
   start,
   bold,
+  isRemoteLink,
   isProduction,
   URL_DELIMITER,
   makeDirectories,
@@ -33,8 +35,6 @@ interface TransformParameters extends Omit<BundleOptions, 'criticalOptions'> {
   readonly buildDirectory: string;
   readonly publicSourcePathToStyle: string;
 }
-
-const notRemoteStyle = (value: string) => !/^https?/.test(value);
 
 export const transformStylesheet = memoize(
   async ({
@@ -105,18 +105,19 @@ const findAndProcessFiles = (
 ) => {
   const [buildDirectory, ...nestedHTMLPath] = pathStats(outputPath).directories;
 
-  return rip(html, STYLESHEET_LINK_REGEXP, notRemoteStyle).map((link) =>
-    transformStylesheet({
-      html,
-      inputPath,
-      buildDirectory,
-      nestedHTMLPath,
-      publicSourcePathToStyle: link,
-      ...options,
-    }).then((output) => ({
-      input: link,
-      output,
-    })),
+  return rip(html, STYLESHEET_LINK_REGEXP, pipe(isRemoteLink, not)).map(
+    (link) =>
+      transformStylesheet({
+        html,
+        inputPath,
+        buildDirectory,
+        nestedHTMLPath,
+        publicSourcePathToStyle: link,
+        ...options,
+      }).then((output) => ({
+        input: link,
+        output,
+      })),
   );
 };
 

@@ -1,4 +1,10 @@
-# [1.1.0] - 2021-08-06
+# [1.1.3] - 2021-09-27
+
+### Fixed
+
+- External link to script won't be precessed now.
+
+## [1.1.0] - 2021-08-06
 
 ### Added
 

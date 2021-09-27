@@ -1,4 +1,5 @@
 export * from './url';
+export * from './not';
 export * from './rip';
 export * from './unit';
 export * from './mode';
