@@ -2,6 +2,7 @@ import purgecss from '@fullhuman/postcss-purgecss';
 import autoprefixer from 'autoprefixer';
 import postcss, { AcceptedPlugin } from 'postcss';
 import cssnano, { CssNanoOptions } from 'cssnano';
+import { PurgeCSSOptions, PluginState } from './types';
 
 export interface NormalizeStepOptions {
   /** Path of source style file. */
@@ -11,7 +12,7 @@ export interface NormalizeStepOptions {
   /** HTML content that has link to _css_. */
   html: string;
   /** Options to be passed to [`PurgeCSS`](https://purgecss.com/). */
-  purgeCSSOptions?: Parameters<typeof purgecss>[0];
+  purgeCSSOptions?: PurgeCSSOptions;
   /** Options to be passed to [`CSSNano`](https://cssnano.co/). */
   cssnanoOptions?: CssNanoOptions;
   /** Array of plugins that can be passed to [`PostCSS`](https://postcss.org). */
@@ -33,13 +34,13 @@ export const normalize = async ({
   // Useful plugins for PostCSS configuration.
   const plugins: any[] = [
     ...postcssPlugins,
-    purgecss({
+    (purgeCSSOptions !== PluginState.Off) ? purgecss({
       content: [{ raw: html, extension: 'html' }],
       ...purgeCSSOptions,
-    }),
+    }) : null,
     autoprefixer,
     cssnano({ preset: 'default', ...cssnanoOptions }),
-  ];
+  ].filter(Boolean);;
 
   return postcss(plugins).process(css, { from: fromUrl });
 };

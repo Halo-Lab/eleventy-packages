@@ -1,3 +1,4 @@
+import purgecss from '@fullhuman/postcss-purgecss';
 import { SassCompilerOptions } from './compile';
 import { NormalizeStepOptions } from './normalize';
 
@@ -34,6 +35,12 @@ interface CriticalOptions {
   readonly inlineImages?: boolean;
   readonly maxImageFileSize?: number;
 }
+
+export enum PluginState {
+  Off = "off",
+}
+
+export type PurgeCSSOptions = Parameters<typeof purgecss>[0] | PluginState.Off;
 
 export type StylesPluginOptions = {
   /**
