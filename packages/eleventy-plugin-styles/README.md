@@ -200,6 +200,15 @@ module.exports = (eleventyConfig) => {
   });
 };
 ```
+You can disable the plugin by passing `'off'` as an option, like this:
+
+```js
+// .eleventy.js
+module.exports = (eleventyConfig) => {
+  eleventyConfig.addPlugin(styles, {
+    purgeCSSOptions: 'off',
+  });
+};
 
 > Avoid overriding `content` property and `css`, because they are used internally and that may cause unexpected results.
 
