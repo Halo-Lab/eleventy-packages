@@ -6,7 +6,7 @@ import { ManifestJsonIcon } from 'pwa-asset-generator/dist/models/result';
 import {
   done,
   oops,
-  toRootUrl,
+  withLeadingSlash,
   DEFAULT_MANIFEST,
   DEFAULT_SOURCE_DIRECTORY,
 } from '@eleventy-packages/common';
@@ -68,7 +68,7 @@ export const handleManifest = once(
     done('Manifest was successfully updated and moved to build directory');
 
     return (
-      pipe(buildPublicUrl, toRootUrl) as (
+      pipe(buildPublicUrl, withLeadingSlash) as (
         ...args: ReadonlyArray<string | undefined>
       ) => string
     )(manifest.publicDirectory, manifestName);

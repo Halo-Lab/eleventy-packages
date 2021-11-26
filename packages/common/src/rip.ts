@@ -22,6 +22,3 @@ export const rip = (
 
   return links;
 };
-
-/** Predicate that detects remote URLs.  */
-export const isRemoteLink = (value: string): boolean => /^https?/.test(value);

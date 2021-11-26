@@ -1,4 +1,4 @@
-import { isUrl, toRootUrl } from '../src/url';
+import { isUrl, withLeadingSlash } from '../src';
 
 describe('isUrl', () => {
   it('should return true if text is url without TLS', () => {
@@ -26,15 +26,15 @@ describe('isUrl', () => {
   });
 });
 
-describe('toRootUrl', () => {
+describe('withLeadingSlash', () => {
   it('should prepend slash to url if it has not got it', () => {
-    const url = toRootUrl('foo');
+    const url = withLeadingSlash('foo');
 
     expect(url).toMatch('/foo');
   });
 
   it('should not prepend slash if url has got it already', () => {
-    const url = toRootUrl('/baz');
+    const url = withLeadingSlash('/baz');
 
     expect(url).toMatch('/baz');
   });

@@ -12,17 +12,17 @@ Why should we use third-party tools like [`gulp`](https://gulpjs.com/), [`webpac
 
 What this plugin can do:
 
-1. Automatically reaches your styles, even from `node_modules` ones!
+1. Automatically reaches your styles, even from `node_modules`!
 
    > In order to import style from package, simply write `@(import|use) 'package_name/path/to/style';` 👐
 
-2. Compiles `sass` and `scss`.
+2. Compiles `less`, `sass` and `scss`.
 
-   > Plugin uses new [`sass`](https://www.npmjs.com/package/sass) package, that allow to use fresh Sass features (such as [module system](https://sass-lang.com/documentation/at-rules/use) etc).
+   > Plugin uses new [`sass`](https://www.npmjs.com/package/sass) package and [`less`](https://lesscss.org) preprocessor, that allow you to use your favourite language for the CSS.
 
 3. Normalizes compiled CSS with [`PostCSS`](https://postcss.org/), [`autoprefixer`](https://www.npmjs.com/package/autoprefixer), gets rid of unused style rules with [`PurgeCSS`](https://purgecss.com/) and minifies CSS with [`cssnano`](https://cssnano.co/). And you can add much more [plugins](https://www.postcss.parts/)!
 
-4. Sets correct relative paths between HTML and CSS.
+4. Sets correct paths between HTML and CSS.
 
 5. Separates critical styles and uncritical ones. Thanks to [critical](https://github.com/addyosmani/critical) package.
 
@@ -56,36 +56,39 @@ interface StylesPluginOptions {
    * Options that will be passed to [critical](https://github.com/addyosmani/critical)
    * package.
    */
-  criticalOptions?: CriticalOptions;
+  readonly criticalOptions?: CriticalOptions | PluginState.Off;
   /**
    * Path to directory with all styles.
    * Should be relative to _current working directory_.
    */
-  inputDirectory?: string;
+  readonly inputDirectory?: string;
   /**
    * Directory inside _output_ folder to be used as
    * warehouse for all compiled styles. Will be
-   * prepended to public style's urls in HTML.
-   *
-   * Should be relative to _build directory_.
+   * prepended to public style urls in HTML.
    */
-  publicDirectory?: string;
+  readonly publicDirectory?: string;
   /**
    * Options that can be passed to [`sass`](https://www.npmjs.com/package/sass)
    * module.
    */
-  sassOptions?: SassCompilerOptions;
+  readonly sassOptions?: SassCompilerOptions | PluginState.Off;
+  /**
+   * Options that can be passed to [`less`](https://www.npmjs.com/package/less)
+   * module.
+   */
+  readonly lessOptions?: Less.Options | PluginState.Off;
+  /** Options to be passed to [`PurgeCSS`](https://purgecss.com/). */
+  readonly purgeCSSOptions?: PurgeCSSOptions | PluginState.Off;
+  /** Options to be passed to [`CSSNano`](https://cssnano.co/). */
+  readonly cssnanoOptions?: CssNanoOptions | PluginState.Off;
+  /** Array of plugins that can be passed to [`PostCSS`](https://postcss.org). */
+  readonly postcssPlugins?: ReadonlyArray<AcceptedPlugin>;
   /**
    * Indicates whether should Eleventy watch on files
    * under _inputDirectory_ or not.
    */
-  addWatchTarget?: boolean;
-  /** Options to be passed to [`PurgeCSS`](https://purgecss.com/). */
-  purgeCSSOptions?: UserDefinedOptions$0;
-  /** Options to be passed to [`cssnano`](https://cssnano.co/). */
-  cssnanoOptions?: CssNanoOptions;
-  /** Array of plugins that can be passed to [`PostCSS`](https://postcss.org). */
-  postcssPlugins?: ReadonlyArray<AcceptedPlugin>;
+  readonly addWatchTarget?: boolean;
 }
 ```
 
@@ -102,7 +105,7 @@ For example:
 <link rel="stylesheet" href="style.scss" />
 ```
 
-> Plugin recognizes followed extensions: `css`, `sass` and `scss`. In future may be added much more if you will need it 🤓
+> Plugin recognizes followed extensions: `css`, `less`, `sass` and `scss`. In future may be added much more if you will need it 🤓
 
 After links extraction plugin will search for these files inside _inputDirectory_ from _options_. So given above example:
 
@@ -115,11 +118,11 @@ module.exports = (eleventyConfig) => {
 };
 ```
 
-Plugin will assume that path style file is `src/styles/style.scss` 🎉 And after all procedures will put compiled file to `_site/style.css` and link in HTML will be changed to:
+Plugin will assume that path style file is `src/styles/style.scss` 🎉 And after all procedures will put compiled file to `_site/style-[hash].css` and link in HTML will be changed to:
 
 ```html
 <!-- If HTML file is in the same directory if style.css -->
-<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="/style-[hash].css" />
 ```
 
 > `_site` is used just for example. Actually [name of the directory will be up to you](https://www.11ty.dev/docs/config/#output-directory) - plugin will know about it.
@@ -131,8 +134,6 @@ You can write relative path to styles if you prefer such style. For example, if 
 ```
 
 > If path starts with leading slash (`/`), then it will be removed.
-
-> If HTML file is in other directory, then referenced stylesheet, plugin will build relative path to style. For example, if output of HTML is `_site/pages/about.html` and CSS's public path is `style.css`(in root of `_site`), then plugin formats public path to `../style.css`. So you don't need to fix links to your assets 🤘!
 
 #### publicDirectory
 
@@ -148,7 +149,7 @@ module.exports = (eleventyConfig) => {
 };
 ```
 
-Given above example, stylesheet file will be placed into `_site/styles` directory, and its public path will be `styles/style.css`.
+Given above example, stylesheet file will be placed into `_site/styles` directory, and its public path will be `styles/style-[hash].css`.
 
 Pretty convenient, yes? 🙂
 
@@ -169,7 +170,7 @@ module.exports = (eleventyConfig) => {
 
 ### sassOptions
 
-For now plugin supports only [`sass`](https://sass-lang.com/) preprocessor.
+Plugin supports [`sass`](https://sass-lang.com/) preprocessor.
 
 If you want to customize its behavior then [options](https://www.npmjs.com/package/sass#api) need to be passed to plugin.
 
@@ -184,7 +185,48 @@ module.exports = (eleventyConfig) => {
 };
 ```
 
+Plugin uses this preprocessor as the default language for CSS. You can disable it by providing `off` value instead of _options_.
+
+```js
+// .eleventy.js
+module.exports = (eleventyConfig) => {
+  eleventyConfig.addPlugin(styles, {
+    sassOptions: 'off',
+  });
+};
+```
+
 > Avoid changing `file` property, because provided stylesheet will be inserted into all your HTML pages, instead of referenced ones. Bad situation ☹️. Also if you want to override `includePaths` property, then make sure you add `node_modules` to array (this is a default value).
+
+### lessOptions
+
+Plugin supports [`less`](https://lesscss.org/) preprocessor.
+
+If you want to customize its behavior then [options](https://lesscss.org/usage/#less-options) need to be passed to plugin.
+
+```js
+// .eleventy.js
+module.exports = (eleventyConfig) => {
+  eleventyConfig.addPlugin(styles, {
+    lessOptions: {
+      /* Some useful options. */
+    },
+  });
+};
+```
+
+Or disable it by providing the `off` value.
+
+```js
+// .eleventy.js
+module.exports = (eleventyConfig) => {
+  eleventyConfig.addPlugin(styles, {
+    lessOptions: 'off',
+  });
+};
+```
+
+> If you want to use this preprocessor, then you should disable `sass` preprocessor at first.
 
 ### purgeCSSOptions
 
@@ -200,6 +242,7 @@ module.exports = (eleventyConfig) => {
   });
 };
 ```
+
 You can disable the plugin by passing `'off'` as an option, like this:
 
 ```js
@@ -209,6 +252,7 @@ module.exports = (eleventyConfig) => {
     purgeCSSOptions: 'off',
   });
 };
+```
 
 > Avoid overriding `content` property and `css`, because they are used internally and that may cause unexpected results.
 
@@ -223,6 +267,17 @@ module.exports = (eleventyConfig) => {
     cssnanoOptions: {
       /* Some useful options. */
     },
+  });
+};
+```
+
+You can disable the plugin by passing `'off'` as an option, like this:
+
+```js
+// .eleventy.js
+module.exports = (eleventyConfig) => {
+  eleventyConfig.addPlugin(styles, {
+    cssnanoOptions: 'off',
   });
 };
 ```
@@ -248,7 +303,7 @@ module.exports = (eleventyConfig) => {
 
 ### criticalOptions
 
-[critical](https://github.com/addyosmani/critical) is included. By default, it works in `production` mode and if `criticalOptions` property is explicitly initialized (at least, empty object).
+[critical](https://github.com/addyosmani/critical) is included. By default, it works in `production` mode and if `criticalOptions` property is not equal to `'off'` value (that disables the plugin).
 
 ```js
 // .eleventy.js

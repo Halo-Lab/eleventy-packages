@@ -1,4 +1,18 @@
-# [1.3.2] - 2021-09-24
+# [1.4.0] - 2021-11-24
+
+### Added
+
+- handling [less](https://lesscss.org) files (by default is disabled in favour of [sass](https://sass-lang.com)).
+- abilily to turn off PostCSS plugins with 'off' value (thanks to [lwojcik](https://github.com/lwojcik)).
+- ability to disable preprocessors in favour of plain CSS.
+- generating hash to the stylesheet names.
+
+### Fixed
+
+- handling the single quote in Stylesheet URLs (thanks to [lwojcik](https://github.com/lwojcik)).
+- rebuild only those stylesheets that are changed (during development).
+
+## [1.3.2] - 2021-09-24
 
 ### Fixed
 

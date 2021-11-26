@@ -16,5 +16,5 @@ export default {
       transforms: ['typescript'],
     }),
   ],
-  external: ['@fluss/core', 'chalk'],
+  external: ['@fluss/core', 'chalk', 'util/types'],
 };

@@ -1,4 +1,14 @@
-# [0.0.4] - 2021-09-27
+# [0.0.5] - 2021-11-24
+
+### Added
+
+- `initMemoryCache` function for initialization memory cache instance.
+- `unique` function that creates predicate function that can filter repeated values in arrays and `List`s.
+- demethodize static methods from `Promise` class.
+- `Linker` that manages file information.
+- `isDirectory` checker.
+
+## [0.0.4] - 2021-09-27
 
 ### Added
 

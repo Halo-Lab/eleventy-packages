@@ -1,4 +1,4 @@
-import { makeDirectories } from '../src';
+import { mkdir } from '../src';
 
 jest.mock('fs', () => ({
   existsSync: (_path: string) => false,
@@ -7,9 +7,9 @@ jest.mock('fs', () => ({
   },
 }));
 
-describe('makeDirectories', () => {
+describe('mkdir', () => {
   it('should return Promise with undefined', () => {
-    expect(makeDirectories('')).toBeInstanceOf(Promise);
-    expect(makeDirectories('')).resolves.toBe(undefined);
+    expect(mkdir('')).toBeInstanceOf(Promise);
+    expect(mkdir('')).resolves.toBe(undefined);
   });
 });

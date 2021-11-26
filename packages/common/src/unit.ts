@@ -1,4 +1,6 @@
-export type Unit = VoidFunction;
+export type Unit = <Parameters extends readonly unknown[]>(
+  ...params: Parameters
+) => void;
 
-/** Function that prevents opetatoins from returning a value. */
+/** Function that prevents operations from returning a value. */
 export const unit: Unit = () => {};

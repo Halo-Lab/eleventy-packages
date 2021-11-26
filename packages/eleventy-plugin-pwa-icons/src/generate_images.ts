@@ -7,9 +7,9 @@ import {
   done,
   oops,
   start,
-  toRootUrl,
+  mkdir,
   DEFAULT_IMAGE,
-  makeDirectories,
+  withLeadingSlash,
   DEFAULT_ICONS_DIRECTORY,
   DEFAULT_SOURCE_DIRECTORY,
 } from '@eleventy-packages/common';
@@ -49,7 +49,7 @@ const generateImages = async ({
   options,
   publicDirectory,
 }: GenerateImageOptions): Promise<ImageResult> =>
-  makeDirectories(output)
+  mkdir(output)
     .then(() =>
       pwaAssetGenerator.generateImages(
         input,
@@ -58,7 +58,7 @@ const generateImages = async ({
           log: false,
           mstile: true,
           favicon: true,
-          pathOverride: toRootUrl(publicDirectory),
+          pathOverride: withLeadingSlash(publicDirectory),
           ...options,
         },
         logger,

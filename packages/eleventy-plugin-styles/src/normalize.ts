@@ -1,23 +1,21 @@
+import cssnano from 'cssnano';
 import purgecss from '@fullhuman/postcss-purgecss';
 import autoprefixer from 'autoprefixer';
 import postcss, { AcceptedPlugin } from 'postcss';
-import cssnano, { CssNanoOptions } from 'cssnano';
-import { PurgeCSSOptions, PluginState } from './types';
 
-export interface NormalizeStepOptions {
+import { StylesPluginOptions, PluginState } from './types';
+
+export type NormalizeStepOptions = {
   /** Path of source style file. */
-  url: string;
+  readonly url: string;
   /** Compiled CSS. */
-  css: Buffer;
+  readonly css: string;
   /** HTML content that has link to _css_. */
-  html: string;
-  /** Options to be passed to [`PurgeCSS`](https://purgecss.com/). */
-  purgeCSSOptions?: PurgeCSSOptions;
-  /** Options to be passed to [`CSSNano`](https://cssnano.co/). */
-  cssnanoOptions?: CssNanoOptions;
-  /** Array of plugins that can be passed to [`PostCSS`](https://postcss.org). */
-  postcssPlugins?: ReadonlyArray<AcceptedPlugin>;
-}
+  readonly html: string;
+} & Omit<
+  StylesPluginOptions,
+  'publicDirectory' | 'addWatchTarget' | 'inputDirectory'
+>;
 
 /**
  * Process compiled CSS in order to normalize it
@@ -32,15 +30,19 @@ export const normalize = async ({
   postcssPlugins = [],
 }: NormalizeStepOptions) => {
   // Useful plugins for PostCSS configuration.
-  const plugins: any[] = [
+  const plugins: AcceptedPlugin[] = [
     ...postcssPlugins,
-    (purgeCSSOptions !== PluginState.Off) ? purgecss({
-      content: [{ raw: html, extension: 'html' }],
-      ...purgeCSSOptions,
-    }) : null,
+    purgeCSSOptions !== PluginState.Off
+      ? purgecss({
+          content: [{ raw: html, extension: 'html' }],
+          ...purgeCSSOptions,
+        })
+      : [],
     autoprefixer,
-    cssnano({ preset: 'default', ...cssnanoOptions }),
-  ].filter(Boolean);;
+    cssnanoOptions !== PluginState.Off
+      ? (cssnano({ preset: 'default', ...cssnanoOptions }) as AcceptedPlugin)
+      : [],
+  ].flat();
 
   return postcss(plugins).process(css, { from: fromUrl });
 };

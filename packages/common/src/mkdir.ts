@@ -1,5 +1,21 @@
-import { promises, existsSync } from 'fs';
+import { extname, dirname } from 'path';
+import { promises, existsSync, PathLike } from 'fs';
 
-/** Recursively creates directories. */
-export const makeDirectories = async (path: string): Promise<void> =>
-  void (existsSync(path) || (await promises.mkdir(path, { recursive: true })));
+import { identity, pipe, when } from '@fluss/core';
+
+import { unit } from './unit';
+import { resolve } from './promise';
+
+/** Checks if a path points to a directory. */
+export const isDirectory = (path: string): boolean => extname(path) === '';
+
+export const mkdir = pipe(
+  when(isDirectory)(identity, dirname),
+  when(existsSync)(
+    pipe(resolve, unit),
+    pipe(
+      (directory: PathLike) => promises.mkdir(directory, { recursive: true }),
+      unit,
+    ),
+  ),
+);

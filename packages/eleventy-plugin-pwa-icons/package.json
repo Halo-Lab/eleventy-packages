@@ -39,5 +39,8 @@
   "peerDependencies": {
     "chalk": "^4.1.0",
     "pwa-asset-generator": "^4.1.0"
+  },
+  "devDepencency": {
+    "@eleventy-packages/common": "^0.0.5"
   }
 }

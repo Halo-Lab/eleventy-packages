@@ -1,14 +1,29 @@
 import { join } from 'path';
 
+import { pipe } from '@fluss/core';
 import {
   done,
+  bold,
+  start,
+  linker,
+  promises,
+  FileEntity,
+  initMemoryCache,
   definePluginName,
   DEFAULT_SOURCE_DIRECTORY,
   DEFAULT_STYLES_DIRECTORY,
+  getEleventyOutputDirectory,
 } from '@eleventy-packages/common';
 
-import { bundle, transformStylesheet } from './bundle';
-import type { StylesPluginOptions } from './types';
+import { separateCriticalCSS } from './critical';
+import { PluginState, StylesPluginOptions } from './types';
+import {
+  findStyles,
+  writeStyleFile,
+  createFileBundler,
+  bindLinkerWithStyles,
+  createPublicUrlInjector,
+} from './bundle';
 
 definePluginName('Styles');
 
@@ -21,15 +36,18 @@ export const styles = (
   config: Record<string, Function>,
   {
     sassOptions = {},
+    lessOptions = PluginState.Off,
     inputDirectory = join(DEFAULT_SOURCE_DIRECTORY, DEFAULT_STYLES_DIRECTORY),
     cssnanoOptions = {},
     addWatchTarget = true,
     postcssPlugins = [],
-    criticalOptions,
+    criticalOptions = PluginState.Off,
     purgeCSSOptions = {},
     publicDirectory = '',
   }: StylesPluginOptions = {},
 ) => {
+  const cache = initMemoryCache<string, Promise<FileEntity>>();
+
   config.addTransform(
     'styles',
     async function (
@@ -40,31 +58,67 @@ export const styles = (
       const output = this.outputPath ?? outputPath;
 
       if (output.endsWith('html')) {
-        return bundle(content, this.inputPath, output, {
-          sassOptions,
-          inputDirectory,
-          cssnanoOptions,
-          postcssPlugins,
-          criticalOptions,
-          purgeCSSOptions,
-          publicDirectory,
-        });
+        start(`Start compiling styles for the ${bold(output)} file.`);
+
+        const results = bindLinkerWithStyles(
+          linker({
+            sassOptions,
+            lessOptions,
+            outputPath: output,
+            baseDirectory: inputDirectory,
+            publicDirectory,
+            postcssPlugins,
+            criticalOptions,
+            purgeCSSOptions,
+            cssnanoOptions,
+          }),
+        )(findStyles(content));
+
+        const files = await promises(
+          results.map((linkerResult) =>
+            cache.through(linkerResult.file.originalUrl, () =>
+              pipe(createFileBundler(linkerResult), writeStyleFile)(content),
+            ),
+          ),
+        );
+
+        const injectors = files
+          .filter<PromiseFulfilledResult<FileEntity>>(
+            (
+              result: PromiseSettledResult<FileEntity>,
+            ): result is PromiseFulfilledResult<FileEntity> =>
+              result.status === 'fulfilled',
+          )
+          .map(({ value }) => value)
+          .map(createPublicUrlInjector);
+
+        const html = injectors.reduce(
+          (html, injectInto) => injectInto(html),
+          content,
+        );
+
+        done(`Finished compiling styles for the ${bold(output)} file.`);
+
+        if (criticalOptions === PluginState.Off) {
+          return html;
+        } else {
+          return separateCriticalCSS({
+            html,
+            buildDirectory: getEleventyOutputDirectory(output),
+            criticalOptions,
+          }).then(({ html }) => html);
+        }
       }
 
       return content;
     },
   );
 
-  config.on('beforeWatch', (changedFiles: ReadonlyArray<string>) => {
-    if (
-      changedFiles.some((relativePath) => /(sc|sa|c)ss$/.test(relativePath))
-    ) {
-      // Rebuild styles if they are changed.
-      transformStylesheet.cache.clear();
-    } else {
-      done('No stylesheet file was changed. Skips compilation.');
-    }
-  });
+  config.on('beforeWatch', (changedFiles: ReadonlyArray<string>) =>
+    changedFiles
+      .filter((relativePath) => /(sc|sa|le|c)ss$/.test(relativePath))
+      .forEach(cache.remove),
+  );
 
   if (addWatchTarget) {
     config.addWatchTarget(inputDirectory);

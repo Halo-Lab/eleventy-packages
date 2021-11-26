@@ -1,6 +1,6 @@
 import { ManifestTransform } from 'workbox-build';
 
-import { toRootUrl } from '@eleventy-packages/common';
+import { withLeadingSlash } from '@eleventy-packages/common';
 
 export const makeManifestURlsAbsolute: ManifestTransform = async (
   manifestEntries,
@@ -8,6 +8,6 @@ export const makeManifestURlsAbsolute: ManifestTransform = async (
   warnings: [],
   manifest: manifestEntries.map((entry) => ({
     ...entry,
-    url: toRootUrl(entry.url),
+    url: withLeadingSlash(entry.url),
   })),
 });

@@ -24,5 +24,11 @@ export const urlToPath = (url: string) => (prefix: string) =>
   );
 
 /** Prepends leading slash if url doesn't have it.  */
-export const toRootUrl = (url: string) =>
+export const withLeadingSlash = (url: string) =>
   url.startsWith(URL_DELIMITER) ? url : URL_DELIMITER + url;
+
+/** Predicate that detects remote URLs.  */
+export const isRemoteLink = (value: string): boolean => /^https?/.test(value);
+
+/** Checks if an url is absolute. */
+export const isAbsoluteURL = (url: string) => url.startsWith(URL_DELIMITER);

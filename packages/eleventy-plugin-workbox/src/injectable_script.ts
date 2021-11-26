@@ -1,4 +1,4 @@
-import { toRootUrl } from '@eleventy-packages/common';
+import { withLeadingSlash } from '@eleventy-packages/common';
 
 /**
  * Build script for service worker registration
@@ -15,7 +15,7 @@ export const buildSWScriptRegistration = (
       <script>
         if ("serviceWorker" in window.navigator) {
           window.addEventListener("load", () =>
-            window.navigator.serviceWorker.register("${toRootUrl(
+            window.navigator.serviceWorker.register("${withLeadingSlash(
               publicUrl,
             )}", { scope: "${scope}" }),
           );
