@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-import { pipe } from '@fluss/core';
+import { pipe, tap } from '@fluss/core';
 import {
   done,
   bold,
@@ -58,8 +58,6 @@ export const styles = (
       const output = this.outputPath ?? outputPath;
 
       if (output.endsWith('html')) {
-        start(`Start compiling styles for the ${bold(output)} file.`);
-
         const results = bindLinkerWithStyles(
           linker({
             sassOptions,
@@ -77,7 +75,18 @@ export const styles = (
         const files = await promises(
           results.map((linkerResult) =>
             cache.through(linkerResult.file.originalUrl, () =>
-              pipe(createFileBundler(linkerResult), writeStyleFile)(content),
+              pipe(
+                tap(() =>
+                  start(`Start compiling styles for the ${bold(output)} file.`),
+                ),
+                createFileBundler(linkerResult),
+                writeStyleFile,
+                tap((_entity: FileEntity) =>
+                  done(
+                    `Finished compiling styles for the ${bold(output)} file.`,
+                  ),
+                ),
+              )(content),
             ),
           ),
         );
@@ -96,8 +105,6 @@ export const styles = (
           (html, injectInto) => injectInto(html),
           content,
         );
-
-        done(`Finished compiling styles for the ${bold(output)} file.`);
 
         if (criticalOptions === PluginState.Off) {
           return html;
