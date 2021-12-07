@@ -1,5 +1,5 @@
 import { promises } from 'fs';
-import { join, dirname, resolve } from 'path';
+import { join, resolve } from 'path';
 
 import { memoize, pipe } from '@fluss/core';
 import { build, BuildResult } from 'esbuild';
@@ -10,10 +10,10 @@ import {
   done,
   oops,
   start,
+  mkdir,
   isRemoteLink,
   isProduction,
   URL_DELIMITER,
-  makeDirectories,
 } from '@eleventy-packages/common';
 
 import { pathStats } from './path_stats';
@@ -46,8 +46,7 @@ export const transformFile = memoize(
 
     return pipe(
       () => resolve(buildDirectory, publicDirectory, publicSourcePathToScript),
-      dirname,
-      makeDirectories,
+      mkdir,
       () =>
         build({
           write: false,

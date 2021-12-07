@@ -25,7 +25,7 @@ export const initMemoryCache = <Key extends string, Value>(): MemoryCache<
         isRegExp(value)
           ? value.test(key)
           : value.includes(key) || key.includes(value),
-      ),
+      )!,
     );
   };
 
