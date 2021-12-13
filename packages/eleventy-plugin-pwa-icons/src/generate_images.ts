@@ -8,13 +8,20 @@ import {
   oops,
   start,
   mkdir,
+  FsCache,
+  readFile,
+  writeFile,
+  readDirectory,
   DEFAULT_IMAGE,
   withLeadingSlash,
   DEFAULT_ICONS_DIRECTORY,
   DEFAULT_SOURCE_DIRECTORY,
+  resolve as resolveWith,
 } from '@eleventy-packages/common';
 
 import { TransformOptions } from './types';
+
+const imageResultFileName = 'imageResult.json';
 
 export type Options = Parameters<typeof pwaAssetGenerator.generateImages>[2];
 export type LoggerFunction = Parameters<
@@ -48,39 +55,54 @@ const generateImages = async ({
   logger,
   options,
   publicDirectory,
-}: GenerateImageOptions): Promise<ImageResult> =>
-  mkdir(output)
-    .then(() =>
-      pwaAssetGenerator.generateImages(
-        input,
-        output,
-        {
-          log: false,
-          mstile: true,
-          favicon: true,
-          pathOverride: withLeadingSlash(publicDirectory),
-          ...options,
-        },
-        logger,
-      ),
-    )
-    .then(({ htmlMeta, manifestJsonContent }) => ({
-      html: Object.values(htmlMeta).join(''),
-      manifestJsonContent,
-    }));
+}: GenerateImageOptions): Promise<ImageResult> => {
+  await mkdir(output);
+
+  const { htmlMeta, manifestJsonContent } =
+    await pwaAssetGenerator.generateImages(
+      input,
+      output,
+      {
+        log: false,
+        mstile: true,
+        favicon: true,
+        pathOverride: withLeadingSlash(publicDirectory),
+        ...options,
+      },
+      logger,
+    );
+
+  return {
+    html: Object.values(htmlMeta).join(''),
+    manifestJsonContent,
+  };
+};
+
+const copyFilesFromCache = (cache: FsCache, outputDirectory: string) =>
+  cache
+    .entries()
+    .filter(([key]) => key !== imageResultFileName)
+    .forEach(async ([name, { pathToContent }]) => {
+      const absolutePathToIcon = resolve(outputDirectory, name);
+
+      await mkdir(absolutePathToIcon);
+
+      readFile(resolve(pathToContent)).to(writeFile(absolutePathToIcon));
+    });
 
 export const handleImages = once(
-  ({
+  async ({
     icons = {},
+    cache,
     logger,
     options,
     buildDirectory,
   }: Pick<TransformOptions, 'icons'> & { buildDirectory: string } & Pick<
       GenerateImageOptions,
       'logger' | 'options'
-    >) => {
-    start('Starting icons generation');
-
+    > & {
+      cache: FsCache;
+    }) => {
     const absolutePathToRawImage = resolve(
       icons.pathToRawImage ?? join(DEFAULT_SOURCE_DIRECTORY, DEFAULT_IMAGE),
     );
@@ -89,21 +111,59 @@ export const handleImages = once(
       icons.publicDirectory ?? DEFAULT_ICONS_DIRECTORY,
     );
 
-    return generateImages({
+    if (cache.has(imageResultFileName)) {
+      start('Skip generating icons. Reading from the cache...');
+
+      copyFilesFromCache(cache, outputIconsDirectory);
+
+      return cache
+        .get(imageResultFileName)
+        .map(({ pathToContent }) =>
+          readFile(resolve(pathToContent))
+            .encoding('utf8')
+            .content()
+            .then(JSON.parse as (value: string) => ImageResult)
+            .catch(
+              () => ({ html: '', manifestJsonContent: [] } as ImageResult),
+            ),
+        )
+        .fill(() =>
+          resolveWith({ html: '', manifestJsonContent: [] } as ImageResult),
+        )
+        .extract();
+    }
+
+    start('Starting icons generation');
+
+    const info = await generateImages({
       input: absolutePathToRawImage,
       output: outputIconsDirectory,
       publicDirectory: icons.publicDirectory ?? DEFAULT_ICONS_DIRECTORY,
       options,
       logger,
-    }).then(
-      (info) => {
-        done('Icons for PWA were successfully generated');
-        return info;
-      },
-      (error) => {
-        oops(error);
-        return { html: '', manifestJsonContent: [] };
-      },
-    );
+    }).catch((error) => {
+      oops(error);
+      return { html: '', manifestJsonContent: [] } as ImageResult;
+    });
+
+    cache.put(imageResultFileName, {
+      name: imageResultFileName,
+      content: JSON.stringify(info),
+    });
+
+    readDirectory(outputIconsDirectory)
+      .end()
+      .then((files) =>
+        files.forEach((file) =>
+          cache.put(file.name, {
+            name: file.name,
+            content: readFile(join(outputIconsDirectory, file.name)).start(),
+          }),
+        ),
+      );
+
+    done('Icons for PWA were successfully generated');
+
+    return info;
   },
 );

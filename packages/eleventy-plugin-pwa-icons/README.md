@@ -88,6 +88,10 @@ By default output directory for icons is _your_build_directory/icons/_.
 
 Default path for manifest output - _your_build_directory/manifest.json_.
 
+## Caching
+
+The plugin caches generated icons to reduce CPU loading. The name of a cache folder is `.icons`. It should be committed to a Git/SVN to avoid unnecessary icons generation.
+
 That is all 👐 The plugin will do a remaining dirty job by itself.
 
 ## Word from author

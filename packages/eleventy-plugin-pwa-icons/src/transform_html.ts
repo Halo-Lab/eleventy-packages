@@ -1,4 +1,4 @@
-import { done } from '@eleventy-packages/common';
+import { done, FsCache } from '@eleventy-packages/common';
 
 import { handleManifest } from './update_manifest';
 import { TransformOptions } from './types';
@@ -19,13 +19,22 @@ export type PWAIconsOptions = TransformOptions & {
 export const generateAndInsertIcons = async (
   html: string,
   buildDirectory: string,
-  { icons, manifest, generatorOptions: options, logger }: PWAIconsOptions,
+  {
+    icons,
+    cache,
+    logger,
+    manifest,
+    generatorOptions: options,
+  }: PWAIconsOptions & {
+    cache: FsCache;
+  },
 ): Promise<string> => {
   const { html: imagesHTML, manifestJsonContent } = await handleImages({
+    cache,
     icons,
-    buildDirectory,
-    options,
     logger,
+    options,
+    buildDirectory,
   });
 
   const manifestPublicUrl = await handleManifest(manifestJsonContent, {

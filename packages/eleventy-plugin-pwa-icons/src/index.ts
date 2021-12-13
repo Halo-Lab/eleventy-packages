@@ -1,4 +1,8 @@
-import { isProduction, definePluginName } from '@eleventy-packages/common';
+import {
+  initFsCache,
+  isProduction,
+  definePluginName,
+} from '@eleventy-packages/common';
 
 import { getOutputDirectory } from './get_build_directory';
 import { generateAndInsertIcons, PWAIconsOptions } from './transform_html';
@@ -20,6 +24,8 @@ export const icons = (
   }: PWAIconsOptions = {},
 ): void => {
   if (enabled) {
+    const cacheContainer = initFsCache({ directory: '.icons' });
+
     config.addTransform(
       'icons',
       async function (
@@ -27,6 +33,8 @@ export const icons = (
         content: string,
         outputPath: string,
       ): Promise<string> {
+        const cache = await cacheContainer;
+
         const outputFilePath = this.outputPath ?? outputPath;
 
         return outputFilePath.endsWith('html')
@@ -35,6 +43,7 @@ export const icons = (
               getOutputDirectory(outputFilePath),
               {
                 icons,
+                cache,
                 logger,
                 manifest,
                 generatorOptions,

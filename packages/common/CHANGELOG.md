@@ -1,4 +1,14 @@
-# [0.0.5] - 2021-11-24
+# [0.0.6] - 2021-12-13
+
+### Added
+
+- `readFile`, `existsFile`, `removeFile` and `writeFile` functions.
+- `readDirectory` and `writeDirectory` functions.
+- `queue` data structure.
+- `thread` and `limitedMemory` structures.
+- memory and FS cache implementation.
+
+## [0.0.5] - 2021-11-24
 
 ### Added
 

@@ -15,7 +15,7 @@ coverage
 # production
 build
 dist
-.npmrc
+.nvmrc
 
 # misc
 .git
