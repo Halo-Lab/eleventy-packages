@@ -2,7 +2,7 @@ import { rm } from 'fs/promises';
 import { Readable } from 'stream';
 import { join, resolve } from 'path';
 
-import { list, List, maybe, Option } from '@fluss/core';
+import { list, List, maybe, Option, tap } from '@fluss/core';
 
 import { oops } from '../pretty';
 import { mkdir } from '../mkdir';
@@ -31,7 +31,8 @@ const createManifestHandler = async (
 
   const data: Record<string, ManifestEntry> = {};
 
-  const flush = () => writeFile(filePath).data(JSON.stringify(data));
+  const flush = () =>
+    writeFile(filePath).encoding('utf8').data(JSON.stringify(data));
 
   if (existsFile(filePath)) {
     await readFile(filePath)

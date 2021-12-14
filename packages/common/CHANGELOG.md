@@ -1,4 +1,10 @@
-# [0.0.6] - 2021-12-13
+# [0.0.7] - 2021-12-14
+
+### Fixed
+
+- Add encoding to the `flush` function of the manifest handler (fs cache).
+
+## [0.0.6] - 2021-12-13
 
 ### Added
 
