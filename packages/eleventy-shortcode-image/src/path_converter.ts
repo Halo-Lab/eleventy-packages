@@ -1,10 +1,12 @@
 import path from 'path';
 
 import { isGif, isSVG } from './image_formats';
-import { URL_DELIMITER, isUrl, urlToPath } from '@eleventy-packages/common';
-
-const prependURLDelimiter = (to: string): string =>
-  to.startsWith(URL_DELIMITER) ? to : URL_DELIMITER + to;
+import {
+  isUrl,
+  urlToPath,
+  URL_DELIMITER,
+  withLeadingSlash,
+} from '@eleventy-packages/common';
 
 interface SourceBase {
   readonly name: string;
@@ -56,7 +58,7 @@ export const converter = (
     : path.resolve(outputPrefix, text);
   const relativeOutputPath = outputPath.replace(process.cwd(), '.');
 
-  const publicURL = prependURLDelimiter(
+  const publicURL = withLeadingSlash(
     outputPath
       .replace(
         absoluteOutputPrefix,

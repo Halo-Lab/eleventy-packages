@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { Readable } from 'stream';
 
+import { mkdir, unit } from '@eleventy-packages/common';
 import { pipe, sequentially } from '@fluss/core';
-import { makeDirectories, unit } from '@eleventy-packages/common';
 
 /**
  * Writes image from _sourcePath_ to _outputPath_.
@@ -16,7 +16,7 @@ export const writeImage = (
   isData = false,
 ) =>
   sequentially(
-    pipe(() => path.dirname(outputPath), makeDirectories),
+    pipe(() => path.dirname(outputPath), mkdir),
     () =>
       (isData ? Readable.from(source) : fs.createReadStream(source)).pipe(
         fs.createWriteStream(outputPath),

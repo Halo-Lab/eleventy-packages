@@ -1,7 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 
-import { makeDirectories } from '@eleventy-packages/common';
+import { mkdir } from '@eleventy-packages/common';
 import { sequentially, when } from '@fluss/core';
 
 import { Source, SourceUrl } from './path_converter';
@@ -30,7 +30,7 @@ export const fetchImage = when(
   // Because we have checked in predicate that source is URL,
   // so we can safely type source parameter as SourceUrl.
   sequentially(
-    (source: Source) => makeDirectories(source.sourceDir),
+    (source: Source) => mkdir(source.sourceDir),
     (source: SourceUrl) => download(source.sourceUrl, source.sourcePath),
   ),
   () => Promise.resolve<ReadonlyArray<string | void>>([]),

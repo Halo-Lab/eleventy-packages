@@ -48,7 +48,7 @@
     "sass": "^1.32.0"
   },
   "devDependencies": {
-    "@eleventy-packages/common": "^0.0.5",
+    "@eleventy-packages/common": "^0.0.7",
     "@types/less": "^3.0.3"
   }
 }

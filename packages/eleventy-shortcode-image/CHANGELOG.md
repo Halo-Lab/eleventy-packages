@@ -1,4 +1,10 @@
-# [1.6.0] - 2021-09-13
+# [1.6.2] - 2021-12-21
+
+### Changed
+
+- Update `@11ty/eleventy-img` and `svgo` dependencies.
+
+## [1.6.0] - 2021-09-13
 
 ### Changed
 

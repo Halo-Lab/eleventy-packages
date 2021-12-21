@@ -18,11 +18,11 @@ import {
   normalizeImageAttributes,
 } from './image_attributes';
 import {
+  isProduction,
   DEFAULT_BUILD_DIRECTORY,
   DEFAULT_ASSETS_DIRECTORY,
   DEFAULT_IMAGES_DIRECTORY,
   DEFAULT_SOURCE_DIRECTORY,
-  isProduction,
 } from '@eleventy-packages/common';
 
 export interface ImageShortCodeOptions {
@@ -108,37 +108,26 @@ export const createImageShortcode = ({
         }
       }
 
-      if (isProduction()) {
-        Image.concurrency = 40;
+      Image.concurrency = 40;
 
-        const stats: Metadata = Image.statsSync(
-          source.sourcePath,
-          getRasterOptimizerOptions(source, rasterOptions),
-        );
+      const stats: Metadata = Image.statsSync(
+        source.sourcePath,
+        getRasterOptimizerOptions(source, rasterOptions),
+      );
 
-        // Do not wait for image compression ends - may seed up start time.
-        Image(
-          source.sourcePath,
-          getRasterOptimizerOptions(source, rasterOptions),
-        ).catch((error: Error) => log('Could not optimize image: %O', error));
+      // Do not wait for image compression ends - may seed up start time.
+      Image(
+        source.sourcePath,
+        getRasterOptimizerOptions(source, rasterOptions),
+      ).catch((error: Error) => log('Could not optimize image: %O', error));
 
-        log(`Image "${source.rawInput}" is optimized. Stats:\n%O`, stats);
+      log(`Image "${source.rawInput}" is optimized. Stats:\n%O`, stats);
 
-        return createPicture(
-          stats,
-          normalizeImageAttributes(attributes),
-          getSrcName(attributes.lazy, attributes.srcName),
-          getSrcsetName(attributes.lazy, attributes.srcsetName),
-        );
-      }
-
-      writeImage(source.sourcePath, source.outputPath);
-
-      return createImg(
-        normalizeImageAttributes({
-          ...attributes,
-          src: source.publicURL,
-        }),
+      return createPicture(
+        stats,
+        normalizeImageAttributes(attributes),
+        getSrcName(attributes.lazy, attributes.srcName),
+        getSrcsetName(attributes.lazy, attributes.srcsetName),
       );
     },
     (src, properties = {}) => src + JSON.stringify(properties),

@@ -39,6 +39,6 @@
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "@eleventy-packages/common": "^0.0.5"
+    "@eleventy-packages/common": "^0.0.7"
   }
 }
