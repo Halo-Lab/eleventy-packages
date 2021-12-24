@@ -1,6 +1,6 @@
 {
   "name": "eleventy-plugin-styles",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Plugin for handling stylesheets from HTML.",
   "main": "index.js",
   "exports": {
