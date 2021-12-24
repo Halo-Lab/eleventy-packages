@@ -27,7 +27,7 @@ export const createFileBundler = ({
   });
 
   return async (html: string): Promise<FileEntity> => {
-    const css = await compile(file.sourcePath);
+    const { css, urls } = await compile(file.sourcePath);
     const result = await normalize({
       ...options,
       css,
@@ -37,6 +37,7 @@ export const createFileBundler = ({
 
     return {
       ...file,
+      urls,
       data: result.css,
     };
   };

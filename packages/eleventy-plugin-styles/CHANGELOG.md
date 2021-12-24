@@ -1,4 +1,10 @@
-# [1.4.0] - 2021-11-24
+# [1.4.1] - 2021-12-24
+
+### Fixed
+
+- rebuilding a stylesheet when some dependencies were changed.
+
+## [1.4.0] - 2021-11-24
 
 ### Added
 

@@ -7,6 +7,7 @@ export interface Cache<Key, Value> {
   readonly keys: () => List<Key>;
   readonly clear: () => void;
   readonly remove: (key: Key | RegExp) => void;
+  /** @deprecated */
   readonly through: (key: Key, or: () => Value) => Value;
   readonly isEmpty: () => boolean;
   readonly entries: () => List<[Key, Value]>;

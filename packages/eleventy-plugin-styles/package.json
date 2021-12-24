@@ -45,10 +45,10 @@
     "cssnano": "^5.0.0",
     "less": "^4.1.0",
     "postcss": "^8.2.0",
-    "sass": "^1.32.0"
+    "sass": "^1.45.0"
   },
   "devDependencies": {
-    "@eleventy-packages/common": "^0.0.7",
+    "@eleventy-packages/common": "^0.0.8",
     "@types/less": "^3.0.3"
   }
 }

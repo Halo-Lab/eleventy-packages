@@ -12,6 +12,7 @@ export * from './unique';
 export * from './pretty';
 export * from './linker';
 export * from './promise';
+export * from './debugger';
 export * from './constants';
 export * from './directory';
 export * from './limitedMemory';

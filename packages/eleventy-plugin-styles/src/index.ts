@@ -6,6 +6,7 @@ import {
   bold,
   start,
   linker,
+  resolve,
   promises,
   FileEntity,
   initMemoryCache,
@@ -15,6 +16,7 @@ import {
   getEleventyOutputDirectory,
 } from '@eleventy-packages/common';
 
+import { Debugger } from './debugger';
 import { separateCriticalCSS } from './critical';
 import { PluginState, StylesPluginOptions } from './types';
 import {
@@ -46,7 +48,7 @@ export const styles = (
     publicDirectory = '',
   }: StylesPluginOptions = {},
 ) => {
-  const cache = initMemoryCache<string, Promise<FileEntity>>();
+  const cache = initMemoryCache<string, FileEntity>();
 
   config.addTransform(
     'styles',
@@ -73,22 +75,37 @@ export const styles = (
         )(findStyles(content));
 
         const files = await promises(
-          results.map((linkerResult) =>
-            cache.through(linkerResult.file.originalUrl, () =>
-              pipe(
-                tap(() =>
-                  start(`Start compiling styles for the ${bold(output)} file.`),
-                ),
-                createFileBundler(linkerResult),
-                writeStyleFile,
-                tap((_entity: FileEntity) =>
-                  done(
-                    `Finished compiling styles for the ${bold(output)} file.`,
-                  ),
-                ),
-              )(content),
+          results
+            .map(
+              (linkerResult) =>
+                [
+                  cache.get(linkerResult.file.originalUrl),
+                  linkerResult,
+                ] as const,
+            )
+            .map(([entity, linkerResult]) =>
+              entity.isSome()
+                ? resolve(entity.extract())
+                : pipe(
+                    tap(() =>
+                      start(
+                        `Start compiling styles for the ${bold(output)} file.`,
+                      ),
+                    ),
+                    createFileBundler(linkerResult),
+                    writeStyleFile,
+                    tap((entity: FileEntity) =>
+                      cache.put(entity.originalUrl, entity),
+                    ),
+                    tap((_entity: FileEntity) =>
+                      done(
+                        `Finished compiling styles for the ${bold(
+                          output,
+                        )} file.`,
+                      ),
+                    ),
+                  )(content),
             ),
-          ),
         );
 
         const injectors = files
@@ -124,7 +141,23 @@ export const styles = (
   config.on('beforeWatch', (changedFiles: ReadonlyArray<string>) =>
     changedFiles
       .filter((relativePath) => /(sc|sa|le|c)ss$/.test(relativePath))
-      .forEach(cache.remove),
+      .map((cachedPath) =>
+        cache
+          .entries()
+          .filter(
+            ([mainURL, { urls }]) =>
+              mainURL === cachedPath ||
+              urls.some((fileName) => cachedPath.endsWith(fileName)),
+          )
+          .forEach(([_originalUrl, entity]) => {
+            Debugger.object` Detected change relates to the ${{
+              file: entity.originalUrl,
+              imports: entity.urls,
+            }}. Removing that file from the memory cache...`;
+
+            cache.remove(entity.originalUrl);
+          }),
+      ),
   );
 
   if (addWatchTarget) {

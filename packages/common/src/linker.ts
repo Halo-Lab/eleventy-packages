@@ -8,6 +8,7 @@ import { isAbsoluteURL, withLeadingSlash } from './url';
 
 export interface FileEntity {
   readonly data: string;
+  readonly urls: readonly string[];
   readonly publicUrl: string;
   readonly sourcePath: string;
   readonly outputPath: string;
@@ -69,6 +70,7 @@ export const linker = <Options>({
       options,
       file: {
         data: '',
+        urls: [],
         publicUrl: publicUrlWithHash,
         sourcePath: resolve(baseDirectory, normalizedSourceUrl),
         outputPath: resolve(outputDirectory, publicUrlWithHash.slice(1)),

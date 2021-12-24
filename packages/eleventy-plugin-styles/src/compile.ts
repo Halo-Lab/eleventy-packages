@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises';
 import { render } from 'less';
 import { oops, resolve } from '@eleventy-packages/common';
 import { pipe, tryCatch } from '@fluss/core';
-import { Options, renderSync } from 'sass';
+import { compile, Options } from 'sass';
 
 import { PluginState } from './types';
 
@@ -14,23 +14,39 @@ export enum Language {
   LESS = 'less',
 }
 
+interface CompilerResult {
+  readonly css: string;
+  readonly urls: readonly string[];
+}
+
 type Compiler = <Options extends object>(
   options: Options,
-) => (path: string) => Promise<string>;
+) => (path: string) => Promise<CompilerResult>;
 
 /**
  * Transform Sass to CSS.
  * It adjusts all Sass files into one CSS file.
  */
-const compileSass: Compiler = (options: Options) => async (file) =>
-  renderSync({
-    file,
+const compileSass: Compiler = (options: Options<'sync'>) => async (file) => {
+  const { css, loadedUrls } = compile(file, {
     // Allow import styles from installed packages.
-    includePaths: [resolvePath('node_modules')],
+    loadPaths: [resolvePath('node_modules')],
     ...options,
-  }).css.toString('utf8');
+  });
 
-const extractCssFromLessResult = ({ css }: Less.RenderOutput): string => css;
+  return {
+    css,
+    urls: loadedUrls.map((url) => url.pathname.replace(process.cwd(), '')),
+  };
+};
+
+const extractCssFromLessResult = ({
+  css,
+  imports,
+}: Less.RenderOutput): CompilerResult => ({
+  css,
+  urls: imports.map((url) => url.replace(process.cwd(), '')),
+});
 
 /**
  * Transform Less into CSS.
@@ -42,11 +58,11 @@ const compileLess: Compiler = (options: Less.Options) =>
       (path: string) => readFile(path, { encoding: 'utf8' }),
       pipe((data: string) => render(data, options), extractCssFromLessResult),
     ),
-    (error) => (oops(error), resolve('')),
+    (error) => (oops(error), resolve({ css: '', urls: [] })),
   );
 
 const compileCSS: Compiler = () => (path: string) =>
-  readFile(path, { encoding: 'utf8' });
+  readFile(path, { encoding: 'utf8' }).then((css) => ({ css, urls: [] }));
 
 const LanguageHandler = {
   [Language.CSS]: compileCSS,
@@ -55,8 +71,8 @@ const LanguageHandler = {
 } as const;
 
 export interface GetCompilerOptions {
-  readonly sassOptions: Options | PluginState.Off;
   readonly lessOptions: Less.Options | PluginState.Off;
+  readonly sassOptions: Options<'sync'> | PluginState.Off;
 }
 
 export const getCompiler = ({
