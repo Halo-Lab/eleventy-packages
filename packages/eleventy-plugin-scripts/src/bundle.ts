@@ -14,6 +14,7 @@ import {
   isRemoteLink,
   isProduction,
   URL_DELIMITER,
+  withLeadingSlash,
 } from '@eleventy-packages/common';
 
 import { pathStats } from './path_stats';
@@ -25,7 +26,6 @@ const { writeFile } = promises;
 type BundleOptions = Required<Omit<ScriptsPluginOptions, 'addWatchTarget'>>;
 
 interface TransformFileOptions extends BundleOptions {
-  readonly nestedHTMLPath: ReadonlyArray<string>;
   readonly buildDirectory: string;
   readonly publicSourcePathToScript: string;
 }
@@ -33,7 +33,6 @@ interface TransformFileOptions extends BundleOptions {
 export const transformFile = memoize(
   ({
     inputDirectory,
-    nestedHTMLPath,
     buildDirectory,
     esbuildOptions,
     publicDirectory,
@@ -79,36 +78,37 @@ export const transformFile = memoize(
           )}"`,
         ),
       () =>
-        nestedHTMLPath
-          .map(() => '..')
-          .concat(publicDirectory)
-          .concat(publicFileName)
-          .filter(Boolean)
-          .join(URL_DELIMITER),
+        withLeadingSlash([publicDirectory, publicFileName].join(URL_DELIMITER)),
     )();
   },
   ({ publicSourcePathToScript }) => publicSourcePathToScript,
 );
 
+interface FilePathsMap {
+  readonly input: string;
+  readonly output: string;
+}
+
 const findAndProcessFiles = (
   html: string,
   outputPath: string,
   { inputDirectory, esbuildOptions, publicDirectory }: BundleOptions,
-) => {
-  const [buildDirectory, ...nestedHTMLPath] = pathStats(outputPath).directories;
+): Promise<readonly FilePathsMap[]> => {
+  const [buildDirectory] = pathStats(outputPath).directories;
 
-  return rip(html, SCRIPTS_LINK_REGEXP, pipe(isRemoteLink, not)).map((link) =>
-    transformFile({
-      inputDirectory,
-      publicDirectory,
-      esbuildOptions,
-      buildDirectory,
-      nestedHTMLPath,
-      publicSourcePathToScript: link,
-    }).then((output) => ({
-      output,
-      input: link,
-    })),
+  return Promise.all(
+    rip(html, SCRIPTS_LINK_REGEXP, pipe(isRemoteLink, not)).map((link) =>
+      transformFile({
+        inputDirectory,
+        publicDirectory,
+        esbuildOptions,
+        buildDirectory,
+        publicSourcePathToScript: link,
+      }).then((output) => ({
+        output,
+        input: link,
+      })),
+    ),
   );
 };
 
@@ -118,7 +118,7 @@ export const bundle = async (
   outputPath: string,
   options: BundleOptions,
 ) =>
-  Promise.all(findAndProcessFiles(html, outputPath, options))
+  findAndProcessFiles(html, outputPath, options)
     .then((array) => array.filter(Boolean))
     .then(
       (validUrls) => {
