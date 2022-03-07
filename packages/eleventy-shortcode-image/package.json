@@ -1,6 +1,6 @@
 {
   "name": "eleventy-shortcode-image",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Shortcode for image transformation, optimization and building its HTML representation.",
   "main": "index.js",
   "exports": {
@@ -13,8 +13,7 @@
     "url": "https://github.com/Halo-Lab/eleventy-shortcode-image.git"
   },
   "publishConfig": {
-    "access": "public",
-    "directory": "build"
+    "access": "public"
   },
   "scripts": {
     "test": "jest",
@@ -25,7 +24,7 @@
     "copy:readme": "cpy README.md build",
     "copy:license": "cpy LICENSE build",
     "prerelease": "npm run build",
-    "release": "npm publish build/"
+    "release": "cd build && npm publish"
   },
   "keywords": [
     "Eleventy",
