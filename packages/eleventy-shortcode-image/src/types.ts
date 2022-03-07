@@ -1,11 +1,13 @@
 export interface AdditionalOptions {
   /**
    * If this option is `true`,then HTML will be generated and
-   * inserted into template. Otherwise info about image will
+   * inserted into template. Otherwise, info about image will
    * be returned. For now is used for SVG.
    * By default, is `false`.
    */
   readonly toHTML?: boolean;
+  readonly shouldDeleteViewBox?: boolean;
+  readonly shouldDeleteDimensions?: boolean;
 }
 
 export type ImageProperties = Record<string, string | number> &

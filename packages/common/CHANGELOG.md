@@ -1,4 +1,14 @@
-# [0.0.7] - 2021-12-14
+# [0.0.9] - 2022-03-07
+
+### Added
+
+- `mixProperties` function.
+
+### Fixed
+
+- increment internal index of `LimitedMemory` object.
+
+## [0.0.7] - 2021-12-14
 
 ### Fixed
 

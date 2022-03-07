@@ -1,4 +1,10 @@
-# [1.6.2] - 2021-12-21
+# [1.7.0] - 2022-03-07
+
+### Added
+
+- `shouldDeleteViewBox` and `shouldDeleteDimensions` properties to `svgOptions` and `imageProperties` objects.
+
+## [1.6.2] - 2021-12-21
 
 ### Changed
 

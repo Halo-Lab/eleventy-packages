@@ -41,6 +41,6 @@
     "pwa-asset-generator": "^6.0.0"
   },
   "devDepencency": {
-    "@eleventy-packages/common": "^0.0.7"
+    "@eleventy-packages/common": "^0.0.9"
   }
 }

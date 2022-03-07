@@ -62,7 +62,11 @@ interface ImageShortCodeOptions {
    * Options for [svgo](https://github.com/svg/svgo) package.
    * for subtle configuration of SVGs optimizations.
    */
-  svgoOptions?: OptimizeOptions & { toHTML?: boolean };
+  svgoOptions?: OptimizeOptions & {
+    readonly toHTML?: boolean;
+    readonly shouldDeleteViewBox?: boolean;
+    readonly shouldDeleteDimensions?: boolean;
+  };
   /**
    * Options for [@11ty/eleventy-img](https://www.11ty.dev/docs/plugins/image/) package.
    * Is is used for optiomizations of raster images.
@@ -99,6 +103,10 @@ This shortcode accepts two arguments:
 interface ImageProperties {
   /** Inserts SVG into HTML. **Only for SVG**. */
   readonly toHTML?: boolean;
+  /** **Only for SVG**. */
+  readonly shouldDeleteViewBox?: boolean;
+  /** **Only for SVG**. */
+  readonly shouldDeleteDimensions?: boolean;
   /** Class names for <img>. */
   readonly classes?: string | ReadonlyArray<string>;
   /**

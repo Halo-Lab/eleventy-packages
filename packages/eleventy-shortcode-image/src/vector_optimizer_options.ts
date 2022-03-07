@@ -1,12 +1,15 @@
+import { AdditionalOptions } from './types';
 import { OptimizeOptions, PresetDefault } from 'svgo';
 
-const overrideDefaultPlugins = (): PresetDefault => ({
+const overrideDefaultPlugins = (
+  options: OptimizeOptions & AdditionalOptions,
+): PresetDefault => ({
   name: 'preset-default',
   params: {
     overrides: {
-      // Preserve view-box attribute on <svg> for proper resizing of SVG
-      // through CSS.
-      removeViewBox: false,
+      removeViewBox: {
+        remove: options.shouldDeleteViewBox ?? false,
+      },
     },
   },
 });
@@ -15,15 +18,15 @@ const overrideDefaultPlugins = (): PresetDefault => ({
 export const getVectorOptimizerOptions = (
   input: string,
   classNames: ReadonlyArray<string>,
-  options: OptimizeOptions = {},
+  options: OptimizeOptions & AdditionalOptions = {},
 ): OptimizeOptions => ({
   path: input,
   plugins: [
-    overrideDefaultPlugins(),
+    overrideDefaultPlugins(options),
     // Remove width and height attributes from <svg>
     {
       name: 'removeDimensions',
-      active: true,
+      active: options.shouldDeleteDimensions ?? true,
     },
     // Add name of SVG to id for create unique IDs if many SVGs will be present in page
     {

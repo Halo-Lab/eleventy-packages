@@ -19,6 +19,7 @@ import {
 } from './image_attributes';
 import {
   isProduction,
+  mixProperties,
   DEFAULT_BUILD_DIRECTORY,
   DEFAULT_ASSETS_DIRECTORY,
   DEFAULT_IMAGES_DIRECTORY,
@@ -67,7 +68,12 @@ export const createImageShortcode = ({
   memoize(
     async (
       src: string,
-      { toHTML, ...attributes }: ImageProperties = {},
+      {
+        toHTML,
+        shouldDeleteViewBox,
+        shouldDeleteDimensions,
+        ...attributes
+      }: ImageProperties = {},
     ): Promise<string> => {
       // Gather information about an image.
       const source = converter(src, inputDirectory, outputDirectory);
@@ -87,17 +93,22 @@ export const createImageShortcode = ({
           : [attributes.classes];
 
         const result = isProduction()
-          ? optimizeSVG(source.sourcePath, classNames, svgoOptions)()
-          : readSVG(classNames)(source.sourcePath);
+          ? await optimizeSVG(
+              source.sourcePath,
+              classNames,
+              mixProperties<AdditionalOptions>({
+                shouldDeleteViewBox,
+                shouldDeleteDimensions,
+              })(svgoOptions),
+            )()
+          : await readSVG(classNames)(source.sourcePath);
 
         if (toHTML ?? svgoOptions.toHTML ?? false) {
           return result;
         } else {
           // We do not need to wait for image writing, because
           // we already have its public URL.
-          result.then((svgData) =>
-            writeImage(svgData, source.outputPath, true),
-          );
+          writeImage(result, source.outputPath, true);
 
           return createImg(
             normalizeImageAttributes({

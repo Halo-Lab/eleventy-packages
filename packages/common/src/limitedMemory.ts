@@ -18,7 +18,7 @@ export const limitedMemory = <Item>(limit = 1000): LimitedMemory<Item> => {
 
       area[currentlyAvailablePart] = item;
 
-      return currentlyAvailablePart;
+      return currentlyAvailablePart++;
     },
     get: (index) => maybe(area[index]) as Option<Item>,
     release: (index) => void (area[index] = null),
