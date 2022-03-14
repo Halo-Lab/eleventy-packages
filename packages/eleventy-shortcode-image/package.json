@@ -24,7 +24,7 @@
     "copy:readme": "cpy README.md build",
     "copy:license": "cpy LICENSE build",
     "prerelease": "npm run build",
-    "release": "cd build && npm publish"
+    "release": "npm publish build/"
   },
   "keywords": [
     "Eleventy",
