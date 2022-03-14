@@ -1,4 +1,10 @@
-# [1.7.1] - 2022-03-07
+# [1.7.2] - 2022-03-14
+
+### Fixed
+
+- Escape every `\` of path separator for Windows.
+
+## [1.7.1] - 2022-03-07
 
 This release is forced by [npm regression bug](https://github.com/npm/cli/issues/4126). The previous release pushed wrong files into the registry.
 

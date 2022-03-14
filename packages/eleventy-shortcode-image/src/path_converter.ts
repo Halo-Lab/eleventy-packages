@@ -64,7 +64,10 @@ export const converter = (
         absoluteOutputPrefix,
         outputPrefix.split(path.sep).slice(1).join(path.sep),
       )
-      .replace(new RegExp(path.sep, 'g'), URL_DELIMITER),
+      .replace(
+        new RegExp(path.sep === '\\' ? '\\' + path.sep : path.sep, 'g'),
+        URL_DELIMITER,
+      ),
   );
   const extension = path.extname(sourcePath).slice(1);
 
