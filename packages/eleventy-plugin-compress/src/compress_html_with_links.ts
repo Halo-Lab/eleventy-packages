@@ -1,6 +1,6 @@
 import { join, dirname } from 'path';
 
-import { done, oops, start, makeDirectories } from '@eleventy-packages/common';
+import { done, oops, start, mkdir } from '@eleventy-packages/common';
 
 import { rip } from './rip';
 import { read } from './read';
@@ -56,7 +56,7 @@ export const compressHTMLWithLinks = async (
           info.then(({ data, url }) => {
             start(`Start to compress "${url}" file`);
 
-            makeDirectories(url)
+            mkdir(url)
               .then(() => compressor(data, url))
               .then(write)
               .then(
