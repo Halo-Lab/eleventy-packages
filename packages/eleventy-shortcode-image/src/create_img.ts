@@ -41,7 +41,9 @@ export const createPicture = (
                   imageFormat[0].sourceType ?? ''
                 }" ${srcsetName}="${imageFormat
                   .map(({ srcset }) => srcset)
-                  .join(', ')}">`,
+                  .join(', ')}" ${
+                  isJust(attributes.sizes) ? `sizes="${attributes.sizes}"` : ''
+                }>`,
             )
             .join('\n')
     }

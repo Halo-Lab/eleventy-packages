@@ -115,6 +115,12 @@ interface ImageProperties {
    * be set directly, but to other custom attributes.
    */
   readonly lazy?: boolean;
+  /**
+   * It specifies different image widths.
+   * If not defined, then `sizes` attribute won't be
+   * included to the `<source>` and `<img>` element.
+   */
+  readonly sizes?: string;
   /** Class names for <img>. */
   readonly classes?: string | ReadonlyArray<string>;
   /** Name of the custom _src_ attribute for lazy loaded image. */

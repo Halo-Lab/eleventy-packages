@@ -18,6 +18,12 @@ export type ImageProperties = Record<string, string | number> &
      * be set directly, but to other custom attributes.
      */
     readonly lazy?: boolean;
+    /**
+     * It specifies different image widths.
+     * If not defined, then `sizes` attribute won't be
+     * included to the `<source>` element.
+     */
+    readonly sizes?: string;
     /** Class names for <img>. */
     readonly classes?: string | ReadonlyArray<string>;
     /** Name of the custom _src_ attribute for lazy loaded image. */

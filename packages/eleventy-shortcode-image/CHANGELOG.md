@@ -1,4 +1,10 @@
-# [1.7.2] - 2022-03-14
+# [1.8.0] - 28-04-2022
+
+### Added
+
+- Explicit sizes attribute for `source` elements.
+
+## [1.7.2] - 2022-03-14
 
 ### Fixed
 
