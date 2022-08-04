@@ -2,7 +2,7 @@ import { sep, resolve, extname } from 'path';
 
 import { identity } from '@fluss/core';
 
-import { hash } from './hash';
+import { uid } from './extendedCrypto';
 import { UP_LEVEL_GLOB, URL_DELIMITER } from './constants';
 import { isAbsoluteURL, withLeadingSlash } from './url';
 
@@ -63,7 +63,7 @@ export const linker = <Options>({
 
     const publicUrlWithHash = publicUrl.replace(
       extension,
-      `-${hash()}${extension}`,
+      `-${uid()}${extension}`,
     );
 
     return {

@@ -1,9 +1,7 @@
 export * from './url';
-export * from './not';
 export * from './mix';
 export * from './rip';
 export * from './unit';
-export * from './hash';
 export * from './mode';
 export * from './file';
 export * from './mkdir';
@@ -17,3 +15,4 @@ export * from './debugger';
 export * from './constants';
 export * from './directory';
 export * from './limitedMemory';
+export * from './extendedCrypto';

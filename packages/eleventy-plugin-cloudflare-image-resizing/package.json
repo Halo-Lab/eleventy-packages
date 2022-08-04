@@ -1,0 +1,28 @@
+{
+	"name": "eleventy-plugin-cloudflare-image-resizing",
+	"version": "0.0.1",
+	"description": "Plugin for generating the correct image URL of Cloudflare Image Resizing service.",
+	"main": "./index.js",
+	"exports": {
+		".": "./index.js"
+	},
+	"publishConfig": {
+		"access": "public",
+		"directory": "build"
+	},
+	"scripts": {
+		"prebuild": "rimraf build",
+		"build": "rollup -c",
+		"postbuild": "npm run copy:package; npm run copy:readme; npm run copy:license",
+		"copy:package": "cpy package.json build",
+		"copy:readme": "cpy README.md build",
+		"copy:license": "cpy LICENSE build",
+		"prerelease": "npm run build",
+		"release": "npm publish build/"
+	},
+	"keywords": [
+		"eleventy",
+		"Cloudflare",
+		"image resizing"
+	]
+}

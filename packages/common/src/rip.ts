@@ -4,7 +4,7 @@
  * describes needed information. Also, pattern should
  * have global flag.
  * It can accept optional predicate that can decide
- * if found information shoud be captured.
+ * if found information should be captured.
  */
 export const rip = (
   text: string,
