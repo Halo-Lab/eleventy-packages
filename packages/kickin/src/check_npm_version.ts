@@ -6,10 +6,10 @@ import { execSync } from 'child_process';
  * dependencies by yourself.
  */
 export const checkNpmVersion = () => {
-  const version = execSync('npm --version').toString().trim();
+	const version = execSync('npm --version').toString().trim();
 
-  return {
-    version,
-    needToInstallPeerDependencies: semver.gte('7.0.0', version),
-  };
+	return {
+		version,
+		needToInstallPeerDependencies: semver.gte('7.0.0', version),
+	};
 };

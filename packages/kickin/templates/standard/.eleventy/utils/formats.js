@@ -8,14 +8,14 @@ const SCRIPT_FORMATS = ['js', 'ts', 'cjs', 'mjs'];
 const STYLE_FORMATS = ['css', 'scss', 'sass'];
 /** List of image formats. */
 const IMAGE_FORMATS = [
-  'jpg',
-  'png',
-  'gif',
-  'ico',
-  'svg',
-  'jpeg',
-  'avif',
-  'webp',
+	'jpg',
+	'png',
+	'gif',
+	'ico',
+	'svg',
+	'jpeg',
+	'avif',
+	'webp',
 ];
 /** List of font formats. */
 const FONT_FORMATS = ['eot', 'ttf', 'otf', 'ttc', 'woff', 'woff2'];
@@ -67,15 +67,15 @@ const isFont = (url) => FONT_FORMATS.includes(extensionOf(url));
  * @param {string} extension
  */
 const getImageFormatsFrom = (extension) => {
-  switch (extension) {
-    case 'png':
-      return ['png', 'webp', 'avif'];
-    case 'svg':
-      // Do not convert vector image to raster image.
-      return ['svg'];
-    default:
-      return ['jpeg', 'webp', 'avif'];
-  }
+	switch (extension) {
+		case 'png':
+			return ['png', 'webp', 'avif'];
+		case 'svg':
+			// Do not convert vector image to raster image.
+			return ['svg'];
+		default:
+			return ['jpeg', 'webp', 'avif'];
+	}
 };
 
 /**
@@ -86,26 +86,26 @@ const getImageFormatsFrom = (extension) => {
  * in CSS, we are forced to use older formats: `png` and `jpeg`.
  */
 const adjustExtension = (url) =>
-  path.join(
-    path.dirname(url),
-    path.basename(url, extensionOf(url, true)) +
-      '.' +
-      // We can safely take first element from array,
-      // because there always will be at least one element.
-      getImageFormatsFrom(extensionOf(url))[0]
-  );
+	path.join(
+		path.dirname(url),
+		path.basename(url, extensionOf(url, true)) +
+			'.' +
+			// We can safely take first element from array,
+			// because there always will be at least one element.
+			getImageFormatsFrom(extensionOf(url))[0],
+	);
 
 module.exports = {
-  isSVG,
-  isFont,
-  isImage,
-  isStyle,
-  isScript,
-  adjustExtension,
-  getImageFormatsFrom,
+	isSVG,
+	isFont,
+	isImage,
+	isStyle,
+	isScript,
+	adjustExtension,
+	getImageFormatsFrom,
 
-  FONT_FORMATS,
-  IMAGE_FORMATS,
-  STYLE_FORMATS,
-  SCRIPT_FORMATS,
+	FONT_FORMATS,
+	IMAGE_FORMATS,
+	STYLE_FORMATS,
+	SCRIPT_FORMATS,
 };

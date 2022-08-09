@@ -86,7 +86,7 @@ If template contains data then along with `render` function you should export `d
 
 ```js
 module.exports.data = {
-  /* some key/value pairs */
+	/* some key/value pairs */
 };
 ```
 
@@ -98,16 +98,16 @@ Also you can organize template as **class**. It must have `render` method(either
 
 ```js
 module.exports = class {
-  data() {
-    // getter or async method
-    return {
-      /* some key/value pairs */
-    };
-  }
+	data() {
+		// getter or async method
+		return {
+			/* some key/value pairs */
+		};
+	}
 
-  async render(data) {
-    return /* html */ `<p>I am a class!</p>`;
-  }
+	async render(data) {
+		return /* html */ `<p>I am a class!</p>`;
+	}
 };
 ```
 
@@ -118,7 +118,7 @@ To include component template into layout or page template simply import compone
 Component (_components/row.js_):
 
 ```js
-module.exports = () => /* html */ `<span>I am a component.</span>;`
+module.exports = () => /* html */ `<span>I am a component.</span>;`;
 ```
 
 Template (_pages/home.js_):
@@ -152,9 +152,9 @@ In order to include style to page in page's template provide `styles` property i
 
 ```js
 module.exports.data = {
-  // Bundler of this starter is smart enough to recognize type of style
-  // and its location (file will be resolved at `src/styles/home.scss`)
-  styles: 'home.scss',
+	// Bundler of this starter is smart enough to recognize type of style
+	// and its location (file will be resolved at `src/styles/home.scss`)
+	styles: 'home.scss',
 };
 ```
 
@@ -162,7 +162,7 @@ If style is inside some directory, then it must be provided in path:
 
 ```js
 module.exports.data = {
-  styles: 'directory/common.scss', // -> src/styles/directory/common.scss
+	styles: 'directory/common.scss', // -> src/styles/directory/common.scss
 };
 ```
 
@@ -178,8 +178,8 @@ In order to include scripts into HTML page provide `scripts` property in page te
 
 ```js
 module.exports.data = {
-  // This will be resolved to 'src/scripts/main.js'
-  scripts: 'main.js', // or 'main.ts' -> 'src/scripts/main.ts'
+	// This will be resolved to 'src/scripts/main.js'
+	scripts: 'main.js', // or 'main.ts' -> 'src/scripts/main.ts'
 };
 ```
 
@@ -195,17 +195,17 @@ Signature of shortcode:
 
 ```ts
 interface ImageAttributes {
-  /** Defines alternative text for image. */
-  alt?: string;
-  /** Defines title for image. */
-  title?: string;
-  /** Class name(s) for `class` attribute. */
-  classes?: string | ReadonlyArray<string>;
+	/** Defines alternative text for image. */
+	alt?: string;
+	/** Defines title for image. */
+	title?: string;
+	/** Class name(s) for `class` attribute. */
+	classes?: string | ReadonlyArray<string>;
 }
 
 async function image(
-  src: string,
-  attributes?: ImageAttributes
+	src: string,
+	attributes?: ImageAttributes,
 ): Promise<string>;
 ```
 
@@ -213,7 +213,7 @@ First parameter is mandatory and contains a path to image relative to `images` d
 
 ```js
 module.exports.render = async function () {
-  return /* html */ `<main>${await this.image('logo.png')}</main>`;
+	return /* html */ `<main>${await this.image('logo.png')}</main>`;
 };
 ```
 

@@ -7,10 +7,10 @@ import { RawContentInfo } from './types';
 
 /** Read file from _build_ directory. */
 export const read = async (url: string): Promise<RawContentInfo> => ({
-  data: await promises
-    .readFile(resolve(url), {
-      encoding: 'utf-8',
-    })
-    .catch((error) => (oops(error), '')),
-  url,
+	data: await promises
+		.readFile(resolve(url), {
+			encoding: 'utf-8',
+		})
+		.catch((error) => (oops(error), '')),
+	url,
 });

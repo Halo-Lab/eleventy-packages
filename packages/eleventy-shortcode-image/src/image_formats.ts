@@ -8,20 +8,20 @@
  * Formats that are accepted by plugin: https://www.11ty.dev/docs/plugins/image/
  */
 export const getImageFormatsFrom = (
-  extension: string
+	extension: string,
 ): ReadonlyArray<string> => {
-  switch (extension) {
-    case 'png':
-      return ['png', 'webp', 'avif'];
-    case 'jpg':
-    case 'jpeg':
-    case 'webp':
-    case 'avif':
-    case 'tiff':
-      return ['jpeg', 'webp', 'avif'];
-    default:
-      return [extension];
-  }
+	switch (extension) {
+		case 'png':
+			return ['png', 'webp', 'avif'];
+		case 'jpg':
+		case 'jpeg':
+		case 'webp':
+		case 'avif':
+		case 'tiff':
+			return ['jpeg', 'webp', 'avif'];
+		default:
+			return [extension];
+	}
 };
 
 export const isGif = (path: string): boolean => path.endsWith('gif');

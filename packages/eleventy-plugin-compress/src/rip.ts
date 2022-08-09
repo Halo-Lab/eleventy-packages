@@ -4,12 +4,12 @@
  * describes needed information.
  */
 export const rip = (text: string, pattern: RegExp) => {
-  const links = [];
+	const links = [];
 
-  let match = null;
-  while ((match = pattern.exec(text)) !== null) {
-    links.push(match[1]);
-  }
+	let match = null;
+	while ((match = pattern.exec(text)) !== null) {
+		links.push(match[1]);
+	}
 
-  return links;
+	return links;
 };

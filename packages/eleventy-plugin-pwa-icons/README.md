@@ -26,9 +26,9 @@ and eventually add to Eleventy as plugin:
 const { icons } = require('eleventy-plugin-pwa-icons');
 
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(icons, {
-    /* Optional options. */
-  });
+	eleventyConfig.addPlugin(icons, {
+		/* Optional options. */
+	});
 };
 ```
 
@@ -38,49 +38,49 @@ The plugin can accept following options:
 
 ```ts
 interface PWAIconsOptions {
-  icons?: {
-    /**
-     * Path to source image for PWA icons.
-     * By default, it is `src/icon.png`.
-     *
-     * Should be relative to _current working directory_.
-     */
-    pathToRawImage?: string;
-    /**
-     * Public directory into which to output all PWA icons.
-     *
-     * Should be relative to _output_ directory.
-     */
-    publicDirectory?: string;
-  };
-  manifest?: {
-    /**
-     * Path to `manifest.json` file.
-     * By default, it is `src/manifest.json`.
-     *
-     * Should be relative to _current working directory_.
-     */
-    pathToManifest?: string;
-    /**
-     * Public directory into which to output updated `manifest.json`.
-     *
-     * Should be relative to _output_ directory.
-     */
-    publicDirectory?: string;
-  };
-  /**
-   * Controls whether plugin should work or not.
-   * By default, it is enabled in _production_ mode.
-   */
-  enabled?: boolean;
-  /** Logs a result of generated items to whatever you want. */
-  logger?: LoggerFunction;
-  /**
-   * Options that control work of [pwa-asset-generator](https://www.npmjs.com/package/pwa-asset-generator).
-   *
-   * See [here](https://github.com/onderceylan/pwa-asset-generator) about available options.
-   */
-  generatorOptions?: Options;
+	icons?: {
+		/**
+		 * Path to source image for PWA icons.
+		 * By default, it is `src/icon.png`.
+		 *
+		 * Should be relative to _current working directory_.
+		 */
+		pathToRawImage?: string;
+		/**
+		 * Public directory into which to output all PWA icons.
+		 *
+		 * Should be relative to _output_ directory.
+		 */
+		publicDirectory?: string;
+	};
+	manifest?: {
+		/**
+		 * Path to `manifest.json` file.
+		 * By default, it is `src/manifest.json`.
+		 *
+		 * Should be relative to _current working directory_.
+		 */
+		pathToManifest?: string;
+		/**
+		 * Public directory into which to output updated `manifest.json`.
+		 *
+		 * Should be relative to _output_ directory.
+		 */
+		publicDirectory?: string;
+	};
+	/**
+	 * Controls whether plugin should work or not.
+	 * By default, it is enabled in _production_ mode.
+	 */
+	enabled?: boolean;
+	/** Logs a result of generated items to whatever you want. */
+	logger?: LoggerFunction;
+	/**
+	 * Options that control work of [pwa-asset-generator](https://www.npmjs.com/package/pwa-asset-generator).
+	 *
+	 * See [here](https://github.com/onderceylan/pwa-asset-generator) about available options.
+	 */
+	generatorOptions?: Options;
 }
 ```
 

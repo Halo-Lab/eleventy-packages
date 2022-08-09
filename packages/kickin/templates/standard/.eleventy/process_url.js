@@ -6,15 +6,15 @@ const { IMAGES_DIRECTORY, FONTS_DIRECTORY } = require('./constants');
 
 /** Rebase urls in styles and make image optimizations. */
 const rebase = (url) => {
-  if (isImage(url)) {
-    optimizeImage(url);
-  }
+	if (isImage(url)) {
+		optimizeImage(url);
+	}
 
-  return path.join(
-    '/',
-    isImage(url) ? IMAGES_DIRECTORY : isFont(url) ? FONTS_DIRECTORY : '',
-    adjustExtension(url)
-  );
+	return path.join(
+		'/',
+		isImage(url) ? IMAGES_DIRECTORY : isFont(url) ? FONTS_DIRECTORY : '',
+		adjustExtension(url),
+	);
 };
 
 /**
@@ -24,4 +24,4 @@ const rebase = (url) => {
  * in this case.
  */
 module.exports.processUrl = ({ url }) =>
-  path.isAbsolute(url) ? url : rebase(url);
+	path.isAbsolute(url) ? url : rebase(url);

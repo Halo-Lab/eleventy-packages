@@ -29,9 +29,9 @@ and then you can include it into `.eleventy.js`:
 const { scripts } = require('eleventy-plugin-scripts');
 
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(scripts, {
-    /* Optional options. */
-  });
+	eleventyConfig.addPlugin(scripts, {
+		/* Optional options. */
+	});
 };
 ```
 
@@ -41,26 +41,26 @@ Plugin can accept the following options:
 
 ```ts
 interface ScriptsPluginOptions {
-  /**
-   * Path to directory with all scripts
-   * Should be relative to _current working directory_.
-   */
-  inputDirectory?: string;
-  /**
-   * Directory inside _output_ folder to be used as
-   * warehouse for all compiled scripts. Will be
-   * prepended to public script urls in HTML.
-   */
-  publicDirectory?: string;
-  /**
-   * Options that can be passed to [`esbuild`](https://esbuild.github.io).
-   */
-  esbuildOptions?: BuildOptions;
-  /**
-   * Indicates whether should Eleventy watch on files
-   * under _inputDirectory_ or not.
-   */
-  addWatchTarget?: boolean;
+	/**
+	 * Path to directory with all scripts
+	 * Should be relative to _current working directory_.
+	 */
+	inputDirectory?: string;
+	/**
+	 * Directory inside _output_ folder to be used as
+	 * warehouse for all compiled scripts. Will be
+	 * prepended to public script urls in HTML.
+	 */
+	publicDirectory?: string;
+	/**
+	 * Options that can be passed to [`esbuild`](https://esbuild.github.io).
+	 */
+	esbuildOptions?: BuildOptions;
+	/**
+	 * Indicates whether should Eleventy watch on files
+	 * under _inputDirectory_ or not.
+	 */
+	addWatchTarget?: boolean;
 }
 ```
 
@@ -84,10 +84,10 @@ After URL extraction plugin will search for these files inside _inputDirectory_ 
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(scripts, {
-    // This is a default value
-    inputDirectory: 'src/scripts',
-  });
+	eleventyConfig.addPlugin(scripts, {
+		// This is a default value
+		inputDirectory: 'src/scripts',
+	});
 };
 ```
 
@@ -109,10 +109,10 @@ If you want to customize output path of compiled script inside _output_ director
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(scripts, {
-    inputDirectory: 'src/scripts',
-    publicDirectory: 'scripts',
-  });
+	eleventyConfig.addPlugin(scripts, {
+		inputDirectory: 'src/scripts',
+		publicDirectory: 'scripts',
+	});
 };
 ```
 
@@ -127,11 +127,11 @@ By default Eleventy will watch for changes inside _inputDirectory_. You have an 
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(scripts, {
-    // Now Eleventy will not trigger rebuild process
-    // if any script changes.
-    addWatchTarget: false,
-  });
+	eleventyConfig.addPlugin(scripts, {
+		// Now Eleventy will not trigger rebuild process
+		// if any script changes.
+		addWatchTarget: false,
+	});
 };
 ```
 
@@ -144,11 +144,11 @@ You customize its behavior by providing [build options](https://esbuild.github.i
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(scripts, {
-    esbuildOptions: {
-      /* Some useful options. */
-    },
-  });
+	eleventyConfig.addPlugin(scripts, {
+		esbuildOptions: {
+			/* Some useful options. */
+		},
+	});
 };
 ```
 

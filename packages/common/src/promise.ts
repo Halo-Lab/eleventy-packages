@@ -5,6 +5,6 @@ export const resolve = Promise.resolve.bind(Promise);
 export const reject = Promise.reject.bind(Promise);
 
 export const promises = <Value>(
-  ...promises: readonly (Promise<Value> | readonly Promise<Value>[])[]
+	...promises: readonly (Promise<Value> | readonly Promise<Value>[])[]
 ): Promise<readonly PromiseSettledResult<Value>[]> =>
-  Promise.allSettled(promises.flat());
+	Promise.allSettled(promises.flat());

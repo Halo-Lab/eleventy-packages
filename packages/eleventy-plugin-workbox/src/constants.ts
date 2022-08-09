@@ -1,13 +1,13 @@
 /** List of image formats. */
 const IMAGE_FORMATS = [
-  'jpg',
-  'png',
-  'gif',
-  'ico',
-  'svg',
-  'jpeg',
-  'avif',
-  'webp',
+	'jpg',
+	'png',
+	'gif',
+	'ico',
+	'svg',
+	'jpeg',
+	'avif',
+	'webp',
 ];
 /** List of font formats. */
 const FONT_FORMATS = ['eot', 'ttf', 'otf', 'ttc', 'woff', 'woff2'];

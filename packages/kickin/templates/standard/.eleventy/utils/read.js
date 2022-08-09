@@ -10,10 +10,10 @@ const { reachFromSource } = require('./reach');
  * @returns content of source file and absolute path to it.
  */
 module.exports = async (...parts) => {
-  const pathToSource = reachFromSource(...parts);
+	const pathToSource = reachFromSource(...parts);
 
-  return {
-    source: await readFile(pathToSource, { encoding: 'utf8' }),
-    url: pathToSource,
-  };
+	return {
+		source: await readFile(pathToSource, { encoding: 'utf8' }),
+		url: pathToSource,
+	};
 };
