@@ -1,10 +1,10 @@
 {
-  "lang": "en-US",
-  "name": "<name>",
-  "scope": "/",
-  "display": "minimal-ui",
-  "start_url": "/",
-  "theme_color": "#ffffff",
-  "description": "<description>",
-  "background_color": "#ffffff"
+	"lang": "en-US",
+	"name": "<name>",
+	"scope": "/",
+	"display": "minimal-ui",
+	"start_url": "/",
+	"theme_color": "#ffffff",
+	"description": "<description>",
+	"background_color": "#ffffff"
 }

@@ -1,54 +1,54 @@
 {
-  "name": "eleventy-plugin-styles",
-  "version": "1.4.1",
-  "description": "Plugin for handling stylesheets from HTML.",
-  "main": "index.js",
-  "exports": {
-    ".": "./index.js",
-    "./index": "./index.js",
-    "./index.js": "./index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Halo-Lab/eleventy-plugin-styles.git"
-  },
-  "publishConfig": {
-    "access": "public",
-    "directory": "build"
-  },
-  "scripts": {
-    "prebuild": "rimraf build",
-    "build": "rollup -c",
-    "postbuild": "npm run copy:package; npm run copy:readme; npm run copy:license",
-    "copy:package": "cpy package.json build",
-    "copy:readme": "cpy README.md build",
-    "copy:license": "cpy LICENSE build",
-    "prerelease": "npm run build",
-    "release": "npm publish build/"
-  },
-  "keywords": [
-    "Eleventy",
-    "styles",
-    "minification",
-    "sass",
-    "scss",
-    "css"
-  ],
-  "author": "Kapelianovych Yevhen",
-  "license": "ISC",
-  "peerDependencies": {
-    "@fullhuman/postcss-purgecss": "^4.0.0",
-    "autoprefixer": "^10.2.0",
-    "browserslist": "^4.16.0",
-    "chalk": "^4.1.0",
-    "critical": "^4.0.0",
-    "cssnano": "^5.0.0",
-    "less": "^4.1.0",
-    "postcss": "^8.2.0",
-    "sass": "^1.45.0"
-  },
-  "devDependencies": {
-    "@eleventy-packages/common": "^0.0.8",
-    "@types/less": "^3.0.3"
-  }
+	"name": "eleventy-plugin-styles",
+	"version": "1.4.1",
+	"description": "Plugin for handling stylesheets from HTML.",
+	"main": "index.js",
+	"exports": {
+		".": "./index.js",
+		"./index": "./index.js",
+		"./index.js": "./index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Halo-Lab/eleventy-plugin-styles.git"
+	},
+	"publishConfig": {
+		"access": "public",
+		"directory": "build"
+	},
+	"scripts": {
+		"prebuild": "rimraf build",
+		"build": "rollup -c",
+		"postbuild": "npm run copy:package && npm run copy:readme && npm run copy:license",
+		"copy:package": "cpy package.json build",
+		"copy:readme": "cpy README.md build",
+		"copy:license": "cpy LICENSE build",
+		"prerelease": "npm run build",
+		"release": "npm publish build/"
+	},
+	"keywords": [
+		"Eleventy",
+		"styles",
+		"minification",
+		"sass",
+		"scss",
+		"css"
+	],
+	"author": "Kapelianovych Yevhen",
+	"license": "ISC",
+	"peerDependencies": {
+		"@fullhuman/postcss-purgecss": "^4.0.0",
+		"autoprefixer": "^10.2.0",
+		"browserslist": "^4.16.0",
+		"chalk": "^4.1.0",
+		"critical": "^4.0.0",
+		"cssnano": "^5.0.0",
+		"less": "^4.1.0",
+		"postcss": "^8.2.0",
+		"sass": "^1.45.0"
+	},
+	"devDependencies": {
+		"@eleventy-packages/common": "^0.0.9",
+		"@types/less": "^3.0.3"
+	}
 }

@@ -5,6 +5,6 @@ import { withLeadingSlash } from '@eleventy-packages/common';
  * inserted into HTML.
  */
 export const buildManifestLinkTag = (url: string) =>
-  /* html */ `<link rel="manifest" href="${withLeadingSlash(
-    url,
-  )}" crossorigin="use-credentials" />`;
+	/* html */ `<link rel="manifest" href="${withLeadingSlash(
+		url,
+	)}" crossorigin="use-credentials" />`;

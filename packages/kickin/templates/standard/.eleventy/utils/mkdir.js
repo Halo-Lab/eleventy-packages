@@ -7,7 +7,7 @@ const { existsSync, promises } = require('fs');
  * @returns {Promise<void>}
  */
 module.exports = async (directoryPath) =>
-  void (
-    existsSync(directoryPath) ||
-    (await promises.mkdir(directoryPath, { recursive: true }))
-  );
+	void (
+		existsSync(directoryPath) ||
+		(await promises.mkdir(directoryPath, { recursive: true }))
+	);

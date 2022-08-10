@@ -40,9 +40,9 @@ and then you can include it into `.eleventy.js`:
 const { styles } = require('eleventy-plugin-styles');
 
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    /* Optional options. */
-  });
+	eleventyConfig.addPlugin(styles, {
+		/* Optional options. */
+	});
 };
 ```
 
@@ -52,43 +52,43 @@ Plugin can accept the following options:
 
 ```ts
 interface StylesPluginOptions {
-  /**
-   * Options that will be passed to [critical](https://github.com/addyosmani/critical)
-   * package.
-   */
-  readonly criticalOptions?: CriticalOptions | PluginState.Off;
-  /**
-   * Path to directory with all styles.
-   * Should be relative to _current working directory_.
-   */
-  readonly inputDirectory?: string;
-  /**
-   * Directory inside _output_ folder to be used as
-   * warehouse for all compiled styles. Will be
-   * prepended to public style urls in HTML.
-   */
-  readonly publicDirectory?: string;
-  /**
-   * Options that can be passed to [`sass`](https://www.npmjs.com/package/sass)
-   * module.
-   */
-  readonly sassOptions?: SassCompilerOptions | PluginState.Off;
-  /**
-   * Options that can be passed to [`less`](https://www.npmjs.com/package/less)
-   * module.
-   */
-  readonly lessOptions?: Less.Options | PluginState.Off;
-  /** Options to be passed to [`PurgeCSS`](https://purgecss.com/). */
-  readonly purgeCSSOptions?: PurgeCSSOptions | PluginState.Off;
-  /** Options to be passed to [`CSSNano`](https://cssnano.co/). */
-  readonly cssnanoOptions?: CssNanoOptions | PluginState.Off;
-  /** Array of plugins that can be passed to [`PostCSS`](https://postcss.org). */
-  readonly postcssPlugins?: ReadonlyArray<AcceptedPlugin>;
-  /**
-   * Indicates whether should Eleventy watch on files
-   * under _inputDirectory_ or not.
-   */
-  readonly addWatchTarget?: boolean;
+	/**
+	 * Options that will be passed to [critical](https://github.com/addyosmani/critical)
+	 * package.
+	 */
+	readonly criticalOptions?: CriticalOptions | PluginState.Off;
+	/**
+	 * Path to directory with all styles.
+	 * Should be relative to _current working directory_.
+	 */
+	readonly inputDirectory?: string;
+	/**
+	 * Directory inside _output_ folder to be used as
+	 * warehouse for all compiled styles. Will be
+	 * prepended to public style urls in HTML.
+	 */
+	readonly publicDirectory?: string;
+	/**
+	 * Options that can be passed to [`sass`](https://www.npmjs.com/package/sass)
+	 * module.
+	 */
+	readonly sassOptions?: SassCompilerOptions | PluginState.Off;
+	/**
+	 * Options that can be passed to [`less`](https://www.npmjs.com/package/less)
+	 * module.
+	 */
+	readonly lessOptions?: Less.Options | PluginState.Off;
+	/** Options to be passed to [`PurgeCSS`](https://purgecss.com/). */
+	readonly purgeCSSOptions?: PurgeCSSOptions | PluginState.Off;
+	/** Options to be passed to [`CSSNano`](https://cssnano.co/). */
+	readonly cssnanoOptions?: CssNanoOptions | PluginState.Off;
+	/** Array of plugins that can be passed to [`PostCSS`](https://postcss.org). */
+	readonly postcssPlugins?: ReadonlyArray<AcceptedPlugin>;
+	/**
+	 * Indicates whether should Eleventy watch on files
+	 * under _inputDirectory_ or not.
+	 */
+	readonly addWatchTarget?: boolean;
 }
 ```
 
@@ -112,9 +112,9 @@ After links extraction plugin will search for these files inside _inputDirectory
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    inputDirectory: 'src/styles',
-  });
+	eleventyConfig.addPlugin(styles, {
+		inputDirectory: 'src/styles',
+	});
 };
 ```
 
@@ -142,10 +142,10 @@ If you want to customize output path of compiled style inside _output_ directory
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    inputDirectory: 'src/styles',
-    publicDirectory: 'styles',
-  });
+	eleventyConfig.addPlugin(styles, {
+		inputDirectory: 'src/styles',
+		publicDirectory: 'styles',
+	});
 };
 ```
 
@@ -160,11 +160,11 @@ By default, Eleventy will watch for changes inside _inputDirectory_. You have an
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    // Now Eleventy will not trigger rebuild process
-    // if any style changes.
-    addWatchTarget: false,
-  });
+	eleventyConfig.addPlugin(styles, {
+		// Now Eleventy will not trigger rebuild process
+		// if any style changes.
+		addWatchTarget: false,
+	});
 };
 ```
 
@@ -177,11 +177,11 @@ If you want to customize its behavior then [options](https://www.npmjs.com/packa
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    sassOptions: {
-      /* Some useful options. */
-    },
-  });
+	eleventyConfig.addPlugin(styles, {
+		sassOptions: {
+			/* Some useful options. */
+		},
+	});
 };
 ```
 
@@ -190,9 +190,9 @@ Plugin uses this preprocessor as the default language for CSS. You can disable i
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    sassOptions: 'off',
-  });
+	eleventyConfig.addPlugin(styles, {
+		sassOptions: 'off',
+	});
 };
 ```
 
@@ -207,11 +207,11 @@ If you want to customize its behavior then [options](https://lesscss.org/usage/#
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    lessOptions: {
-      /* Some useful options. */
-    },
-  });
+	eleventyConfig.addPlugin(styles, {
+		lessOptions: {
+			/* Some useful options. */
+		},
+	});
 };
 ```
 
@@ -220,9 +220,9 @@ Or disable it by providing the `off` value.
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    lessOptions: 'off',
-  });
+	eleventyConfig.addPlugin(styles, {
+		lessOptions: 'off',
+	});
 };
 ```
 
@@ -235,11 +235,11 @@ module.exports = (eleventyConfig) => {
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    purgeCSSOptions: {
-      /* Some useful options. */
-    },
-  });
+	eleventyConfig.addPlugin(styles, {
+		purgeCSSOptions: {
+			/* Some useful options. */
+		},
+	});
 };
 ```
 
@@ -248,9 +248,9 @@ You can disable the plugin by passing `'off'` as an option, like this:
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    purgeCSSOptions: 'off',
-  });
+	eleventyConfig.addPlugin(styles, {
+		purgeCSSOptions: 'off',
+	});
 };
 ```
 
@@ -263,11 +263,11 @@ module.exports = (eleventyConfig) => {
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    cssnanoOptions: {
-      /* Some useful options. */
-    },
-  });
+	eleventyConfig.addPlugin(styles, {
+		cssnanoOptions: {
+			/* Some useful options. */
+		},
+	});
 };
 ```
 
@@ -276,9 +276,9 @@ You can disable the plugin by passing `'off'` as an option, like this:
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    cssnanoOptions: 'off',
-  });
+	eleventyConfig.addPlugin(styles, {
+		cssnanoOptions: 'off',
+	});
 };
 ```
 
@@ -291,11 +291,11 @@ By default it uses [`default preset`](https://cssnano.co/docs/optimisations) for
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    postcssPlugins: [
-      /* Some useful plugins. */
-    ],
-  });
+	eleventyConfig.addPlugin(styles, {
+		postcssPlugins: [
+			/* Some useful plugins. */
+		],
+	});
 };
 ```
 
@@ -308,11 +308,11 @@ module.exports = (eleventyConfig) => {
 ```js
 // .eleventy.js
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(styles, {
-    criticalOptions: {
-      /* Some useful options. */
-    },
-  });
+	eleventyConfig.addPlugin(styles, {
+		criticalOptions: {
+			/* Some useful options. */
+		},
+	});
 };
 ```
 

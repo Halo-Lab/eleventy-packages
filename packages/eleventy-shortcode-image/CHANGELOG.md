@@ -1,4 +1,26 @@
-# [1.6.2] - 2021-12-21
+# [1.8.0] - 28-04-2022
+
+### Added
+
+- Explicit sizes attribute for `source` elements.
+
+## [1.7.2] - 2022-03-14
+
+### Fixed
+
+- Escape every `\` of path separator for Windows.
+
+## [1.7.1] - 2022-03-07
+
+This release is forced by [npm regression bug](https://github.com/npm/cli/issues/4126). The previous release pushed wrong files into the registry.
+
+## [1.7.0] - 2022-03-07
+
+### Added
+
+- `shouldDeleteViewBox` and `shouldDeleteDimensions` properties to `svgOptions` and `imageProperties` objects.
+
+## [1.6.2] - 2021-12-21
 
 ### Changed
 

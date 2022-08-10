@@ -1,21 +1,22 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "target": "ES2018",
-    "baseUrl": ".",
-    "composite": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "paths": {
-      "*": ["./packages/*/src"],
-      "@eleventy-packages/*": ["./packages/*/src"]
-    }
-  },
-  "references": [
-    {
-      "path": "./packages/common"
-    }
-  ]
+	"compilerOptions": {
+		"strict": true,
+		"target": "ES2018",
+		"baseUrl": ".",
+		"composite": true,
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"paths": {
+			"*": ["./packages/*/src"],
+			"@eleventy-packages/*": ["./packages/*/src"]
+		}
+	},
+	"references": [
+		{
+			"path": "./packages/common"
+		}
+	],
+	"files": ["global.d.ts"]
 }

@@ -24,9 +24,9 @@ and eventually add to Eleventy as plugin:
 const { compress } = require('eleventy-plugin-compress');
 
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(compress, {
-    /* Optional options. */
-  });
+	eleventyConfig.addPlugin(compress, {
+		/* Optional options. */
+	});
 };
 ```
 
@@ -40,12 +40,12 @@ The plugin can accept following options:
 type CompressAlgorithm = 'brotli' | 'gzip' | 'deflate';
 
 interface CompressPluginOptions {
-  /**
-   * Signals whether this plugin should do its job.
-   * By default, it is on in production environment.
-   */
-  enabled?: boolean;
-  algorithm?: CompressAlgorithm | ReadonlyArray<CompressAlgorithm>;
+	/**
+	 * Signals whether this plugin should do its job.
+	 * By default, it is on in production environment.
+	 */
+	enabled?: boolean;
+	algorithm?: CompressAlgorithm | ReadonlyArray<CompressAlgorithm>;
 }
 ```
 

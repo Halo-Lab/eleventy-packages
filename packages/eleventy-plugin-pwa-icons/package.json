@@ -1,46 +1,46 @@
 {
-  "name": "eleventy-plugin-pwa-icons",
-  "version": "1.2.1",
-  "description": "Plugin for generating splash screen images and icons, favicons and mstile images.",
-  "main": "index.js",
-  "exports": {
-    ".": "./index.js",
-    "./index": "./index.js",
-    "./index.js": "./index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Halo-Lab/eleventy-plugin-pwa-icons.git"
-  },
-  "publishConfig": {
-    "access": "public",
-    "directory": "build"
-  },
-  "scripts": {
-    "test": "jest",
-    "prebuild": "rimraf build",
-    "build": "rollup -c",
-    "postbuild": "npm run copy:package; npm run copy:readme; npm run copy:license",
-    "copy:package": "cpy package.json build",
-    "copy:readme": "cpy README.md build",
-    "copy:license": "cpy LICENSE build",
-    "prerelease": "npm run build",
-    "release": "npm publish build/"
-  },
-  "keywords": [
-    "Eleventy",
-    "PWA",
-    "icons",
-    "favicons",
-    "mstile"
-  ],
-  "author": "Kapelianovych Yevhen",
-  "license": "ISC",
-  "peerDependencies": {
-    "chalk": "^4.1.0",
-    "pwa-asset-generator": "^6.0.0"
-  },
-  "devDepencency": {
-    "@eleventy-packages/common": "^0.0.7"
-  }
+	"name": "eleventy-plugin-pwa-icons",
+	"version": "1.2.1",
+	"description": "Plugin for generating splash screen images and icons, favicons and mstile images.",
+	"main": "index.js",
+	"exports": {
+		".": "./index.js",
+		"./index": "./index.js",
+		"./index.js": "./index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Halo-Lab/eleventy-plugin-pwa-icons.git"
+	},
+	"publishConfig": {
+		"access": "public",
+		"directory": "build"
+	},
+	"scripts": {
+		"test": "jest",
+		"prebuild": "rimraf build",
+		"build": "rollup -c",
+		"postbuild": "npm run copy:package; npm run copy:readme; npm run copy:license",
+		"copy:package": "cpy package.json build",
+		"copy:readme": "cpy README.md build",
+		"copy:license": "cpy LICENSE build",
+		"prerelease": "npm run build",
+		"release": "npm publish build/"
+	},
+	"keywords": [
+		"Eleventy",
+		"PWA",
+		"icons",
+		"favicons",
+		"mstile"
+	],
+	"author": "Kapelianovych Yevhen",
+	"license": "ISC",
+	"peerDependencies": {
+		"chalk": "^4.1.0",
+		"pwa-asset-generator": "^6.0.0"
+	},
+	"devDepencency": {
+		"@eleventy-packages/common": "^0.0.9"
+	}
 }

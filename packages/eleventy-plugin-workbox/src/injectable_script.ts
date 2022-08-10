@@ -9,15 +9,15 @@ import { withLeadingSlash } from '@eleventy-packages/common';
  * By convention, it should be in the site's root.
  */
 export const buildSWScriptRegistration = (
-  publicUrl: string,
-  scope: string,
+	publicUrl: string,
+	scope: string,
 ) => /* html */ `<!-- Register service worker for PWA offline mode support. -->
       <script>
         if ("serviceWorker" in window.navigator) {
           window.addEventListener("load", () =>
             window.navigator.serviceWorker.register("${withLeadingSlash(
-              publicUrl,
-            )}", { scope: "${scope}" }),
+							publicUrl,
+						)}", { scope: "${scope}" }),
           );
         }
       </script>`;
