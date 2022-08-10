@@ -7,18 +7,18 @@
  * if found information should be captured.
  */
 export const rip = (
-  text: string,
-  pattern: RegExp,
-  predicate: (value: string) => boolean = () => true,
+	text: string,
+	pattern: RegExp,
+	predicate: (value: string) => boolean = () => true,
 ): ReadonlyArray<string> => {
-  const links = [];
+	const links = [];
 
-  let match = null;
-  while ((match = pattern.exec(text)) !== null) {
-    if (predicate(match[1])) {
-      links.push(match[1]);
-    }
-  }
+	let match = null;
+	while ((match = pattern.exec(text)) !== null) {
+		if (predicate(match[1])) {
+			links.push(match[1]);
+		}
+	}
 
-  return links;
+	return links;
 };

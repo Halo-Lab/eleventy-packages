@@ -1,10 +1,10 @@
 import { join } from 'path';
 
 import {
-  done,
-  definePluginName,
-  DEFAULT_SOURCE_DIRECTORY,
-  DEFAULT_SCRIPTS_DIRECTORY,
+	done,
+	definePluginName,
+	DEFAULT_SOURCE_DIRECTORY,
+	DEFAULT_SCRIPTS_DIRECTORY,
 } from '@eleventy-packages/common';
 
 import { ScriptsPluginOptions } from './types';
@@ -18,46 +18,46 @@ definePluginName('Scripts');
  * to the _output_ directory.
  */
 export const scripts = (
-  config: Record<string, Function>,
-  {
-    inputDirectory = join(DEFAULT_SOURCE_DIRECTORY, DEFAULT_SCRIPTS_DIRECTORY),
-    esbuildOptions = {},
-    publicDirectory = '',
-    addWatchTarget = true,
-  }: ScriptsPluginOptions = {},
+	config: Record<string, Function>,
+	{
+		inputDirectory = join(DEFAULT_SOURCE_DIRECTORY, DEFAULT_SCRIPTS_DIRECTORY),
+		esbuildOptions = {},
+		publicDirectory = '',
+		addWatchTarget = true,
+	}: ScriptsPluginOptions = {},
 ) => {
-  config.addTransform(
-    'scripts',
-    async function (
-      this: Record<string, any>,
-      content: string,
-      outputPath: string,
-    ) {
-      const output = this.outputPath ?? outputPath;
+	config.addTransform(
+		'scripts',
+		async function (
+			this: Record<string, any>,
+			content: string,
+			outputPath: string,
+		) {
+			const output = this.outputPath ?? outputPath;
 
-      return output.endsWith('html')
-        ? bundle(content, output, {
-            inputDirectory,
-            publicDirectory,
-            esbuildOptions,
-          })
-        : content;
-    },
-  );
+			return output.endsWith('html')
+				? bundle(content, output, {
+						inputDirectory,
+						publicDirectory,
+						esbuildOptions,
+				  })
+				: content;
+		},
+	);
 
-  config.on('beforeWatch', (changedFiles: ReadonlyArray<string>) => {
-    if (
-      changedFiles.some(
-        (file) => file.includes(inputDirectory) && /(ts|js)$/.test(file),
-      )
-    ) {
-      transformFile.cache.clear();
-    } else {
-      done('No script file was changed. Skip compilation.');
-    }
-  });
+	config.on('beforeWatch', (changedFiles: ReadonlyArray<string>) => {
+		if (
+			changedFiles.some(
+				(file) => file.includes(inputDirectory) && /(ts|js)$/.test(file),
+			)
+		) {
+			transformFile.cache.clear();
+		} else {
+			done('No script file was changed. Skip compilation.');
+		}
+	});
 
-  if (addWatchTarget) {
-    config.addWatchTarget(inputDirectory);
-  }
+	if (addWatchTarget) {
+		config.addWatchTarget(inputDirectory);
+	}
 };

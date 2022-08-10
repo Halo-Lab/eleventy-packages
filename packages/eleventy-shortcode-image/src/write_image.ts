@@ -11,14 +11,14 @@ import { pipe, sequentially } from '@fluss/core';
  * should be image data and _isData_ need to be `true`.
  */
 export const writeImage = (
-  source: string,
-  outputPath: string,
-  isData = false,
+	source: string,
+	outputPath: string,
+	isData = false,
 ) =>
-  sequentially(
-    pipe(() => path.dirname(outputPath), mkdir),
-    () =>
-      (isData ? Readable.from(source) : fs.createReadStream(source)).pipe(
-        fs.createWriteStream(outputPath),
-      ),
-  )().then(unit);
+	sequentially(
+		pipe(() => path.dirname(outputPath), mkdir),
+		() =>
+			(isData ? Readable.from(source) : fs.createReadStream(source)).pipe(
+				fs.createWriteStream(outputPath),
+			),
+	)().then(unit);

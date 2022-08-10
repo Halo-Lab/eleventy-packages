@@ -4,11 +4,11 @@ let pluginName = '';
 
 /** Defines name of plugin to distinguish logs in DEBUG mode. */
 export const definePluginName = (name: string): void =>
-  void (pluginName = name);
+	void (pluginName = name);
 
 /** Convert Error to string. */
 const errorToString = (error: Error) =>
-  error.name + ': ' + error.message + '\n' + error.stack;
+	error.name + ': ' + error.message + '\n' + error.stack;
 
 /**
  * Log _message_ bound with _name_ of the process
@@ -19,16 +19,16 @@ const errorToString = (error: Error) =>
  * @param emoji - just for fun :)
  */
 const log = (paint: Chalk, message: string | Error, emoji: string) =>
-  console.info(
-    ' ' +
-      chalk.black.bgYellowBright(new Date().toLocaleTimeString()) +
-      ' -> ' +
-      chalk.bold.gray(pluginName) +
-      ': ' +
-      paint(message instanceof Error ? errorToString(message) : message) +
-      ' ' +
-      emoji,
-  );
+	console.info(
+		' ' +
+			chalk.black.bgYellowBright(new Date().toLocaleTimeString()) +
+			' -> ' +
+			chalk.bold.gray(pluginName) +
+			': ' +
+			paint(message instanceof Error ? errorToString(message) : message) +
+			' ' +
+			emoji,
+	);
 
 /**
  * Alert about starting of process.

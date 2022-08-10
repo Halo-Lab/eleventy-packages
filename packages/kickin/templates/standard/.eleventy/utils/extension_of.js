@@ -7,4 +7,4 @@ const path = require('path');
  * @param {boolean} [withDot]
  */
 module.exports.extensionOf = (url, withDot = false) =>
-  withDot ? path.extname(url) : path.extname(url).slice(1);
+	withDot ? path.extname(url) : path.extname(url).slice(1);

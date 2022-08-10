@@ -19,6 +19,6 @@ const reachFromSource = (...parts) => path.resolve(SOURCE_DIRECTORY, ...parts);
 const reachFromBuild = (...parts) => path.resolve(BUILD_DIRECTORY, ...parts);
 
 module.exports = {
-  reachFromBuild,
-  reachFromSource,
+	reachFromBuild,
+	reachFromSource,
 };

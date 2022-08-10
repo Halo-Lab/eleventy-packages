@@ -26,9 +26,9 @@ And then add plugin to _eleventyConfig_ object in `.eleventy.js`.
 const { cache } = require('eleventy-plugin-workbox');
 
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(cache, {
-    /* Options are optional. */
-  });
+	eleventyConfig.addPlugin(cache, {
+		/* Options are optional. */
+	});
 };
 ```
 
@@ -38,29 +38,29 @@ Plugin can accept options:
 
 ```ts
 interface EleventyPluginWorkboxOptions {
-  /**
-   * Options that will be passed to
-   * [`generateSW` function](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.generateSW).
-   */
-  generateSWOptions?: GenerateSWConfig;
-  /**
-   * Directory inside _output_ folder to be used as place for
-   * service worker.
-   */
-  publicDirectory?: string;
-  /**
-   * Scope for service worker.
-   * Default `/`.
-   */
-  scope?: string;
-  /**
-   * Tells if plugin should generate service worker.
-   * Useful for situations when there is a need to test service worker,
-   * especially in development process.
-   *
-   * By default, it is enabled if `NODE_ENV === 'production'`.
-   */
-  enabled?: boolean;
+	/**
+	 * Options that will be passed to
+	 * [`generateSW` function](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.generateSW).
+	 */
+	generateSWOptions?: GenerateSWConfig;
+	/**
+	 * Directory inside _output_ folder to be used as place for
+	 * service worker.
+	 */
+	publicDirectory?: string;
+	/**
+	 * Scope for service worker.
+	 * Default `/`.
+	 */
+	scope?: string;
+	/**
+	 * Tells if plugin should generate service worker.
+	 * Useful for situations when there is a need to test service worker,
+	 * especially in development process.
+	 *
+	 * By default, it is enabled if `NODE_ENV === 'production'`.
+	 */
+	enabled?: boolean;
 }
 ```
 

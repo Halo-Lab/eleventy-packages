@@ -1,7 +1,7 @@
 import {
-  initFsCache,
-  isProduction,
-  definePluginName,
+	initFsCache,
+	isProduction,
+	definePluginName,
 } from '@eleventy-packages/common';
 
 import { getOutputDirectory } from './get_build_directory';
@@ -14,43 +14,43 @@ definePluginName('PWA icons');
  * Also fills `icons` property in the `manifest.json` file.
  */
 export const icons = (
-  config: Record<string, Function>,
-  {
-    logger,
-    icons = {},
-    manifest = {},
-    generatorOptions = {},
-    enabled = isProduction(),
-  }: PWAIconsOptions = {},
+	config: Record<string, Function>,
+	{
+		logger,
+		icons = {},
+		manifest = {},
+		generatorOptions = {},
+		enabled = isProduction(),
+	}: PWAIconsOptions = {},
 ): void => {
-  if (enabled) {
-    const cacheContainer = initFsCache({ directory: '.icons' });
+	if (enabled) {
+		const cacheContainer = initFsCache({ directory: '.icons' });
 
-    config.addTransform(
-      'icons',
-      async function (
-        this: { outputPath: string },
-        content: string,
-        outputPath: string,
-      ): Promise<string> {
-        const cache = await cacheContainer;
+		config.addTransform(
+			'icons',
+			async function (
+				this: { outputPath: string },
+				content: string,
+				outputPath: string,
+			): Promise<string> {
+				const cache = await cacheContainer;
 
-        const outputFilePath = this.outputPath ?? outputPath;
+				const outputFilePath = this.outputPath ?? outputPath;
 
-        return outputFilePath.endsWith('html')
-          ? generateAndInsertIcons(
-              content,
-              getOutputDirectory(outputFilePath),
-              {
-                icons,
-                cache,
-                logger,
-                manifest,
-                generatorOptions,
-              },
-            )
-          : content;
-      },
-    );
-  }
+				return outputFilePath.endsWith('html')
+					? generateAndInsertIcons(
+							content,
+							getOutputDirectory(outputFilePath),
+							{
+								icons,
+								cache,
+								logger,
+								manifest,
+								generatorOptions,
+							},
+					  )
+					: content;
+			},
+		);
+	}
 };

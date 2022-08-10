@@ -3,11 +3,11 @@ import { ManifestTransform } from 'workbox-build';
 import { withLeadingSlash } from '@eleventy-packages/common';
 
 export const makeManifestURlsAbsolute: ManifestTransform = async (
-  manifestEntries,
+	manifestEntries,
 ) => ({
-  warnings: [],
-  manifest: manifestEntries.map((entry) => ({
-    ...entry,
-    url: withLeadingSlash(entry.url),
-  })),
+	warnings: [],
+	manifest: manifestEntries.map((entry) => ({
+		...entry,
+		url: withLeadingSlash(entry.url),
+	})),
 });

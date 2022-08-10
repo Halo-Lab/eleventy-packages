@@ -6,8 +6,8 @@ import { CompressAlgorithm } from './types';
 import { compressHTMLWithLinks } from './compress_html_with_links';
 
 export interface CompressPluginOptions {
-  enabled?: boolean;
-  algorithm?: CompressAlgorithm | ReadonlyArray<CompressAlgorithm>;
+	enabled?: boolean;
+	algorithm?: CompressAlgorithm | ReadonlyArray<CompressAlgorithm>;
 }
 
 definePluginName('Icons');
@@ -27,31 +27,31 @@ let buildDirectory: string;
  * **This plugin should be added last to Eleventy.**
  */
 export const compress = (
-  config: Record<string, Function>,
-  {
-    enabled = isProduction(),
-    algorithm = 'brotli',
-  }: CompressPluginOptions = {},
+	config: Record<string, Function>,
+	{
+		enabled = isProduction(),
+		algorithm = 'brotli',
+	}: CompressPluginOptions = {},
 ) => {
-  if (enabled) {
-    config.addTransform(
-      'compress',
-      async (content: string, outputPath: string) => {
-        if (outputPath.endsWith('html')) {
-          // We can safely extract name of the build directory,
-          // because it is first directory in _outputPath_.
-          buildDirectory ??= outputPath.split(sep)[0];
+	if (enabled) {
+		config.addTransform(
+			'compress',
+			async (content: string, outputPath: string) => {
+				if (outputPath.endsWith('html')) {
+					// We can safely extract name of the build directory,
+					// because it is first directory in _outputPath_.
+					buildDirectory ??= outputPath.split(sep)[0];
 
-          await compressHTMLWithLinks(
-            content,
-            outputPath,
-            algorithm,
-            buildDirectory,
-          );
-        }
+					await compressHTMLWithLinks(
+						content,
+						outputPath,
+						algorithm,
+						buildDirectory,
+					);
+				}
 
-        return content;
-      },
-    );
-  }
+				return content;
+			},
+		);
+	}
 };

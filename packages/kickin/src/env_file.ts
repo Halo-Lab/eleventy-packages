@@ -9,6 +9,6 @@ HOST=http://localhost:3000
 `;
 
 export const generateEnvFile = (cwd: string) =>
-  promises.writeFile(join(cwd, '.env'), envContent, {
-    encoding: 'utf-8',
-  });
+	promises.writeFile(join(cwd, '.env'), envContent, {
+		encoding: 'utf-8',
+	});

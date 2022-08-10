@@ -5,10 +5,10 @@ import { sep } from 'path';
  * so we can get output directory as first top-level directory.
  */
 export const getOutputDirectory = (outputPath: string): string => {
-  const firstDirectory = outputPath.split(sep)[0];
+	const firstDirectory = outputPath.split(sep)[0];
 
-  return outputPath.length > 0 &&
-    (firstDirectory === '' || firstDirectory.startsWith('.'))
-    ? getOutputDirectory(outputPath.split(sep).slice(1).join(sep))
-    : firstDirectory;
+	return outputPath.length > 0 &&
+		(firstDirectory === '' || firstDirectory.startsWith('.'))
+		? getOutputDirectory(outputPath.split(sep).slice(1).join(sep))
+		: firstDirectory;
 };

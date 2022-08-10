@@ -1,10 +1,10 @@
 {
-  "extends": "../../tsconfig.build.json",
-  "compilerOptions": {
-    "lib": ["webworker"],
-    "baseUrl": "./",
-    "rootDir": "./src",
-    "declarationDir": "./build"
-  },
-  "include": ["./src"]
+	"extends": "../../tsconfig.build.json",
+	"compilerOptions": {
+		"lib": ["webworker"],
+		"baseUrl": "./",
+		"rootDir": "./src",
+		"declarationDir": "./build"
+	},
+	"include": ["./src"]
 }

@@ -1,6 +1,6 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {},
-  "include": ["src"],
-  "exclude": ["node_modules", "build", "**/*.spec.ts"]
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {},
+	"include": ["src"],
+	"exclude": ["node_modules", "build", "**/*.spec.ts"]
 }

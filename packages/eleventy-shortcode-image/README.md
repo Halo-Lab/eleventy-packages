@@ -24,12 +24,12 @@ and then you can include it into `.eleventy.js`:
 const { createImageShortcode } = require('eleventy-shortcode-image');
 
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addShortcode(
-    'image',
-    createImageShortcode({
-      /* Options */
-    }),
-  );
+	eleventyConfig.addShortcode(
+		'image',
+		createImageShortcode({
+			/* Options */
+		}),
+	);
 };
 ```
 
@@ -41,38 +41,38 @@ This function accepts optional options:
 
 ```ts
 interface ImageShortCodeOptions {
-  /**
-   * Path to directory where all images live.
-   *
-   * Should start from the _current working directory_.
-   *
-   * By default it is `src/assets/images`.
-   */
-  inputDirectory?: string;
-  /**
-   * Path to directory for optimized and transformed images.
-   * First part of the path is meant to be the _output_ directory.
-   *
-   * Should start from the _current working directory_.
-   *
-   * By default it is `_site/images`.
-   */
-  outputDirectory?: string;
-  /**
-   * Options for [svgo](https://github.com/svg/svgo) package.
-   * for subtle configuration of SVGs optimizations.
-   */
-  svgoOptions?: OptimizeOptions & {
-    readonly toHTML?: boolean;
-    readonly shouldDeleteViewBox?: boolean;
-    readonly shouldDeleteDimensions?: boolean;
-  };
-  /**
-   * Options for [@11ty/eleventy-img](https://www.11ty.dev/docs/plugins/image/) package.
-   * Is is used for optiomizations of raster images.
-   * For more info see its documentation.
-   */
-  rasterOptions?: Record<string, any>;
+	/**
+	 * Path to directory where all images live.
+	 *
+	 * Should start from the _current working directory_.
+	 *
+	 * By default it is `src/assets/images`.
+	 */
+	inputDirectory?: string;
+	/**
+	 * Path to directory for optimized and transformed images.
+	 * First part of the path is meant to be the _output_ directory.
+	 *
+	 * Should start from the _current working directory_.
+	 *
+	 * By default it is `_site/images`.
+	 */
+	outputDirectory?: string;
+	/**
+	 * Options for [svgo](https://github.com/svg/svgo) package.
+	 * for subtle configuration of SVGs optimizations.
+	 */
+	svgoOptions?: OptimizeOptions & {
+		readonly toHTML?: boolean;
+		readonly shouldDeleteViewBox?: boolean;
+		readonly shouldDeleteDimensions?: boolean;
+	};
+	/**
+	 * Options for [@11ty/eleventy-img](https://www.11ty.dev/docs/plugins/image/) package.
+	 * Is is used for optiomizations of raster images.
+	 * For more info see its documentation.
+	 */
+	rasterOptions?: Record<string, any>;
 }
 ```
 
@@ -80,16 +80,16 @@ Example:
 
 ```ts
 const options = {
-  // Do not add leading and trailing `/`
-  inputDirectory: 'src/images',
-  // Do not add leading and trailing `/`
-  outputDirectory: '_site/images',
-  svgoOptions: {
-    /* ... */
-  },
-  rasterOptions: {
-    /* ... */
-  },
+	// Do not add leading and trailing `/`
+	inputDirectory: 'src/images',
+	// Do not add leading and trailing `/`
+	outputDirectory: '_site/images',
+	svgoOptions: {
+		/* ... */
+	},
+	rasterOptions: {
+		/* ... */
+	},
 };
 ```
 
@@ -101,40 +101,40 @@ This shortcode accepts two arguments:
 
 ```ts
 interface ImageProperties {
-  /** Inserts SVG into HTML. **Only for SVG**. */
-  readonly toHTML?: boolean;
-  /** **Only for SVG**. */
-  readonly shouldDeleteViewBox?: boolean;
-  /** **Only for SVG**. */
-  readonly shouldDeleteDimensions?: boolean;
-  /** Class names for <img>. */
-  readonly classes?: string | ReadonlyArray<string>;
-  /**
-   * Defines that image should be loaded lazily.
-   * Notifies plugin that _src_ and _srcset_ should not
-   * be set directly, but to other custom attributes.
-   */
-  readonly lazy?: boolean;
-  /**
-   * It specifies different image widths.
-   * If not defined, then `sizes` attribute won't be
-   * included to the `<source>` and `<img>` element.
-   */
-  readonly sizes?: string;
-  /** Class names for <img>. */
-  readonly classes?: string | ReadonlyArray<string>;
-  /** Name of the custom _src_ attribute for lazy loaded image. */
-  readonly srcName?: string;
-  /** Name of the custom _srcset_ attribute for lazy loaded image. */
-  readonly srcsetName?: string;
+	/** Inserts SVG into HTML. **Only for SVG**. */
+	readonly toHTML?: boolean;
+	/** **Only for SVG**. */
+	readonly shouldDeleteViewBox?: boolean;
+	/** **Only for SVG**. */
+	readonly shouldDeleteDimensions?: boolean;
+	/** Class names for <img>. */
+	readonly classes?: string | ReadonlyArray<string>;
+	/**
+	 * Defines that image should be loaded lazily.
+	 * Notifies plugin that _src_ and _srcset_ should not
+	 * be set directly, but to other custom attributes.
+	 */
+	readonly lazy?: boolean;
+	/**
+	 * It specifies different image widths.
+	 * If not defined, then `sizes` attribute won't be
+	 * included to the `<source>` and `<img>` element.
+	 */
+	readonly sizes?: string;
+	/** Class names for <img>. */
+	readonly classes?: string | ReadonlyArray<string>;
+	/** Name of the custom _src_ attribute for lazy loaded image. */
+	readonly srcName?: string;
+	/** Name of the custom _srcset_ attribute for lazy loaded image. */
+	readonly srcsetName?: string;
 
-  // And any other valid attribute.
+	// And any other valid attribute.
 }
 
 // This is a signature of the actual shortcode.
 async function image(
-  src: string,
-  properties?: ImageProperties,
+	src: string,
+	properties?: ImageProperties,
 ): Promise<string>;
 ```
 
@@ -143,16 +143,16 @@ async function image(
   ```js
   // .eleventy.js
   eleventyConfig.addShortcode(
-    'image',
-    createImageShortcode({
-      inputDirectory: 'src/images',
-    }),
+  	'image',
+  	createImageShortcode({
+  		inputDirectory: 'src/images',
+  	}),
   );
 
   // your_template.11ty.js
   module.exports = async function () {
-    // Shortcode will assume that path to image is 'src/images/some_image.png'
-    return `${await this.image('some_image.png')}`;
+  	// Shortcode will assume that path to image is 'src/images/some_image.png'
+  	return `${await this.image('some_image.png')}`;
   };
   ```
 
@@ -162,10 +162,10 @@ async function image(
 
   ```js
   module.exports = async function () {
-    return `${this.image('foo.png', {
-      alt: 'baz',
-      classes: 'my-image',
-    })}`;
+  	return `${this.image('foo.png', {
+  		alt: 'baz',
+  		classes: 'my-image',
+  	})}`;
   };
   ```
 
