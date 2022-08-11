@@ -1,5 +1,5 @@
 import { last } from '@eleventy-packages/common';
-import { isJust, list } from '@fluss/core';
+import { isJust, List } from '@fluss/core';
 import { ImageMetadata, Metadata } from '@11ty/eleventy-img';
 
 import { ImageProperties } from './types';
@@ -31,7 +31,7 @@ export const createPicture = (
 
 	return `<picture>
     ${
-			list(Object.values(metadata)).chain(list).isEmpty()
+			List(Object.values(metadata)).chain(List).isEmpty()
 				? ''
 				: Object.values(metadata)
 						.reverse()

@@ -1,6 +1,6 @@
 import { promises } from 'fs';
 
-import { pipe, tryCatch } from '@fluss/core';
+import { pipe, tryExecute } from '@fluss/core';
 import { optimize, OptimizedSvg, OptimizeOptions } from 'svgo';
 
 import { log } from './logger';
@@ -12,7 +12,7 @@ export const optimizeSVG = (
 	classNames: ReadonlyArray<string>,
 	svgoOptions: OptimizeOptions & AdditionalOptions,
 ) =>
-	tryCatch(
+	tryExecute<Promise<string>, Error>(
 		pipe(
 			() => promises.readFile(filePath, { encoding: 'utf8' }),
 			(data: string) =>
@@ -22,20 +22,23 @@ export const optimizeSVG = (
 				),
 			({ data }: OptimizedSvg) => data,
 		),
-		async (error: Error) => (
+	).extract(
+		async (error) => (
 			log(`SVG optimization is failed with error.\n%O`, error), ''
 		),
 	);
 
-export const readSVG = (classNames: readonly string[]) =>
-	tryCatch(
-		pipe(
-			(sourcePath: string) =>
-				promises.readFile(sourcePath, { encoding: 'utf8' }),
-			(data: string) =>
-				data.replace('<svg', `<svg class="${classNames.join(' ')}"`),
-		),
-		async (error: Error) => (
-			log(`SVG moving is failed with error.\n%O`, error), ''
-		),
-	);
+export const readSVG =
+	(classNames: readonly string[]) => (sourcePath: string) =>
+		tryExecute<Promise<string>, Error>(() =>
+			pipe(
+				(sourcePath: string) =>
+					promises.readFile(sourcePath, { encoding: 'utf8' }),
+				(data: string) =>
+					data.replace('<svg', `<svg class="${classNames.join(' ')}"`),
+			)(sourcePath),
+		).extract(
+			async (error: Error) => (
+				log(`SVG moving is failed with error.\n%O`, error), ''
+			),
+		);

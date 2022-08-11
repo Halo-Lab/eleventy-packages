@@ -1,5 +1,5 @@
 // @ts-ignore
-import * as critical from 'critical';
+import { generate } from 'critical';
 
 import { URL_DELIMITER } from '@eleventy-packages/common';
 
@@ -54,7 +54,7 @@ export const separateCriticalCSS = ({
 	buildDirectory,
 	criticalOptions,
 }: CriticalCreatorOptions): Promise<CriticalResult> =>
-	critical.generate({
+	generate({
 		html,
 		base: buildDirectory,
 		inline: true,

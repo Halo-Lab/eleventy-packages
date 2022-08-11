@@ -1,5 +1,5 @@
 import json from '@rollup/plugin-json';
-import typescript from '@rollup/plugin-typescript';
+import sucrase from '@rollup/plugin-sucrase';
 import { terser } from 'rollup-plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
@@ -16,7 +16,10 @@ export default {
 			resolveOnly: ['@eleventy-packages/common'],
 			moduleDirectories: ['../../node_modules', '../../packages'],
 		}),
-		typescript(),
+		sucrase({
+			exclude: ['node_modules/**'],
+			transforms: ['typescript'],
+		}),
 		terser(),
 	],
 	external: [
