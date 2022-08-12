@@ -1,5 +1,5 @@
 import { promises } from 'fs';
-import { join, resolve } from 'path';
+import { basename, join, resolve } from 'path';
 
 import { memoize, pipe, not } from '@fluss/core';
 import { build, BuildResult } from 'esbuild';
@@ -22,9 +22,11 @@ import { ScriptsPluginOptions } from './types';
 
 const { writeFile } = promises;
 
-type BundleOptions = Required<Omit<ScriptsPluginOptions, 'addWatchTarget'>>;
+export type BundleOptions = Required<
+	Omit<ScriptsPluginOptions, 'addWatchTarget'>
+>;
 
-interface TransformFileOptions extends BundleOptions {
+export interface TransformFileOptions extends BundleOptions {
 	readonly buildDirectory: string;
 	readonly publicSourcePathToScript: string;
 }
@@ -40,10 +42,17 @@ export const transformFile = memoize(
 		start(`Start compiling "${bold(publicSourcePathToScript)}" file.`);
 
 		const pathToScriptFromRoot = join(inputDirectory, publicSourcePathToScript);
-		const publicFileName = publicSourcePathToScript.replace(/ts$/, 'js');
+		const publicFileName = basename(
+			publicSourcePathToScript.replace(/ts$/, 'js'),
+		);
 
 		return pipe(
-			() => resolve(buildDirectory, publicDirectory, publicSourcePathToScript),
+			() =>
+				resolve(
+					buildDirectory,
+					publicDirectory,
+					basename(publicSourcePathToScript),
+				),
 			mkdir,
 			() =>
 				build({
