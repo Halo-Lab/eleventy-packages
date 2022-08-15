@@ -85,7 +85,7 @@ describe('createFileBundler', () => {
 		const result = await createFileBundler(linkerResult)(mockDataHtmlFile);
 
 		expect(result.urls).toHaveLength(1);
-		expect(normalize(decodeURI(result.urls[0]))).toBe(
+		expect(normalize(result.urls[0])).toBe(
 			`${mockDataLinkerOptions.baseDirectory}${sep}main.scss`,
 		);
 		expect(result.data).toBe('');

@@ -1,5 +1,5 @@
-import mockFs from 'mock-fs';
 import { normalize, resolve, sep } from 'path';
+import mockFs from 'mock-fs';
 
 import { getCompiler } from '../src/compile';
 import { bindLinkerWithStyles, findStyles } from '../src/bundle';
@@ -40,7 +40,7 @@ describe('getCompiler', () => {
 		);
 
 		expect(result.urls).toHaveLength(1);
-		expect(normalize(decodeURI(result.urls[0]))).toBe(
+		expect(normalize(result.urls[0])).toBe(
 			`${mockDataLinkerOptions.baseDirectory}${sep}main.scss`,
 		);
 		expect(result.css).toBe('');
