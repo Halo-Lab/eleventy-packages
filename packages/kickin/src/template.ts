@@ -1,7 +1,7 @@
 import { promises } from 'fs';
 import { resolve, join } from 'path';
 
-import { makeDirectories } from '@eleventy-packages/common';
+import { mkdir } from '@eleventy-packages/common';
 
 import { startProcess } from './spinner';
 
@@ -24,7 +24,7 @@ const copyDirectory = async (
 				? [Promise.resolve()]
 				: entities.map((entity) =>
 						entity.isDirectory()
-							? makeDirectories(join(to, entity.name)).then(() =>
+							? mkdir(join(to, entity.name)).then(() =>
 									copyDirectory(
 										join(input, entity.name),
 										join(to, entity.name),

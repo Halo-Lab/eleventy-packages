@@ -2,7 +2,7 @@ import { join } from 'path';
 
 import Image, { Metadata } from '@11ty/eleventy-img';
 import { OptimizeOptions } from 'svgo';
-import { isNothing, memoize } from '@fluss/core';
+import { isJust, memoize } from '@fluss/core';
 
 import { log } from './logger';
 import { converter } from './path_converter';
@@ -88,7 +88,7 @@ export const createImageShortcode = ({
 					attributes.classes,
 				)
 					? attributes.classes
-					: isNothing(attributes.classes)
+					: !isJust(attributes.classes)
 					? []
 					: [attributes.classes];
 
@@ -100,7 +100,7 @@ export const createImageShortcode = ({
 								shouldDeleteViewBox,
 								shouldDeleteDimensions,
 							})(svgoOptions),
-					  )()
+					  )
 					: await readSVG(classNames)(source.sourcePath);
 
 				if (toHTML ?? svgoOptions.toHTML ?? false) {

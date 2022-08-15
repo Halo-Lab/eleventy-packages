@@ -1,4 +1,4 @@
-import { isNothing } from '@fluss/core';
+import { isJust } from '@fluss/core';
 
 const defaultAttributes = {
 	loading: 'lazy',
@@ -19,7 +19,7 @@ export const normalizeImageAttributes = ({
 >) => {
 	const classNames: ReadonlyArray<string | number> = Array.isArray(classes)
 		? classes
-		: isNothing(classes)
+		: !isJust(classes)
 		? []
 		: [classes];
 

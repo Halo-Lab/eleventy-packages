@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join, normalize } from 'path';
 
 import {
 	done,
@@ -33,7 +33,7 @@ export const scripts = (
 			content: string,
 			outputPath: string,
 		) {
-			const output = this.outputPath ?? outputPath;
+			const output = normalize(this.outputPath ?? outputPath);
 
 			return output.endsWith('html')
 				? bundle(content, output, {

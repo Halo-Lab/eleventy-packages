@@ -2,7 +2,7 @@ import { resolve } from 'path';
 
 import chalk from 'chalk';
 import { sequentially } from '@fluss/core';
-import { makeDirectories } from '@eleventy-packages/common';
+import { mkdir } from '@eleventy-packages/common';
 
 import { copyTemplate } from './template';
 import { generateEnvFile } from './env_file';
@@ -10,7 +10,7 @@ import { createPackageJson } from './package_json';
 
 export const createProject = async (folder = process.cwd()): Promise<void> =>
 	sequentially(
-		makeDirectories,
+		mkdir,
 		createPackageJson,
 		copyTemplate,
 		generateEnvFile,

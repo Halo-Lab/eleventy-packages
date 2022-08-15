@@ -2,7 +2,7 @@ import fs from 'fs';
 import https from 'https';
 
 import { mkdir } from '@eleventy-packages/common';
-import { sequentially, when } from '@fluss/core';
+import { when } from '@fluss/core';
 
 import { Source, SourceUrl } from './path_converter';
 
@@ -27,11 +27,12 @@ export const fetchImage = when(
 	(source: Source): source is SourceUrl =>
 		source.isURL && !fs.existsSync(source.sourcePath),
 )(
-	// Because we have checked in predicate that source is URL,
-	// so we can safely type source parameter as SourceUrl.
-	sequentially(
-		(source: Source) => mkdir(source.sourceDir),
-		(source: SourceUrl) => download(source.sourceUrl, source.sourcePath),
-	),
-	() => Promise.resolve<ReadonlyArray<string | void>>([]),
+	async (source: Source) => {
+		// Because we have checked in predicate that source is URL,
+		// so we can safely type source parameter as SourceUrl.
+		await mkdir(source.sourceDir);
+
+		await download((source as SourceUrl).sourceUrl, source.sourcePath);
+	},
+	() => Promise.resolve(),
 );

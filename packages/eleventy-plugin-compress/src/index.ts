@@ -1,4 +1,4 @@
-import { sep } from 'path';
+import { sep, normalize } from 'path';
 
 import { definePluginName, isProduction } from '@eleventy-packages/common';
 
@@ -40,7 +40,7 @@ export const compress = (
 				if (outputPath.endsWith('html')) {
 					// We can safely extract name of the build directory,
 					// because it is first directory in _outputPath_.
-					buildDirectory ??= outputPath.split(sep)[0];
+					buildDirectory ??= normalize(outputPath).split(sep)[0];
 
 					await compressHTMLWithLinks(
 						content,

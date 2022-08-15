@@ -1,10 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import process from 'process';
 
-import { isJust } from '@fluss/core';
-
-import { bold, hash, oops, URL_DELIMITER } from '@eleventy-packages/common';
+import { bold, oops, URL_DELIMITER } from '@eleventy-packages/common';
+import { buildImagePath } from './build_image_path';
+import { buildCloudflareImage } from './build_cloudflare_image';
 
 /**
  * Reference:
@@ -75,23 +74,6 @@ const injectDefaultOptions = (
 	...options,
 });
 
-/** Builds a full image Cloudflare URL. */
-const cloudflareURL = (
-	zone: string,
-	options: CloudflareURLOptions,
-	originalURL: string,
-) =>
-	zone +
-	URL_DELIMITER +
-	'cdn-cgi' +
-	URL_DELIMITER +
-	'image' +
-	Object.entries(options)
-		.map(([name, value]) => (value !== undefined ? `${name}=${value}` : ''))
-		.join(',') +
-	URL_DELIMITER +
-	originalURL;
-
 export interface InitializeOptions {
 	/** Domain name on Cloudflare. */
 	readonly zone?: string | URL;
@@ -139,30 +121,18 @@ export default ({
 			...options
 		}: CloudflareURLOptions & ImageAttributes = {},
 	): string | Record<string, string | number | boolean> {
-		const outputDirectory = this.page.outputPath.split(path.sep)[0];
-
-		const originalURLPath = originalURL.split(URL_DELIMITER).join(path.sep);
-
-		const inputImagePath = path.resolve(
-			process.cwd(),
-			relativeTo ?? this.page.inputPath,
-			originalURLPath,
-		);
-
-		const rebasedImageName =
-			path.basename(originalURLPath, path.extname(originalURLPath)) +
-			`.${hash(inputImagePath)}` +
-			path.extname(originalURLPath);
-
-		const outputImagePath = path.resolve(
-			process.cwd(),
-			outputDirectory,
-			directory,
-			rebasedImageName,
-		);
+		const { inputImagePath, outputImagePath, rebasedImageName } =
+			buildImagePath({
+				originalURL,
+				relativeTo,
+				page: this.page,
+				directory,
+			});
 
 		if (!fs.existsSync(outputImagePath)) {
 			if (fs.existsSync(inputImagePath)) {
+				fs.mkdirSync(path.dirname(outputImagePath), { recursive: true });
+
 				fs.createReadStream(inputImagePath).pipe(
 					fs.createWriteStream(outputImagePath),
 				);
@@ -179,58 +149,15 @@ export default ({
 
 		const rebasedOriginalURL = `${directory}${URL_DELIMITER}${rebasedImageName}`;
 
-		const url = cloudflareURL(normalizedZone, fullOptions, rebasedOriginalURL);
-
-		if (emit === 'url' || (mode === 'url' && !isJust(emit))) {
-			return url;
-		}
-
-		const srcset =
-			sizes.length > 0
-				? `srcset="${sizes
-						.map(
-							(size) =>
-								`${cloudflareURL(
-									normalizedZone,
-									{
-										...fullOptions,
-										width: size,
-									},
-									rebasedOriginalURL,
-								)} ${size}w`,
-						)
-						.join(',')}"`
-				: densities.length > 0
-				? densities
-						.map(
-							(density) =>
-								`${cloudflareURL(
-									normalizedZone,
-									{ ...fullOptions, width: fullOptions.width! * density },
-									rebasedOriginalURL,
-								)} ${density}x`,
-						)
-						.join(',')
-				: '';
-
-		if (sizes.length > 0 || densities.length > 0) {
-			delete attributes.srcset;
-		}
-
-		if (emit === 'attributes' || (mode === 'attributes' && !isJust(emit))) {
-			return {
-				...attributes,
-				src: url,
-				srcset,
-			};
-		}
-
-		const renderedAttributes = Object.entries(attributes)
-			.map(([name, value]) =>
-				typeof value === 'boolean' ? (value ? name : '') : `name="${value}"`,
-			)
-			.join(' ');
-
-		return `<img src="${url}" ${srcset} ${renderedAttributes} />`;
+		return buildCloudflareImage({
+			normalizedZone,
+			fullOptions,
+			rebasedOriginalURL,
+			attributes,
+			sizes,
+			densities,
+			emit,
+			mode,
+		});
 	};
 };

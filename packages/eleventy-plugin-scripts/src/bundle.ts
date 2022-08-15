@@ -1,11 +1,10 @@
 import { promises } from 'fs';
-import { join, resolve } from 'path';
+import { basename, join, resolve } from 'path';
 
-import { memoize, pipe } from '@fluss/core';
+import { memoize, pipe, not } from '@fluss/core';
 import { build, BuildResult } from 'esbuild';
 import {
 	rip,
-	not,
 	bold,
 	done,
 	oops,
@@ -23,9 +22,11 @@ import { ScriptsPluginOptions } from './types';
 
 const { writeFile } = promises;
 
-type BundleOptions = Required<Omit<ScriptsPluginOptions, 'addWatchTarget'>>;
+export type BundleOptions = Required<
+	Omit<ScriptsPluginOptions, 'addWatchTarget'>
+>;
 
-interface TransformFileOptions extends BundleOptions {
+export interface TransformFileOptions extends BundleOptions {
 	readonly buildDirectory: string;
 	readonly publicSourcePathToScript: string;
 }
@@ -41,10 +42,17 @@ export const transformFile = memoize(
 		start(`Start compiling "${bold(publicSourcePathToScript)}" file.`);
 
 		const pathToScriptFromRoot = join(inputDirectory, publicSourcePathToScript);
-		const publicFileName = publicSourcePathToScript.replace(/ts$/, 'js');
+		const publicFileName = basename(
+			publicSourcePathToScript.replace(/ts$/, 'js'),
+		);
 
 		return pipe(
-			() => resolve(buildDirectory, publicDirectory, publicSourcePathToScript),
+			() =>
+				resolve(
+					buildDirectory,
+					publicDirectory,
+					basename(publicSourcePathToScript),
+				),
 			mkdir,
 			() =>
 				build({
@@ -60,13 +68,15 @@ export const transformFile = memoize(
 					entryPoints: [pathToScriptFromRoot],
 					...esbuildOptions,
 				}),
-			({ outputFiles = [] }: BuildResult) =>
-				outputFiles.map((file) =>
-					writeFile(file.path, file.text).then(() => file.path),
+			({ outputFiles = [] }: BuildResult): any =>
+				Promise.all(
+					outputFiles.map((file) =>
+						writeFile(file.path, file.text).then(() => file.path),
+					),
 				),
-			(paths) => Promise.all(paths),
-			(paths: ReadonlyArray<string>) =>
-				void done(
+			// @ts-ignore // TODO  TS IGNORE
+			(paths: string[]) => {
+				done(
 					`Compiled "${bold(publicSourcePathToScript)}" script${
 						paths.length > 1 ? 's were' : 'was'
 					} written to "${bold(
@@ -76,7 +86,9 @@ export const transformFile = memoize(
 							.map((pathPart) => pathPart.replace(process.cwd(), ''))
 							.join(', '),
 					)}"`,
-				),
+				);
+			},
+
 			() =>
 				withLeadingSlash([publicDirectory, publicFileName].join(URL_DELIMITER)),
 		)();
@@ -97,7 +109,7 @@ const findAndProcessFiles = (
 	const [buildDirectory] = pathStats(outputPath).directories;
 
 	return Promise.all(
-		rip(html, SCRIPTS_LINK_REGEXP, pipe(isRemoteLink, not)).map((link) =>
+		rip(html, SCRIPTS_LINK_REGEXP, not(isRemoteLink)).map((link) =>
 			transformFile({
 				inputDirectory,
 				publicDirectory,

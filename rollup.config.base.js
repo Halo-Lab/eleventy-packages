@@ -9,6 +9,7 @@ export default {
 		file: 'build/index.js',
 		format: 'cjs',
 		sourcemap: true,
+		exports: 'auto',
 	},
 	plugins: [
 		sucrase({

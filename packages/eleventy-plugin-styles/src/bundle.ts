@@ -1,6 +1,6 @@
 import { writeFile } from 'fs/promises';
 
-import { tap, not } from '@fluss/core';
+import { not, awaitedTap } from '@fluss/core';
 import {
 	rip,
 	mkdir,
@@ -27,6 +27,7 @@ export const createFileBundler = ({
 
 	return async (html: string): Promise<FileEntity> => {
 		const { css, urls } = await compile(file.sourcePath);
+
 		const result = await normalize({
 			...options,
 			css,
@@ -42,7 +43,7 @@ export const createFileBundler = ({
 	};
 };
 
-export const writeStyleFile = tap(async (entity: FileEntity) => {
+export const writeStyleFile = awaitedTap(async (entity: FileEntity) => {
 	await mkdir(entity.outputPath);
 	await writeFile(entity.outputPath, entity.data, { encoding: 'utf8' });
 });

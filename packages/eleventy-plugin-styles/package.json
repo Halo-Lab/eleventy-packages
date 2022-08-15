@@ -17,6 +17,7 @@
 		"directory": "build"
 	},
 	"scripts": {
+		"test": "jest",
 		"prebuild": "rimraf build",
 		"build": "rollup -c",
 		"postbuild": "npm run copy:package && npm run copy:readme && npm run copy:license",
