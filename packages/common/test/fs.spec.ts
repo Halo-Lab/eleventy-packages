@@ -4,9 +4,13 @@ import { trimLeadingPathDelimiter } from '../src';
 
 describe('fs', () => {
 	it('should return correct path without extra leading path delimiter', () => {
-		const path = sep + process.cwd();
+		const path = sep + sep + sep + process.cwd();
 
-		expect(trimLeadingPathDelimiter(path)).toBe(process.cwd());
+		const expected = process.cwd().startsWith(sep)
+			? process.cwd().slice(1)
+			: process.cwd();
+
+		expect(trimLeadingPathDelimiter(path)).toBe(expected);
 	});
 
 	it('should return initial path', () => {

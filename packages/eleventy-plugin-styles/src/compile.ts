@@ -42,9 +42,8 @@ const compileSass: Compiler = (options: Options<'sync'>) => async (file) => {
 		css,
 		urls: loadedUrls.map((url) =>
 			// decodeURI -> non english letters in path
-			trimLeadingPathDelimiter(normalize(decodeURI(url.pathname))).replace(
-				process.cwd() + sep,
-				'',
+			trimLeadingPathDelimiter(
+				normalize(decodeURI(url.pathname)).replace(process.cwd() + sep, ''),
 			),
 		),
 	};
@@ -57,9 +56,8 @@ const extractCssFromLessResult = ({
 	css,
 	// decodeURI -> non english letters in path
 	urls: imports.map((url) =>
-		trimLeadingPathDelimiter(normalize(decodeURI(url))).replace(
-			process.cwd() + sep,
-			'',
+		trimLeadingPathDelimiter(
+			normalize(decodeURI(url)).replace(process.cwd() + sep, ''),
 		),
 	),
 });
