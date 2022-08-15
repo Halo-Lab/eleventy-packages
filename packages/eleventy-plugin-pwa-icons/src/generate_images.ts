@@ -127,10 +127,9 @@ export const handleImages = once(
 							() => ({ html: '', manifestJsonContent: [] } as ImageResult),
 						),
 				)
-				.fill(() =>
+				.extract(() =>
 					resolveWith({ html: '', manifestJsonContent: [] } as ImageResult),
-				)
-				.extract();
+				);
 		}
 
 		start('Starting icons generation');

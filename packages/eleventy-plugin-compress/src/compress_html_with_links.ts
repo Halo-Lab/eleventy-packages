@@ -1,8 +1,14 @@
 import { join, dirname } from 'path';
 
-import { done, oops, start, mkdir } from '@eleventy-packages/common';
+import {
+	done,
+	oops,
+	start,
+	mkdir,
+	isRemoteLink,
+	rip,
+} from '@eleventy-packages/common';
 
-import { rip } from './rip';
 import { read } from './read';
 import { gzip } from './gzip';
 import { write } from './write';
@@ -11,6 +17,7 @@ import { deflate } from './deflate';
 import { isRelative } from './is_relative';
 import { CompressAlgorithm } from './types';
 import { SCRIPTS_LINK_REGEXP, STYLESHEET_LINK_REGEXP } from './constants';
+import { not } from '@fluss/core';
 
 const COMPRESSOR_FUNCTIONS = {
 	gzip,
@@ -33,14 +40,14 @@ export const compressHTMLWithLinks = async (
 
 	const contents = [Promise.resolve({ data: content, url: outputPath })]
 		.concat(
-			rip(content, STYLESHEET_LINK_REGEXP).map((link) =>
+			rip(content, STYLESHEET_LINK_REGEXP, not(isRemoteLink)).map((link) =>
 				read(
 					join(isRelative(link) ? dirname(outputPath) : buildDirectory, link),
 				),
 			),
 		)
 		.concat(
-			rip(content, SCRIPTS_LINK_REGEXP).map((link) =>
+			rip(content, SCRIPTS_LINK_REGEXP, not(isRemoteLink)).map((link) =>
 				read(
 					join(isRelative(link) ? dirname(outputPath) : buildDirectory, link),
 				),
@@ -53,10 +60,10 @@ export const compressHTMLWithLinks = async (
 
 			return Promise.all(
 				contents.map((info) =>
-					info.then(({ data, url }) => {
+					info.then(async ({ data, url }) => {
 						start(`Start to compress "${url}" file`);
 
-						mkdir(url)
+						await mkdir(url)
 							.then(() => compressor(data, url))
 							.then(write)
 							.then(
