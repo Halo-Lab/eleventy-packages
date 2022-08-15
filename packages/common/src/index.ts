@@ -1,3 +1,4 @@
+export * from './fs';
 export * from './url';
 export * from './mix';
 export * from './rip';

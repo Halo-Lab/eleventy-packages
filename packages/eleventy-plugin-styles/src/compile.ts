@@ -2,9 +2,13 @@ import { readFile } from 'fs/promises';
 import { resolve as resolvePath, normalize, sep } from 'path';
 
 import { render } from 'less';
-import { oops, resolve } from '@eleventy-packages/common';
 import { pipe, tryExecute } from '@fluss/core';
 import { compile, Options } from 'sass';
+import {
+	oops,
+	resolve,
+	trimLeadingPathDelimiter,
+} from '@eleventy-packages/common';
 
 import { PluginState } from './types';
 
@@ -37,7 +41,11 @@ const compileSass: Compiler = (options: Options<'sync'>) => async (file) => {
 	return {
 		css,
 		urls: loadedUrls.map((url) =>
-			normalize(url.pathname).replace(process.cwd() + sep, ''),
+			// decodeURI -> non english letters in path
+			trimLeadingPathDelimiter(normalize(decodeURI(url.pathname))).replace(
+				process.cwd() + sep,
+				'',
+			),
 		),
 	};
 };
@@ -47,7 +55,13 @@ const extractCssFromLessResult = ({
 	imports,
 }: Less.RenderOutput): CompilerResult => ({
 	css,
-	urls: imports.map((url) => normalize(url).replace(process.cwd() + sep, '')),
+	// decodeURI -> non english letters in path
+	urls: imports.map((url) =>
+		trimLeadingPathDelimiter(normalize(decodeURI(url))).replace(
+			process.cwd() + sep,
+			'',
+		),
+	),
 });
 
 /**
