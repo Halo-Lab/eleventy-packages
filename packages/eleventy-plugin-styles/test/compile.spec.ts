@@ -30,7 +30,7 @@ describe('getCompiler', () => {
 		mockFs.restore();
 	});
 
-	it('should return ...', async () => {
+	it('should compile file, return object with urls path, css data and other properties', async () => {
 		const linkerResult = bindLinkerWithStyles(linker(mockDataLinkerOptions))(
 			findStyles(mockDataHtmlFile),
 		)[0];
@@ -39,12 +39,9 @@ describe('getCompiler', () => {
 			linkerResult.file.sourcePath,
 		);
 
-		// Delete first "/" because wrong path started with "/" (/C:/Folder/)
-		const resultUrls = result.urls.map((url) => url.slice(1));
-
-		expect(resultUrls).toHaveLength(1);
-		expect(normalize(decodeURI(resultUrls[0]))).toBe(
-			resolve(`${mockDataLinkerOptions.baseDirectory}${sep}main.scss`),
+		expect(result.urls).toHaveLength(1);
+		expect(normalize(decodeURI(result.urls[0]))).toBe(
+			`${mockDataLinkerOptions.baseDirectory}${sep}main.scss`,
 		);
 		expect(result.css).toBe('');
 	});

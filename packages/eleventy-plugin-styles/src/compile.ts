@@ -1,5 +1,5 @@
-import { resolve as resolvePath } from 'path';
 import { readFile } from 'fs/promises';
+import { resolve as resolvePath, normalize, sep } from 'path';
 
 import { render } from 'less';
 import { oops, resolve } from '@eleventy-packages/common';
@@ -36,7 +36,9 @@ const compileSass: Compiler = (options: Options<'sync'>) => async (file) => {
 
 	return {
 		css,
-		urls: loadedUrls.map((url) => url.pathname.replace(process.cwd(), '')),
+		urls: loadedUrls.map((url) =>
+			normalize(url.pathname).replace(process.cwd() + sep, ''),
+		),
 	};
 };
 
@@ -45,7 +47,7 @@ const extractCssFromLessResult = ({
 	imports,
 }: Less.RenderOutput): CompilerResult => ({
 	css,
-	urls: imports.map((url) => url.replace(process.cwd(), '')),
+	urls: imports.map((url) => normalize(url).replace(process.cwd() + sep, '')),
 });
 
 /**

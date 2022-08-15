@@ -34,7 +34,7 @@ module.exports = (config) => {
    2. _url_ - shortcode outputs only final Cloudflare URL.
    3. _attributes_ - shortcode outputs `<img>` ready to use attributes as the object.
 3. _directory_ is the name of the directory under the _output_ which will contain referenced images.
-   Plugin copies images from source to the _output_ directory by itself. **Don't use the _passThoughCopy_ option
+   Plugin copies images from source to the _output_ directory by itself. **Don't use the _addPassthroughCopy_ option
    with images that are referenced by the plugin because you may end up with two copies.**
 
 ### Shortcode has the following signature:
@@ -45,12 +45,12 @@ const result = cloudflareImage(url, options);
 
 1. _url_ - it is the relative path to the image from the current page. You may set another relative _from_
    point by providing _relativeTo_ property in _options_.
-2. _options_ - it includes [all options]() that Cloudflare URL may accept and several options like:
+2. _options_ - it includes [all options](https://developers.cloudflare.com/images/image-resizing/url-format/#options) that Cloudflare URL may accept and several additional options like:
    1. _relativeTo_ - see above.
    2. _emit_ - overrides the global _mode_ option and accepts the same values.
    3. _densities_ - list of all image densities for the _srcset_ attribute. (_sizes_ shouldn't be defined)
    4. _sizes_ - list of all required image widths for the _srcset_ attribute. (_densities_ shouldn't be defined)
-   5. _attributes_ - map of all additional `<img>` attributes.
+   5. _attributes_ - a map of all additional `<img>` attributes.
 
 > _srcset_ attribute if defined in the _attributes_ is not used if _densities_ or _sizes_ is provided.
 
