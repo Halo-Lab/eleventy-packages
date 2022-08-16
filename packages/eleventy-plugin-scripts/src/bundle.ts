@@ -1,5 +1,5 @@
 import { promises } from 'fs';
-import { basename, join, resolve } from 'path';
+import { basename, join, normalize, resolve, sep } from 'path';
 
 import { memoize, pipe, not } from '@fluss/core';
 import { build, BuildResult } from 'esbuild';
@@ -42,17 +42,12 @@ export const transformFile = memoize(
 		start(`Start compiling "${bold(publicSourcePathToScript)}" file.`);
 
 		const pathToScriptFromRoot = join(inputDirectory, publicSourcePathToScript);
-		const publicFileName = basename(
+		const publicFilePaths = normalize(
 			publicSourcePathToScript.replace(/ts$/, 'js'),
-		);
+		).split(sep);
 
 		return pipe(
-			() =>
-				resolve(
-					buildDirectory,
-					publicDirectory,
-					basename(publicSourcePathToScript),
-				),
+			() => resolve(buildDirectory, publicDirectory, publicSourcePathToScript),
 			mkdir,
 			() =>
 				build({
@@ -90,7 +85,9 @@ export const transformFile = memoize(
 			},
 
 			() =>
-				withLeadingSlash([publicDirectory, publicFileName].join(URL_DELIMITER)),
+				withLeadingSlash(
+					[publicDirectory, ...publicFilePaths].join(URL_DELIMITER),
+				),
 		)();
 	},
 	({ publicSourcePathToScript }) => publicSourcePathToScript,
