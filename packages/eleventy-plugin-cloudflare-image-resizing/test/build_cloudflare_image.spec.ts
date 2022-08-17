@@ -15,12 +15,41 @@ const mockDataCloudflareImageOptions: BuildCloudflareImageOptions = {
 	mode: 'img',
 };
 
+const mockDataCloudflareImageOptionsWithAttributes: BuildCloudflareImageOptions =
+	{
+		normalizedZone: '',
+		fullOptions: {
+			anim: true,
+			dpr: 1,
+			format: 'auto',
+			quality: 85,
+		},
+		rebasedOriginalURL: 'cloudflare-images/car.b62406a0fe1.jpg',
+		mode: 'img',
+		attributes: {
+			alt: 'myImage',
+			width: '5',
+			toHTML: true,
+			disabled: false,
+		},
+	};
+
 describe('buildCloudflareImage', () => {
 	it('should return correct image url', () => {
 		const result = buildCloudflareImage(mockDataCloudflareImageOptions);
 
 		expect(result).toBe(
-			`<img src="/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/${mockDataCloudflareImageOptions.rebasedOriginalURL}"   />`,
+			`<img src="/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/cloudflare-images/car.b62406a0fe1.jpg"   />`,
+		);
+	});
+
+	it('should return correct image url (test with attributes)', () => {
+		const result = buildCloudflareImage(
+			mockDataCloudflareImageOptionsWithAttributes,
+		);
+
+		expect(result).toBe(
+			`<img src="/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/cloudflare-images/car.b62406a0fe1.jpg"  alt="myImage" width="5" toHTML  />`,
 		);
 	});
 });
