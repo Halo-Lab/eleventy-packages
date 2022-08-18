@@ -1,4 +1,4 @@
-import { isUrl, withLeadingSlash } from '../src';
+import { isUrl, withLeadingSlash, trimLastSlash } from '../src';
 
 describe('isUrl', () => {
 	it('should return true if text is url without TLS', () => {
@@ -31,5 +31,15 @@ describe('withLeadingSlash', () => {
 		const url = withLeadingSlash('/baz');
 
 		expect(url).toMatch('/baz');
+	});
+});
+
+describe('trimLastSlash', () => {
+	it('should return correct url (trim last slash in url if slash exists)', () => {
+		const url = trimLastSlash('https://example.com');
+		const urlWithSlash = trimLastSlash('https://example.com/');
+
+		expect(url).toBe('https://example.com');
+		expect(urlWithSlash).toBe('https://example.com');
 	});
 });
