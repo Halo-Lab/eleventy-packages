@@ -4,7 +4,8 @@ import {
 } from '../src/build_cloudflare_image';
 
 const mockDataCloudflareImageOptions: BuildCloudflareImageOptions = {
-	normalizedZone: '',
+	normalizedZone: 'https://test.com',
+	normalizedDomain: 'https://test.com/',
 	fullOptions: {
 		anim: true,
 		dpr: 1,
@@ -18,6 +19,7 @@ const mockDataCloudflareImageOptions: BuildCloudflareImageOptions = {
 const mockDataCloudflareImageOptionsWithAttributes: BuildCloudflareImageOptions =
 	{
 		normalizedZone: '',
+		normalizedDomain: '',
 		fullOptions: {
 			anim: true,
 			dpr: 1,
@@ -39,7 +41,7 @@ describe('buildCloudflareImage', () => {
 		const result = buildCloudflareImage(mockDataCloudflareImageOptions);
 
 		expect(result).toBe(
-			`<img src="/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/cloudflare-images/car.b62406a0fe1.jpg"   />`,
+			`<img src="https://test.com/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/https://test.com/cloudflare-images/car.b62406a0fe1.jpg"   />`,
 		);
 	});
 
