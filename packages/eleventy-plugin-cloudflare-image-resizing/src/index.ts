@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { bold, oops, URL_DELIMITER } from '@eleventy-packages/common';
+
 import { buildImagePath } from './build_image_path';
 import { buildCloudflareImage } from './build_cloudflare_image';
 
@@ -100,6 +101,8 @@ export interface ImageAttributes {
 	readonly sizes?: readonly number[];
 	/** Native image attributes pairs. */
 	readonly attributes?: Record<string, string | number | boolean>;
+	/** Domain for image. */
+	readonly domain?: string | URL;
 }
 
 export default ({
@@ -118,9 +121,13 @@ export default ({
 			densities = [],
 			relativeTo,
 			emit,
+			domain = '',
 			...options
 		}: CloudflareURLOptions & ImageAttributes = {},
 	): string | Record<string, string | number | boolean> {
+		const normalizedDomain =
+			typeof domain === 'string' ? domain : domain?.origin ?? '';
+
 		const { inputImagePath, outputImagePath, rebasedImageName } =
 			buildImagePath({
 				originalURL,
@@ -151,6 +158,7 @@ export default ({
 
 		return buildCloudflareImage({
 			normalizedZone,
+			normalizedDomain,
 			fullOptions,
 			rebasedOriginalURL,
 			attributes,

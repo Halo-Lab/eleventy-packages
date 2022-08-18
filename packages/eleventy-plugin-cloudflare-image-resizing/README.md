@@ -22,6 +22,7 @@ module.exports = (config) => {
 			zone: 'https://example.com', // optional
 			mode: 'img', // optional, default
 			directory: 'cloudflare-images', // optional, default
+			domain: 'https://example.com', // optional
 		}),
 	);
 };
@@ -51,6 +52,9 @@ const result = cloudflareImage(url, options);
    3. _densities_ - list of all image densities for the _srcset_ attribute. (_sizes_ shouldn't be defined)
    4. _sizes_ - list of all required image widths for the _srcset_ attribute. (_densities_ shouldn't be defined)
    5. _attributes_ - a map of all additional `<img>` attributes.
+   6. _domain_ is the domain that acts as a place from where images are taken.
+			It may be omitted, and in that case, it will be implying that images are hosted on the current domain (which serves
+			the whole website).
 
 > _srcset_ attribute if defined in the _attributes_ is not used if _densities_ or _sizes_ is provided.
 

@@ -1,11 +1,12 @@
 import { isJust } from '@fluss/core';
 
-import { URL_DELIMITER } from '@eleventy-packages/common';
+import { URL_DELIMITER, trimLastSlash } from '@eleventy-packages/common';
 
 import { CloudflareURLOptions, ImageAttributes } from './index';
 
 export interface BuildCloudflareImageOptions extends ImageAttributes {
 	normalizedZone: string;
+	normalizedDomain: string;
 	fullOptions: CloudflareURLOptions;
 	rebasedOriginalURL: string;
 	mode: 'img' | 'url' | 'attributes';
@@ -14,6 +15,7 @@ export interface BuildCloudflareImageOptions extends ImageAttributes {
 /** Builds a full image Cloudflare URL. */
 const cloudflareURL = (
 	zone: string,
+	domain: string,
 	options: CloudflareURLOptions,
 	originalURL: string,
 ) =>
@@ -27,10 +29,12 @@ const cloudflareURL = (
 		.map(([name, value]) => (value !== undefined ? `${name}=${value}` : ''))
 		.join(',') +
 	URL_DELIMITER +
+	(domain ? domain + URL_DELIMITER : '') +
 	originalURL;
 
 export const buildCloudflareImage = ({
 	normalizedZone,
+	normalizedDomain,
 	fullOptions,
 	rebasedOriginalURL,
 	attributes = {},
@@ -41,7 +45,15 @@ export const buildCloudflareImage = ({
 }: BuildCloudflareImageOptions):
 	| string
 	| Record<string, string | number | boolean> => {
-	const url = cloudflareURL(normalizedZone, fullOptions, rebasedOriginalURL);
+	const normalizedZoneBySlash = trimLastSlash(normalizedZone);
+	const normalizedDomainBySlash = trimLastSlash(normalizedDomain);
+
+	const url = cloudflareURL(
+		normalizedZoneBySlash,
+		normalizedDomainBySlash,
+		fullOptions,
+		rebasedOriginalURL,
+	);
 
 	if (emit === 'url' || (mode === 'url' && !isJust(emit))) {
 		return url;
@@ -53,7 +65,8 @@ export const buildCloudflareImage = ({
 					.map(
 						(size) =>
 							`${cloudflareURL(
-								normalizedZone,
+								normalizedZoneBySlash,
+								normalizedDomainBySlash,
 								{
 									...fullOptions,
 									width: size,
@@ -67,7 +80,8 @@ export const buildCloudflareImage = ({
 					.map(
 						(density) =>
 							`${cloudflareURL(
-								normalizedZone,
+								normalizedZoneBySlash,
+								normalizedDomainBySlash,
 								{ ...fullOptions, width: fullOptions.width! * density },
 								rebasedOriginalURL,
 							)} ${density}x`,

@@ -1,6 +1,6 @@
 {
 	"name": "eleventy-plugin-cloudflare-image-resizing",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Plugin for generating the correct image URL of Cloudflare Image Resizing service.",
 	"main": "./index.js",
 	"exports": {

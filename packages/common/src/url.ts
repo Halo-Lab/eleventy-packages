@@ -29,6 +29,10 @@ export const urlToPath = (url: string) => (prefix: string) =>
 export const withLeadingSlash = (url: string) =>
 	url.startsWith(URL_DELIMITER) ? url : URL_DELIMITER + url;
 
+/** Delete last slash if url have it.  */
+export const trimLastSlash = (url: string) =>
+	url.endsWith(URL_DELIMITER) ? url.slice(0, -1) : url;
+
 /** Predicate that detects remote URLs.  */
 export const isRemoteLink = (value: string): boolean => /^https?/.test(value);
 
