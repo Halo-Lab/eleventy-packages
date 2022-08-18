@@ -22,7 +22,6 @@ module.exports = (config) => {
 			zone: 'https://example.com', // optional
 			mode: 'img', // optional, default
 			directory: 'cloudflare-images', // optional, default
-			domain: 'https://example.com', // optional
 		}),
 	);
 };
