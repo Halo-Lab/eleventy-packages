@@ -88,8 +88,6 @@ export interface InitializeOptions {
 	readonly mode?: 'img' | 'url' | 'attributes';
 	/** A name of the directory where the images will be written. */
 	readonly directory?: string;
-	/** Domain name on Cloudflare. */
-	readonly domain?: string | URL;
 }
 
 export interface ImageAttributes {
