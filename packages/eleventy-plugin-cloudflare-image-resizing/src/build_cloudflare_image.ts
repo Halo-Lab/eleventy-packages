@@ -89,7 +89,7 @@ export const buildCloudflareImage = ({
 
 	const renderedAttributes = Object.entries(attributes)
 		.map(([name, value]) =>
-			typeof value === 'boolean' ? (value ? name : '') : `name="${value}"`,
+			typeof value === 'boolean' ? (value ? name : '') : `${name}="${value}"`,
 		)
 		.join(' ');
 
