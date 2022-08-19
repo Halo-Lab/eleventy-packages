@@ -28,7 +28,7 @@ export const buildImagePath = ({
 
 	const inputImagePath = path.resolve(
 		process.cwd(),
-		relativeTo ?? path.dirname(page.inputPath),
+		path.normalize(relativeTo ?? path.dirname(page.inputPath)),
 		originalURLPath,
 	);
 
