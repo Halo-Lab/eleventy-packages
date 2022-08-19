@@ -1,7 +1,7 @@
 import path from 'path';
 import process from 'process';
 
-import { hash, URL_DELIMITER } from '@eleventy-packages/common';
+import { URL_DELIMITER } from '@eleventy-packages/common';
 
 export interface BuildImagePathOptions {
 	originalURL: string;
@@ -34,7 +34,6 @@ export const buildImagePath = ({
 
 	const rebasedImageName =
 		path.basename(originalURLPath, path.extname(originalURLPath)) +
-		`.${hash(inputImagePath)}` +
 		path.extname(originalURLPath);
 
 	const outputImagePath = path.resolve(

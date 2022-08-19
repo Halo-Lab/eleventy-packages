@@ -131,7 +131,7 @@ export default ({
 		const { inputImagePath, outputImagePath, rebasedImageName } =
 			buildImagePath({
 				originalURL,
-				relativeTo,
+				relativeTo: (relativeTo && path.normalize(relativeTo)) || relativeTo,
 				page: this.page,
 				directory,
 			});
