@@ -21,11 +21,14 @@ describe('buildImagePath', () => {
 	it('should return correct image path properties', () => {
 		const result = buildImagePath(mockDataImagePathOptions);
 
+		const hash = result.rebasedImageName.split('.')[1];
+
 		const newImageName =
 			basename(
 				mockDataImagePathOptions.originalURL,
 				extname(mockDataImagePathOptions.originalURL),
 			) +
+			`.${hash}` +
 			extname(mockDataImagePathOptions.originalURL);
 
 		expect(result.inputImagePath).toBe(
