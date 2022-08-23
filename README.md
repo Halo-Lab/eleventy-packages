@@ -9,8 +9,9 @@ It consists of:
 3. [eleventy-plugin-scripts](./packages/eleventy-plugin-scripts)
 4. [eleventy-plugin-styles](./packages/eleventy-plugin-styles)
 5. [eleventy-plugin-workbox](./packages/eleventy-plugin-workbox)
-6. [eleventy-shortcode-image](./packages/eleventy-shortcode-image)
-7. [kickin](./packages/kickin)
+6. [eleventy-plugin-cloudflare-image-resizing](./packages/eleventy-plugin-cloudflare-image-resizing)
+7. [eleventy-shortcode-image](./packages/eleventy-shortcode-image)
+8. [kickin](./packages/kickin)
 
 ## Prerequisites
 
