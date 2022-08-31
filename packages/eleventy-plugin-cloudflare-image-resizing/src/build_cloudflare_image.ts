@@ -1,3 +1,5 @@
+import { env } from 'process';
+
 import { isJust } from '@fluss/core';
 
 import { URL_DELIMITER, trimLastSlash } from '@eleventy-packages/common';
@@ -7,6 +9,7 @@ import { CloudflareURLOptions, ImageAttributes } from './index';
 export interface BuildCloudflareImageOptions extends ImageAttributes {
 	normalizedZone: string;
 	normalizedDomain: string;
+	bypass: () => boolean;
 	fullOptions: CloudflareURLOptions;
 	rebasedOriginalURL: string;
 	mode: 'img' | 'url' | 'attributes';
@@ -35,6 +38,7 @@ const cloudflareURL = (
 export const buildCloudflareImage = ({
 	normalizedZone,
 	normalizedDomain,
+	bypass = () => env.NODE_ENV === 'production',
 	fullOptions,
 	rebasedOriginalURL,
 	attributes = {},
@@ -48,12 +52,16 @@ export const buildCloudflareImage = ({
 	const normalizedZoneBySlash = trimLastSlash(normalizedZone);
 	const normalizedDomainBySlash = trimLastSlash(normalizedDomain);
 
-	const url = cloudflareURL(
-		normalizedZoneBySlash,
-		normalizedDomainBySlash,
-		fullOptions,
-		rebasedOriginalURL,
-	);
+	const isLocal = !bypass();
+
+	const url = isLocal
+		? rebasedOriginalURL
+		: cloudflareURL(
+				normalizedZoneBySlash,
+				normalizedDomainBySlash,
+				fullOptions,
+				rebasedOriginalURL,
+		  );
 
 	if (emit === 'url' || (mode === 'url' && !isJust(emit))) {
 		return url;
@@ -64,27 +72,35 @@ export const buildCloudflareImage = ({
 			? `srcset="${sizes
 					.map(
 						(size) =>
-							`${cloudflareURL(
-								normalizedZoneBySlash,
-								normalizedDomainBySlash,
-								{
-									...fullOptions,
-									width: size,
-								},
-								rebasedOriginalURL,
-							)} ${size}w`,
+							`${
+								isLocal
+									? rebasedOriginalURL
+									: cloudflareURL(
+											normalizedZoneBySlash,
+											normalizedDomainBySlash,
+											{
+												...fullOptions,
+												width: size,
+											},
+											rebasedOriginalURL,
+									  )
+							} ${size}w`,
 					)
 					.join(',')}"`
 			: densities.length > 0
 			? densities
 					.map(
 						(density) =>
-							`${cloudflareURL(
-								normalizedZoneBySlash,
-								normalizedDomainBySlash,
-								{ ...fullOptions, width: fullOptions.width! * density },
-								rebasedOriginalURL,
-							)} ${density}x`,
+							`${
+								isLocal
+									? rebasedOriginalURL
+									: cloudflareURL(
+											normalizedZoneBySlash,
+											normalizedDomainBySlash,
+											{ ...fullOptions, width: fullOptions.width! * density },
+											rebasedOriginalURL,
+									  )
+							} ${density}x`,
 					)
 					.join(',')
 			: '';
