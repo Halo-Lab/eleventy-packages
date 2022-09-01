@@ -116,7 +116,7 @@ export default ({
 	zone = '',
 	mode = 'img',
 	directory = 'cloudflare-images',
-	bypass = () => env.NODE_ENV === 'production',
+	bypass = () => env.NODE_ENV !== 'production',
 }: InitializeOptions = {}) => {
 	const normalizedZone = typeof zone === 'string' ? zone : zone?.origin ?? '';
 
@@ -167,7 +167,7 @@ export default ({
 		return buildCloudflareImage({
 			normalizedZone,
 			normalizedDomain,
-			isLocal: !bypass(),
+			isLocal: bypass(),
 			fullOptions,
 			rebasedOriginalURL,
 			attributes,
