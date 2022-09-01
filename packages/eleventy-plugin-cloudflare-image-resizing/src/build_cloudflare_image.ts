@@ -50,8 +50,10 @@ export const buildCloudflareImage = ({
 	const normalizedZoneBySlash = trimLastSlash(normalizedZone);
 	const normalizedDomainBySlash = trimLastSlash(normalizedDomain);
 
+	const localDirectoryURL = URL_DELIMITER + rebasedOriginalURL;
+
 	const url = isLocal
-		? rebasedOriginalURL
+		? localDirectoryURL
 		: cloudflareURL(
 				normalizedZoneBySlash,
 				normalizedDomainBySlash,
@@ -70,7 +72,7 @@ export const buildCloudflareImage = ({
 						(size) =>
 							`${
 								isLocal
-									? rebasedOriginalURL
+									? localDirectoryURL
 									: cloudflareURL(
 											normalizedZoneBySlash,
 											normalizedDomainBySlash,
@@ -89,7 +91,7 @@ export const buildCloudflareImage = ({
 						(density) =>
 							`${
 								isLocal
-									? rebasedOriginalURL
+									? localDirectoryURL
 									: cloudflareURL(
 											normalizedZoneBySlash,
 											normalizedDomainBySlash,

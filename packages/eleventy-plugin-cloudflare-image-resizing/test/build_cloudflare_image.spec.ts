@@ -83,7 +83,7 @@ describe('buildCloudflareImage', () => {
 		);
 
 		expect(result).toBe(
-			`<img src="cloudflare-images/car.b62406a0fe1.jpg"  alt="myImage" width="5" toHTML  />`,
+			`<img src="/cloudflare-images/car.b62406a0fe1.jpg"  alt="myImage" width="5" toHTML  />`,
 		);
 	});
 });
