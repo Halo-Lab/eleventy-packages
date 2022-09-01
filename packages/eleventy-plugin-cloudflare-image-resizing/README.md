@@ -22,7 +22,7 @@ module.exports = (config) => {
 			zone: 'https://example.com', // optional
 			mode: 'img', // optional, default
 			directory: 'cloudflare-images', // optional, default
-			bypass: () => process.env.NODE_ENV === 'production', // optional, default
+			bypass: () => process.env.NODE_ENV !== 'production', // optional, default
 		}),
 	);
 };
