@@ -7,6 +7,7 @@ import { CloudflareURLOptions, ImageAttributes } from './index';
 export interface BuildCloudflareImageOptions extends ImageAttributes {
 	normalizedZone: string;
 	normalizedDomain: string;
+	isLocal: boolean;
 	fullOptions: CloudflareURLOptions;
 	rebasedOriginalURL: string;
 	mode: 'img' | 'url' | 'attributes';
@@ -35,6 +36,7 @@ const cloudflareURL = (
 export const buildCloudflareImage = ({
 	normalizedZone,
 	normalizedDomain,
+	isLocal,
 	fullOptions,
 	rebasedOriginalURL,
 	attributes = {},
@@ -48,12 +50,16 @@ export const buildCloudflareImage = ({
 	const normalizedZoneBySlash = trimLastSlash(normalizedZone);
 	const normalizedDomainBySlash = trimLastSlash(normalizedDomain);
 
-	const url = cloudflareURL(
-		normalizedZoneBySlash,
-		normalizedDomainBySlash,
-		fullOptions,
-		rebasedOriginalURL,
-	);
+	const localDirectoryURL = URL_DELIMITER + rebasedOriginalURL;
+
+	const url = isLocal
+		? localDirectoryURL
+		: cloudflareURL(
+				normalizedZoneBySlash,
+				normalizedDomainBySlash,
+				fullOptions,
+				rebasedOriginalURL,
+		  );
 
 	if (emit === 'url' || (mode === 'url' && !isJust(emit))) {
 		return url;
@@ -64,27 +70,35 @@ export const buildCloudflareImage = ({
 			? `srcset="${sizes
 					.map(
 						(size) =>
-							`${cloudflareURL(
-								normalizedZoneBySlash,
-								normalizedDomainBySlash,
-								{
-									...fullOptions,
-									width: size,
-								},
-								rebasedOriginalURL,
-							)} ${size}w`,
+							`${
+								isLocal
+									? localDirectoryURL
+									: cloudflareURL(
+											normalizedZoneBySlash,
+											normalizedDomainBySlash,
+											{
+												...fullOptions,
+												width: size,
+											},
+											rebasedOriginalURL,
+									  )
+							} ${size}w`,
 					)
 					.join(',')}"`
 			: densities.length > 0
 			? densities
 					.map(
 						(density) =>
-							`${cloudflareURL(
-								normalizedZoneBySlash,
-								normalizedDomainBySlash,
-								{ ...fullOptions, width: fullOptions.width! * density },
-								rebasedOriginalURL,
-							)} ${density}x`,
+							`${
+								isLocal
+									? localDirectoryURL
+									: cloudflareURL(
+											normalizedZoneBySlash,
+											normalizedDomainBySlash,
+											{ ...fullOptions, width: fullOptions.width! * density },
+											rebasedOriginalURL,
+									  )
+							} ${density}x`,
 					)
 					.join(',')
 			: '';

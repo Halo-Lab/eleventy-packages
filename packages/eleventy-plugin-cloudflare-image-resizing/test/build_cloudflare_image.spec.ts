@@ -6,6 +6,7 @@ import {
 const mockDataCloudflareImageOptions: BuildCloudflareImageOptions = {
 	normalizedZone: 'https://test.com',
 	normalizedDomain: 'https://test.com/',
+	isLocal: false,
 	fullOptions: {
 		anim: true,
 		dpr: 1,
@@ -20,6 +21,7 @@ const mockDataCloudflareImageOptionsWithAttributes: BuildCloudflareImageOptions 
 	{
 		normalizedZone: '',
 		normalizedDomain: '',
+		isLocal: false,
 		fullOptions: {
 			anim: true,
 			dpr: 1,
@@ -35,6 +37,26 @@ const mockDataCloudflareImageOptionsWithAttributes: BuildCloudflareImageOptions 
 			disabled: false,
 		},
 	};
+
+const mockDataCloudflareImageOptionsDifBypass: BuildCloudflareImageOptions = {
+	normalizedZone: 'https://test.com',
+	normalizedDomain: 'https://test.com',
+	isLocal: true,
+	fullOptions: {
+		anim: true,
+		dpr: 1,
+		format: 'auto',
+		quality: 85,
+	},
+	rebasedOriginalURL: 'cloudflare-images/car.b62406a0fe1.jpg',
+	mode: 'img',
+	attributes: {
+		alt: 'myImage',
+		width: '5',
+		toHTML: true,
+		disabled: false,
+	},
+};
 
 describe('buildCloudflareImage', () => {
 	it('should return correct image url', () => {
@@ -52,6 +74,16 @@ describe('buildCloudflareImage', () => {
 
 		expect(result).toBe(
 			`<img src="/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/cloudflare-images/car.b62406a0fe1.jpg"  alt="myImage" width="5" toHTML  />`,
+		);
+	});
+
+	it('should return correct image url from local directory', () => {
+		const result = buildCloudflareImage(
+			mockDataCloudflareImageOptionsDifBypass,
+		);
+
+		expect(result).toBe(
+			`<img src="/cloudflare-images/car.b62406a0fe1.jpg"  alt="myImage" width="5" toHTML  />`,
 		);
 	});
 });

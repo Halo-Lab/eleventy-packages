@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { env } from 'process';
 
 import { bold, oops, URL_DELIMITER } from '@eleventy-packages/common';
 
@@ -88,6 +89,12 @@ export interface InitializeOptions {
 	readonly mode?: 'img' | 'url' | 'attributes';
 	/** A name of the directory where the images will be written. */
 	readonly directory?: string;
+	/**
+	 * A function that checks NODE_ENV for prod or local
+	 * prod returns image path from Cloudflare service
+	 * local returns image path from local Cloudflare directory
+	 */
+	readonly bypass?: () => boolean;
 }
 
 export interface ImageAttributes {
@@ -109,6 +116,7 @@ export default ({
 	zone = '',
 	mode = 'img',
 	directory = 'cloudflare-images',
+	bypass = () => env.NODE_ENV !== 'production',
 }: InitializeOptions = {}) => {
 	const normalizedZone = typeof zone === 'string' ? zone : zone?.origin ?? '';
 
@@ -159,6 +167,7 @@ export default ({
 		return buildCloudflareImage({
 			normalizedZone,
 			normalizedDomain,
+			isLocal: bypass(),
 			fullOptions,
 			rebasedOriginalURL,
 			attributes,
