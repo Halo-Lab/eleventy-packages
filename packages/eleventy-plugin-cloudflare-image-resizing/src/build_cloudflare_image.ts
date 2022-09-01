@@ -1,5 +1,3 @@
-import { env } from 'process';
-
 import { isJust } from '@fluss/core';
 
 import { URL_DELIMITER, trimLastSlash } from '@eleventy-packages/common';
@@ -9,7 +7,7 @@ import { CloudflareURLOptions, ImageAttributes } from './index';
 export interface BuildCloudflareImageOptions extends ImageAttributes {
 	normalizedZone: string;
 	normalizedDomain: string;
-	bypass: () => boolean;
+	isLocal: boolean;
 	fullOptions: CloudflareURLOptions;
 	rebasedOriginalURL: string;
 	mode: 'img' | 'url' | 'attributes';
@@ -38,7 +36,7 @@ const cloudflareURL = (
 export const buildCloudflareImage = ({
 	normalizedZone,
 	normalizedDomain,
-	bypass = () => env.NODE_ENV === 'production',
+	isLocal,
 	fullOptions,
 	rebasedOriginalURL,
 	attributes = {},
@@ -51,8 +49,6 @@ export const buildCloudflareImage = ({
 	| Record<string, string | number | boolean> => {
 	const normalizedZoneBySlash = trimLastSlash(normalizedZone);
 	const normalizedDomainBySlash = trimLastSlash(normalizedDomain);
-
-	const isLocal = !bypass();
 
 	const url = isLocal
 		? rebasedOriginalURL

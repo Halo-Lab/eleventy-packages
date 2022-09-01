@@ -167,7 +167,7 @@ export default ({
 		return buildCloudflareImage({
 			normalizedZone,
 			normalizedDomain,
-			bypass,
+			isLocal: !bypass(),
 			fullOptions,
 			rebasedOriginalURL,
 			attributes,

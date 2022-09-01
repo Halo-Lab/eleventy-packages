@@ -6,7 +6,7 @@ import {
 const mockDataCloudflareImageOptions: BuildCloudflareImageOptions = {
 	normalizedZone: 'https://test.com',
 	normalizedDomain: 'https://test.com/',
-	bypass: () => true,
+	isLocal: false,
 	fullOptions: {
 		anim: true,
 		dpr: 1,
@@ -21,7 +21,7 @@ const mockDataCloudflareImageOptionsWithAttributes: BuildCloudflareImageOptions 
 	{
 		normalizedZone: '',
 		normalizedDomain: '',
-		bypass: () => true,
+		isLocal: false,
 		fullOptions: {
 			anim: true,
 			dpr: 1,
@@ -41,7 +41,7 @@ const mockDataCloudflareImageOptionsWithAttributes: BuildCloudflareImageOptions 
 const mockDataCloudflareImageOptionsDifBypass: BuildCloudflareImageOptions = {
 	normalizedZone: 'https://test.com',
 	normalizedDomain: 'https://test.com',
-	bypass: () => false,
+	isLocal: true,
 	fullOptions: {
 		anim: true,
 		dpr: 1,
