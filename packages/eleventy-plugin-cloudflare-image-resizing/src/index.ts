@@ -136,6 +136,23 @@ export default ({
 		const normalizedDomain =
 			typeof domain === 'string' ? domain : domain?.origin ?? '';
 
+		const fullOptions = injectDefaultOptions(options);
+
+		if (originalURL.startsWith('http') || originalURL.startsWith('https')) {
+			return buildCloudflareImage({
+				normalizedZone,
+				normalizedDomain: '',
+				isLocal: bypass(),
+				fullOptions,
+				rebasedOriginalURL: originalURL,
+				attributes,
+				sizes,
+				densities,
+				emit,
+				mode,
+			});
+		}
+
 		const { inputImagePath, outputImagePath, rebasedImageName } =
 			buildImagePath({
 				originalURL,
@@ -159,8 +176,6 @@ export default ({
 				);
 			}
 		}
-
-		const fullOptions = injectDefaultOptions(options);
 
 		const rebasedOriginalURL = `${directory}${URL_DELIMITER}${rebasedImageName}`;
 

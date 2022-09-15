@@ -38,3 +38,7 @@ export const isRemoteLink = (value: string): boolean => /^https?/.test(value);
 
 /** Checks if an url is absolute. */
 export const isAbsoluteURL = (url: string) => url.startsWith(URL_DELIMITER);
+
+/** Checks if an url is from Public Internet. */
+export const isPublicInternetURL = (url: string) =>
+	url.startsWith('http') || url.startsWith('https');
