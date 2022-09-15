@@ -2,7 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import { env } from 'process';
 
-import { bold, oops, URL_DELIMITER } from '@eleventy-packages/common';
+import {
+	bold,
+	oops,
+	URL_DELIMITER,
+	isPublicInternetURL
+} from '@eleventy-packages/common';
 
 import { buildImagePath } from './build_image_path';
 import { buildCloudflareImage } from './build_cloudflare_image';
@@ -136,6 +141,23 @@ export default ({
 		const normalizedDomain =
 			typeof domain === 'string' ? domain : domain?.origin ?? '';
 
+		const fullOptions = injectDefaultOptions(options);
+
+		if (isPublicInternetURL(originalURL)) {
+			return buildCloudflareImage({
+				normalizedZone,
+				normalizedDomain: '',
+				isLocal: bypass(),
+				fullOptions,
+				rebasedOriginalURL: originalURL,
+				attributes,
+				sizes,
+				densities,
+				emit,
+				mode,
+			});
+		}
+
 		const { inputImagePath, outputImagePath, rebasedImageName } =
 			buildImagePath({
 				originalURL,
@@ -159,8 +181,6 @@ export default ({
 				);
 			}
 		}
-
-		const fullOptions = injectDefaultOptions(options);
 
 		const rebasedOriginalURL = `${directory}${URL_DELIMITER}${rebasedImageName}`;
 

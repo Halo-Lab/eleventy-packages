@@ -1,6 +1,10 @@
 import { isJust } from '@fluss/core';
 
-import { URL_DELIMITER, trimLastSlash } from '@eleventy-packages/common';
+import {
+	URL_DELIMITER,
+	trimLastSlash,
+	isPublicInternetURL
+} from '@eleventy-packages/common';
 
 import { CloudflareURLOptions, ImageAttributes } from './index';
 
@@ -50,7 +54,9 @@ export const buildCloudflareImage = ({
 	const normalizedZoneBySlash = trimLastSlash(normalizedZone);
 	const normalizedDomainBySlash = trimLastSlash(normalizedDomain);
 
-	const localDirectoryURL = URL_DELIMITER + rebasedOriginalURL;
+	const localDirectoryURL =
+		(isPublicInternetURL(rebasedOriginalURL) ? '': URL_DELIMITER) +
+		rebasedOriginalURL;
 
 	const url = isLocal
 		? localDirectoryURL

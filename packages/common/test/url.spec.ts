@@ -1,4 +1,9 @@
-import { isUrl, withLeadingSlash, trimLastSlash } from '../src';
+import {
+	isUrl,
+	withLeadingSlash,
+	trimLastSlash,
+	isPublicInternetURL,
+} from '../src';
 
 describe('isUrl', () => {
 	it('should return true if text is url without TLS', () => {
@@ -41,5 +46,17 @@ describe('trimLastSlash', () => {
 
 		expect(url).toBe('https://example.com');
 		expect(urlWithSlash).toBe('https://example.com');
+	});
+});
+
+describe('isPublicInternetURL', () => {
+	it('should return boolean, check if url start with HTTP or HTTPS', () => {
+		const urlLocal = isPublicInternetURL('src/build');
+		const urlHTTP = isPublicInternetURL('http://example.com');
+		const urlHTTPS = isPublicInternetURL('https://example.com');
+
+		expect(urlLocal).toBe(false);
+		expect(urlHTTP).toBe(true);
+		expect(urlHTTPS).toBe(true);
 	});
 });
