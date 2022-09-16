@@ -1,3 +1,5 @@
+import { normalize } from 'path';
+
 import {
 	initFsCache,
 	isProduction,
@@ -35,7 +37,7 @@ export const icons = (
 			): Promise<string> {
 				const cache = await cacheContainer;
 
-				const outputFilePath = this.outputPath ?? outputPath;
+				const outputFilePath = normalize(this.outputPath ?? outputPath);
 
 				return outputFilePath.endsWith('html')
 					? generateAndInsertIcons(
