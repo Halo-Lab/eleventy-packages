@@ -2,11 +2,16 @@ import fs from 'fs';
 import path from 'path';
 import { env } from 'process';
 
+import { Task } from "@fluss/core";
+
+import { createReadStream, createWriteStream } from 'graceful-fs';
+
 import {
 	bold,
 	oops,
+	pool,
 	URL_DELIMITER,
-	isPublicInternetURL
+	isPublicInternetURL,
 } from '@eleventy-packages/common';
 
 import { buildImagePath } from './build_image_path';
@@ -138,6 +143,8 @@ export default ({
 			...options
 		}: CloudflareURLOptions & ImageAttributes = {},
 	): string | Record<string, string | number | boolean> {
+		const poolFunc = pool();
+
 		const normalizedDomain =
 			typeof domain === 'string' ? domain : domain?.origin ?? '';
 
@@ -166,12 +173,31 @@ export default ({
 				directory,
 			});
 
+		// poolFunc.add(Task((succeed, fail) => {
+		// 	if (!fs.existsSync(outputImagePath)) {
+		// 		if (fs.existsSync(inputImagePath)) {
+		// 			fs.mkdirSync(path.dirname(outputImagePath), { recursive: true });
+		//
+		// 			fs.createReadStream(inputImagePath).pipe(
+		// 				fs.createWriteStream(outputImagePath),
+		// 			).on('close', succeed).on('error', fail);
+		// 		} else {
+		// 			oops(
+		// 				`Cloudflare image plugin: cannot find the ${bold(
+		// 					inputImagePath,
+		// 				)} image. Skipping copying...`,
+		// 			);
+		// 			succeed(1);
+		// 		}
+		// 	}
+		// }));
+
 		if (!fs.existsSync(outputImagePath)) {
 			if (fs.existsSync(inputImagePath)) {
 				fs.mkdirSync(path.dirname(outputImagePath), { recursive: true });
 
-				fs.createReadStream(inputImagePath).pipe(
-					fs.createWriteStream(outputImagePath),
+				createReadStream(inputImagePath).pipe(
+					createWriteStream(outputImagePath),
 				);
 			} else {
 				oops(

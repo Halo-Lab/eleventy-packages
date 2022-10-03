@@ -1,5 +1,11 @@
-import { promises } from 'fs';
+// import { promises } from 'fs';
 import { basename, join, normalize, resolve, sep } from 'path';
+// import { writeFile } from 'graceful-fs';
+// import { promisify } from 'util';
+
+import * as fs from 'graceful-fs';
+import { promisify } from 'util';
+const writeFile = promisify(fs.writeFile);
 
 import { memoize, pipe, not } from '@fluss/core';
 import { build, BuildResult } from 'esbuild';
@@ -20,7 +26,7 @@ import { pathStats } from './path_stats';
 import { SCRIPTS_LINK_REGEXP } from './constants';
 import { ScriptsPluginOptions } from './types';
 
-const { writeFile } = promises;
+// const { writeFile } = promises;
 
 export type BundleOptions = Required<
 	Omit<ScriptsPluginOptions, 'addWatchTarget'>

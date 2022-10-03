@@ -38,6 +38,7 @@
 		"esbuild": "^0.14.0"
 	},
 	"devDependencies": {
-		"@eleventy-packages/common": "^0.0.9"
+		"@eleventy-packages/common": "^0.0.9",
+		"graceful-fs": "^4.2.10"
 	}
 }

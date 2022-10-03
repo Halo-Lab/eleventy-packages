@@ -26,5 +26,8 @@
 		"Cloudflare",
 		"image resizing"
 	],
-	"license": "ISC"
+	"license": "ISC",
+	"devDependencies": {
+		"graceful-fs": "^4.2.10"
+	}
 }

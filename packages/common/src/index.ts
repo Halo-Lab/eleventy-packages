@@ -8,6 +8,7 @@ export * from './file';
 export * from './mkdir';
 export * from './cache';
 export * from './array';
+export * from './thread';
 export * from './unique';
 export * from './pretty';
 export * from './linker';
