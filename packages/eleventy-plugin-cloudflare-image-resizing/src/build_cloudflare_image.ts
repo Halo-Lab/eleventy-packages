@@ -3,7 +3,7 @@ import { isJust } from '@fluss/core';
 import {
 	URL_DELIMITER,
 	trimLastSlash,
-	isPublicInternetURL
+	isPublicInternetURL,
 } from '@eleventy-packages/common';
 
 import { CloudflareURLOptions, ImageAttributes } from './index';
@@ -15,10 +15,16 @@ export interface BuildCloudflareImageOptions extends ImageAttributes {
 	fullOptions: CloudflareURLOptions;
 	rebasedOriginalURL: string;
 	mode: 'img' | 'url' | 'attributes';
+	cloudflareURL?: (
+		zone: string,
+		domain: string,
+		options: CloudflareURLOptions,
+		originalURL: string,
+	) => string;
 }
 
 /** Builds a full image Cloudflare URL. */
-const cloudflareURL = (
+const cloudflareDefaultURL = (
 	zone: string,
 	domain: string,
 	options: CloudflareURLOptions,
@@ -48,6 +54,7 @@ export const buildCloudflareImage = ({
 	densities = [],
 	emit,
 	mode = 'img',
+	cloudflareURL = cloudflareDefaultURL,
 }: BuildCloudflareImageOptions):
 	| string
 	| Record<string, string | number | boolean> => {
@@ -55,7 +62,7 @@ export const buildCloudflareImage = ({
 	const normalizedDomainBySlash = trimLastSlash(normalizedDomain);
 
 	const localDirectoryURL =
-		(isPublicInternetURL(rebasedOriginalURL) ? '': URL_DELIMITER) +
+		(isPublicInternetURL(rebasedOriginalURL) ? '' : URL_DELIMITER) +
 		rebasedOriginalURL;
 
 	const url = isLocal
