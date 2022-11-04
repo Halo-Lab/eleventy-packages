@@ -1,3 +1,5 @@
+import { URL_DELIMITER } from '@eleventy-packages/common';
+
 import {
 	buildCloudflareImage,
 	BuildCloudflareImageOptions,
@@ -5,6 +7,7 @@ import {
 
 const mockDataCloudflare: Record<
 	'imageOptions' |
+	'imageOptionsWithCloudflareURL' |
 	'imageOptionsWithAttributes' |
 	'imageOptionsDifBypass' |
 	'imageOptionsWithPublicInternetUrl'|
@@ -22,6 +25,35 @@ const mockDataCloudflare: Record<
 		},
 		rebasedOriginalURL: 'cloudflare-images/car.b62406a0fe1.jpg',
 		mode: 'img',
+	},
+	imageOptionsWithCloudflareURL: {
+		normalizedZone: 'https://test.com',
+		normalizedDomain: 'https://test.com/',
+		isLocal: false,
+		fullOptions: {
+			anim: true,
+			dpr: 1,
+			format: 'auto',
+			quality: 85,
+		},
+		rebasedOriginalURL: 'cloudflare-images/car.b62406a0fe1.jpg',
+		mode: 'img',
+		cloudflareURL: (zone, domain, options, originalURL) =>
+			'http://localhost:8787' +
+			URL_DELIMITER +
+			'?image=' +
+			zone +
+			URL_DELIMITER +
+			'cdn-cgi' +
+			URL_DELIMITER +
+			'image' +
+			URL_DELIMITER +
+			Object.entries(options)
+				.map(([name, value]) => (value !== undefined ? `${name}=${value}` : ''))
+				.join(',') +
+			URL_DELIMITER +
+			(domain ? domain + URL_DELIMITER : '') +
+			originalURL
 	},
 	imageOptionsWithAttributes: {
 		normalizedZone: '',
@@ -107,6 +139,14 @@ describe('buildCloudflareImage', () => {
 
 		expect(result).toBe(
 			`<img src="https://test.com/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/https://test.com/cloudflare-images/car.b62406a0fe1.jpg"   />`,
+		);
+	});
+
+	it('should return correct image url (test with custom cloudflareURL)', () => {
+		const result = buildCloudflareImage(mockDataCloudflare.imageOptionsWithCloudflareURL);
+
+		expect(result).toBe(
+			`<img src="http://localhost:8787/?image=https://test.com/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/https://test.com/cloudflare-images/car.b62406a0fe1.jpg"   />`,
 		);
 	});
 

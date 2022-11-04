@@ -6,7 +6,7 @@ import {
 	bold,
 	oops,
 	URL_DELIMITER,
-	isPublicInternetURL
+	isPublicInternetURL,
 } from '@eleventy-packages/common';
 
 import { buildImagePath } from './build_image_path';
@@ -100,6 +100,16 @@ export interface InitializeOptions {
 	 * local returns image path from local Cloudflare directory
 	 */
 	readonly bypass?: () => boolean;
+	/**
+	 * A function that allows to define own (custom) src to the image.
+	 * This is like a custom cloudflareURL function.
+	 */
+	readonly cloudflareURL?: (
+		zone: string,
+		domain: string,
+		options: CloudflareURLOptions,
+		originalURL: string,
+	) => string;
 }
 
 export interface ImageAttributes {
@@ -122,6 +132,7 @@ export default ({
 	mode = 'img',
 	directory = 'cloudflare-images',
 	bypass = () => env.NODE_ENV !== 'production',
+	cloudflareURL,
 }: InitializeOptions = {}) => {
 	const normalizedZone = typeof zone === 'string' ? zone : zone?.origin ?? '';
 
@@ -155,6 +166,7 @@ export default ({
 				densities,
 				emit,
 				mode,
+				cloudflareURL,
 			});
 		}
 
@@ -195,6 +207,7 @@ export default ({
 			densities,
 			emit,
 			mode,
+			cloudflareURL,
 		});
 	};
 };
