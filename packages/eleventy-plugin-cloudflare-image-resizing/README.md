@@ -22,7 +22,8 @@ module.exports = (config) => {
 			zone: 'https://example.com', // optional
 			mode: 'img', // optional, default
 			directory: 'cloudflare-images', // optional, default
-			bypass: () => process.env.NODE_ENV !== 'production', // optional, default
+			bypass: () => process.env.NODE_ENV !== 'production', // optional, default,
+			cloudflareURL: () => zone + '/' + 'image' + originalURL // usage example
 		}),
 	);
 };
@@ -41,6 +42,12 @@ module.exports = (config) => {
 	 the production environment, by default) or from the local directory (see directory option). 
    This function must return a boolean value. If true, a returned URL points to the Cloudflare service, otherwise - 
 	 the local directory.
+5. _cloudflareURL_ is a function that allows you to customize your cloudflare URL.
+	 cloudflareURL must have the following arguments: 
+   * _zone_
+   * _domain_
+   * _options_ - cloudflare URL options like: format, quality, width, anim, etc.
+   * _originalURL_ - URL of your image
 
 ### Shortcode has the following signature:
 
