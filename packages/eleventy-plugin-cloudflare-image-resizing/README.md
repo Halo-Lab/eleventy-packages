@@ -22,8 +22,8 @@ module.exports = (config) => {
 			zone: 'https://example.com', // optional
 			mode: 'img', // optional, default
 			directory: 'cloudflare-images', // optional, default
-			bypass: () => process.env.NODE_ENV !== 'production', // optional, default,
-			cloudflareURL: () => zone + '/' + 'image' + originalURL // usage example
+			bypass: () => process.env.NODE_ENV !== 'production', // optional, default
+			cloudflareURL: () => zone + '/' + 'image' + originalURL // optional, usage example
 		}),
 	);
 };
@@ -36,8 +36,8 @@ module.exports = (config) => {
    2. _url_ - shortcode outputs only final Cloudflare URL.
    3. _attributes_ - shortcode outputs `<img>` ready to use attributes as the object.
 3. _directory_ is the name of the directory under the _output_ which will contain referenced images.
-   Plugin copies images from source to the _output_ directory by itself. **Don't use the _addPassthroughCopy_ option
-   with images that are referenced by the plugin because you may end up with two copies.**
+	 Plugin copies images from source to the _output_ directory by itself. **Don't use the _addPassthroughCopy_ option
+	 with images that are referenced by the plugin because you may end up with two copies.**
 4. _bypass_ is a function that determines which image URL should be returned either from the Cloudflare service (for 
 	 the production environment, by default) or from the local directory (see directory option). 
    This function must return a boolean value. If true, a returned URL points to the Cloudflare service, otherwise - 
