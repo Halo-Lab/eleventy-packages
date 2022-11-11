@@ -1,4 +1,4 @@
-import { join, normalize } from 'path';
+import { join, normalize, basename } from 'path';
 
 import { pipe, tap } from '@fluss/core';
 import {
@@ -8,6 +8,7 @@ import {
 	linker,
 	resolve,
 	promises,
+	removeFile,
 	FileEntity,
 	initMemoryCache,
 	definePluginName,
@@ -94,7 +95,7 @@ export const styles = (
 									createFileBundler(linkerResult),
 									writeStyleFile,
 									tap((entity: FileEntity) =>
-										cache.put(entity.originalUrl, entity),
+										cache.put(basename(entity.outputPath), entity),
 									),
 									tap((_entity: FileEntity) =>
 										done(
@@ -153,7 +154,14 @@ export const styles = (
 							imports: entity.urls,
 						}}. Removing that file from the memory cache...`;
 
-						cache.remove(entity.originalUrl);
+						cache.remove(basename(entity.outputPath));
+
+						Debugger.object` Deleting the ${{
+							file: basename(entity.outputPath),
+							imports: entity.urls,
+						}} style file...`;
+
+						removeFile(entity.outputPath);
 					}),
 			),
 	);
