@@ -13,6 +13,7 @@ export interface FileEntity {
 	readonly sourcePath: string;
 	readonly outputPath: string;
 	readonly originalUrl: string;
+	readonly isEdit: boolean;
 }
 
 export type LinkerOptions<Options> = Options & {
@@ -76,6 +77,7 @@ export const linker = <Options>({
 				sourcePath: resolve(baseDirectory, normalizedSourceUrl),
 				outputPath: resolve(outputDirectory, publicUrlWithHash.slice(1)),
 				originalUrl: sourceUrl,
+				isEdit: false
 			},
 		};
 	};
