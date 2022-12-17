@@ -1,4 +1,4 @@
-import { join, normalize, basename } from 'path';
+import { join, normalize } from 'path';
 
 import { pipe, tap } from '@fluss/core';
 import {
@@ -8,7 +8,6 @@ import {
 	linker,
 	resolve,
 	promises,
-	removeFile,
 	FileEntity,
 	initMemoryCache,
 	definePluginName,
@@ -27,6 +26,7 @@ import {
 	bindLinkerWithStyles,
 	createPublicUrlInjector,
 } from './bundle';
+import { getCompiler } from './compile';
 
 definePluginName('Styles');
 
@@ -80,12 +80,23 @@ export const styles = (
 						.map(
 							(linkerResult) =>
 								[
-									cache.get(linkerResult.file.originalUrl),
+									cache.get(linkerResult.file.sourcePath),
 									linkerResult,
 								] as const,
 						)
-						.map(([entity, linkerResult]) =>
-							entity.map(resolve).extract(() =>
+						.map(([entity, linkerResult]) => {
+							const cacheEntity = entity.toJSON().value;
+
+							if (cacheEntity && cacheEntity.isEdit) {
+								const compiledEntity = createFileBundler({
+									...linkerResult,
+									file: cacheEntity,
+								})(content);
+
+								return compiledEntity;
+							}
+
+							return entity.map(resolve).extract(() =>
 								pipe(
 									tap(() => {
 										start(
@@ -93,44 +104,60 @@ export const styles = (
 										);
 									}),
 									createFileBundler(linkerResult),
-									writeStyleFile,
-									tap((entity: FileEntity) =>
-										cache.put(basename(entity.outputPath), entity),
-									),
+									(entity: FileEntity) => {
+										if (!cache.get(entity.sourcePath).toJSON().value) {
+											writeStyleFile(entity);
+											cache.put(entity.sourcePath, entity);
+										}
+
+										return entity;
+									},
 									tap((_entity: FileEntity) =>
 										done(
 											`Finished compiling styles for the ${bold(output)} file.`,
 										),
 									),
 								)(content),
-							),
-						),
+							);
+						}),
 				);
 
-				const injectors = files
+				const receivedFiles = files
 					.filter<PromiseFulfilledResult<FileEntity>>(
 						(
 							result: PromiseSettledResult<unknown>,
 						): result is PromiseFulfilledResult<FileEntity> =>
 							result.status === 'fulfilled',
 					)
-					.map(({ value }) => value)
-					.map(createPublicUrlInjector);
+					.map(({ value }) => value);
 
-				const html = injectors.reduce(
-					(html, injectInto) => injectInto(html),
-					content,
+				const receivedEditedFiles = receivedFiles.filter(
+					(entity) => entity.isEdit,
 				);
 
-				if (criticalOptions === PluginState.Off) {
-					return html;
-				} else {
-					return separateCriticalCSS({
-						html,
-						buildDirectory: getEleventyOutputDirectory(output),
-						criticalOptions,
-					}).then(({ html }) => html);
+				if (!receivedEditedFiles.length) {
+					const injectors = receivedFiles.map(createPublicUrlInjector);
+
+					const html = injectors.reduce(
+						(html, injectInto) => injectInto(html),
+						content,
+					);
+
+					if (criticalOptions === PluginState.Off) {
+						return html;
+					} else {
+						return separateCriticalCSS({
+							html,
+							buildDirectory: getEleventyOutputDirectory(output),
+							criticalOptions,
+						}).then(({ html }) => html);
+					}
 				}
+
+				receivedFiles.forEach((entity) => {
+					writeStyleFile(entity);
+					cache.put(entity.sourcePath, { ...entity, isEdit: false });
+				});
 			}
 
 			return content;
@@ -152,16 +179,9 @@ export const styles = (
 						Debugger.object` Detected change relates to the ${{
 							file: entity.originalUrl,
 							imports: entity.urls,
-						}}. Removing that file from the memory cache...`;
+						}}. Updating memory cache...`;
 
-						cache.remove(basename(entity.outputPath));
-
-						Debugger.object` Deleting the ${{
-							file: basename(entity.outputPath),
-							imports: entity.urls,
-						}} style file...`;
-
-						removeFile(entity.outputPath);
+						cache.put(entity.sourcePath, { ...entity, isEdit: true });
 					}),
 			),
 	);

@@ -3,8 +3,10 @@ import { writeFile } from 'fs/promises';
 import { not, awaitedTap } from '@fluss/core';
 import {
 	rip,
+	oops,
 	mkdir,
 	Linker,
+	existsFile,
 	FileEntity,
 	LinkerResult,
 	isRemoteLink,
@@ -26,6 +28,12 @@ export const createFileBundler = ({
 	});
 
 	return async (html: string): Promise<FileEntity> => {
+		if (!existsFile(file.sourcePath)) {
+			oops(
+				`File ${file.sourcePath} not found! \nYou need to create such a file or remove the link from the HTML.`,
+			);
+		}
+
 		const { css, urls } = await compile(file.sourcePath);
 
 		const result = await normalize({
