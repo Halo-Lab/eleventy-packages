@@ -1,6 +1,7 @@
 import { isJust } from '@fluss/core';
 
 import {
+	hash,
 	URL_DELIMITER,
 	trimLastSlash,
 	isPublicInternetURL,
@@ -41,7 +42,8 @@ const cloudflareDefaultURL = (
 		.join(',') +
 	URL_DELIMITER +
 	(domain ? domain + URL_DELIMITER : '') +
-	originalURL;
+	originalURL +
+	`?${hash(originalURL)}`;
 
 export const buildCloudflareImage = ({
 	normalizedZone,
@@ -63,7 +65,8 @@ export const buildCloudflareImage = ({
 
 	const localDirectoryURL =
 		(isPublicInternetURL(rebasedOriginalURL) ? '' : URL_DELIMITER) +
-		rebasedOriginalURL;
+		rebasedOriginalURL +
+		`?${hash(rebasedOriginalURL)}`;
 
 	const url = isLocal
 		? localDirectoryURL
