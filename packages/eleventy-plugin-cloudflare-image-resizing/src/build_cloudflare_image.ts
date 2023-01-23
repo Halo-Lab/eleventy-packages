@@ -1,6 +1,7 @@
 import { isJust } from '@fluss/core';
 
 import {
+	hash,
 	URL_DELIMITER,
 	trimLastSlash,
 	isPublicInternetURL,
@@ -41,21 +42,22 @@ const cloudflareDefaultURL = (
 		.join(',') +
 	URL_DELIMITER +
 	(domain ? domain + URL_DELIMITER : '') +
-	originalURL;
+	originalURL +
+	`?${hash(originalURL)}`;
 
 export const buildCloudflareImage = ({
-	normalizedZone,
-	normalizedDomain,
-	isLocal,
-	fullOptions,
-	rebasedOriginalURL,
-	attributes = {},
-	sizes = [],
-	densities = [],
-	emit,
-	mode = 'img',
-	cloudflareURL = cloudflareDefaultURL,
-}: BuildCloudflareImageOptions):
+																			 normalizedZone,
+																			 normalizedDomain,
+																			 isLocal,
+																			 fullOptions,
+																			 rebasedOriginalURL,
+																			 attributes = {},
+																			 sizes = [],
+																			 densities = [],
+																			 emit,
+																			 mode = 'img',
+																			 cloudflareURL = cloudflareDefaultURL,
+																		 }: BuildCloudflareImageOptions):
 	| string
 	| Record<string, string | number | boolean> => {
 	const normalizedZoneBySlash = trimLastSlash(normalizedZone);
@@ -63,16 +65,17 @@ export const buildCloudflareImage = ({
 
 	const localDirectoryURL =
 		(isPublicInternetURL(rebasedOriginalURL) ? '' : URL_DELIMITER) +
-		rebasedOriginalURL;
+		rebasedOriginalURL +
+		`?${hash(rebasedOriginalURL)}`;
 
 	const url = isLocal
 		? localDirectoryURL
 		: cloudflareURL(
-				normalizedZoneBySlash,
-				normalizedDomainBySlash,
-				fullOptions,
-				rebasedOriginalURL,
-		  );
+			normalizedZoneBySlash,
+			normalizedDomainBySlash,
+			fullOptions,
+			rebasedOriginalURL,
+		);
 
 	if (emit === 'url' || (mode === 'url' && !isJust(emit))) {
 		return url;
@@ -81,40 +84,40 @@ export const buildCloudflareImage = ({
 	const srcset =
 		sizes.length > 0
 			? `srcset="${sizes
-					.map(
-						(size) =>
-							`${
-								isLocal
-									? localDirectoryURL
-									: cloudflareURL(
-											normalizedZoneBySlash,
-											normalizedDomainBySlash,
-											{
-												...fullOptions,
-												width: size,
-											},
-											rebasedOriginalURL,
-									  )
-							} ${size}w`,
-					)
-					.join(',')}"`
+				.map(
+					(size) =>
+						`${
+							isLocal
+								? localDirectoryURL
+								: cloudflareURL(
+									normalizedZoneBySlash,
+									normalizedDomainBySlash,
+									{
+										...fullOptions,
+										width: size,
+									},
+									rebasedOriginalURL,
+								)
+						} ${size}w`,
+				)
+				.join(',')}"`
 			: densities.length > 0
-			? densities
+				? densities
 					.map(
 						(density) =>
 							`${
 								isLocal
 									? localDirectoryURL
 									: cloudflareURL(
-											normalizedZoneBySlash,
-											normalizedDomainBySlash,
-											{ ...fullOptions, width: fullOptions.width! * density },
-											rebasedOriginalURL,
-									  )
+										normalizedZoneBySlash,
+										normalizedDomainBySlash,
+										{ ...fullOptions, width: fullOptions.width! * density },
+										rebasedOriginalURL,
+									)
 							} ${density}x`,
 					)
 					.join(',')
-			: '';
+				: '';
 
 	if (sizes.length > 0 || densities.length > 0) {
 		delete attributes.srcset;
