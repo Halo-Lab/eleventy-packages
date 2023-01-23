@@ -4,6 +4,7 @@ import { not, awaitedTap } from '@fluss/core';
 import {
 	rip,
 	oops,
+	hash,
 	mkdir,
 	Linker,
 	existsFile,
@@ -59,7 +60,7 @@ export const writeStyleFile = awaitedTap(async (entity: FileEntity) => {
 export const createPublicUrlInjector =
 	({ originalUrl, publicUrl }: FileEntity) =>
 	(html: string): string =>
-		html.replace(originalUrl, publicUrl);
+		html.replace(originalUrl, `${publicUrl}?${hash(publicUrl)}`);
 
 export const findStyles = (html: string) =>
 	rip(html, STYLESHEET_LINK_REGEXP, not(isRemoteLink));
