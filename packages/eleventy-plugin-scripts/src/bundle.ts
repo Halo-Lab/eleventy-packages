@@ -8,6 +8,7 @@ import {
 	bold,
 	done,
 	oops,
+	hash,
 	start,
 	mkdir,
 	isRemoteLink,
@@ -132,7 +133,7 @@ export const bundle = async (
 		.then(
 			(validUrls) => {
 				const htmlWithScripts = validUrls.reduce(
-					(text, { input, output }) => text.replace(input, output),
+					(text, { input, output }) => text.replace(input, `${output}?${hash(output)}`),
 					html,
 				);
 
