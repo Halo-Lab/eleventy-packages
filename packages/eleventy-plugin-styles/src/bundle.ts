@@ -3,8 +3,8 @@ import { writeFile } from 'fs/promises';
 import { not, awaitedTap } from '@fluss/core';
 import {
 	rip,
+	uid,
 	oops,
-	hash,
 	mkdir,
 	Linker,
 	existsFile,
@@ -31,7 +31,7 @@ export const createFileBundler = ({
 	return async (html: string): Promise<FileEntity> => {
 		if (!existsFile(file.sourcePath)) {
 			oops(
-				`File ${file.sourcePath} not found! \nYou need to create such a file or remove the link from the HTML.`,
+				`Error: File ${file.sourcePath} Not Found! \nYou need to create such a file or remove the link from the HTML.`,
 			);
 		}
 
@@ -60,7 +60,7 @@ export const writeStyleFile = awaitedTap(async (entity: FileEntity) => {
 export const createPublicUrlInjector =
 	({ originalUrl, publicUrl }: FileEntity) =>
 	(html: string): string =>
-		html.replace(originalUrl, `${publicUrl}?${hash(publicUrl)}`);
+		html.replace(originalUrl, `${publicUrl}?${uid()}`);
 
 export const findStyles = (html: string) =>
 	rip(html, STYLESHEET_LINK_REGEXP, not(isRemoteLink));

@@ -1,12 +1,11 @@
 import { join, normalize } from 'path';
 
-import { pipe, tap } from '@fluss/core';
+import { isJust, pipe, tap } from '@fluss/core';
 import {
 	done,
 	bold,
 	start,
 	linker,
-	resolve,
 	promises,
 	FileEntity,
 	initMemoryCache,
@@ -26,7 +25,6 @@ import {
 	bindLinkerWithStyles,
 	createPublicUrlInjector,
 } from './bundle';
-import { getCompiler } from './compile';
 
 definePluginName('Styles');
 
@@ -80,46 +78,42 @@ export const styles = (
 						.map(
 							(linkerResult) =>
 								[
-									cache.get(linkerResult.file.sourcePath),
+									cache.get(linkerResult.file.sourcePath).toJSON().value,
 									linkerResult,
 								] as const,
 						)
-						.map(([entity, linkerResult]) => {
-							const cacheEntity = entity.toJSON().value;
-
-							if (cacheEntity && cacheEntity.isEdit) {
-								const compiledEntity = createFileBundler({
-									...linkerResult,
-									file: cacheEntity,
-								})(content);
-
-								return compiledEntity;
-							}
-
-							return entity.map(resolve).extract(() =>
-								pipe(
-									tap(() => {
-										start(
-											`Start compiling styles for the ${bold(output)} file.`,
-										);
-									}),
-									createFileBundler(linkerResult),
-									(entity: FileEntity) => {
-										if (!cache.get(entity.sourcePath).toJSON().value) {
-											writeStyleFile(entity);
-											cache.put(entity.sourcePath, entity);
-										}
-
-										return entity;
-									},
-									tap((_entity: FileEntity) =>
-										done(
-											`Finished compiling styles for the ${bold(output)} file.`,
+						.map(([entity, linkerResult]) =>
+							!entity || entity.isEdit
+								? pipe(
+										tap(() => {
+											start(
+												`Start compiling styles for the ${bold(output)} file.`,
+											);
+										}),
+										createFileBundler(
+											isJust(entity)
+												? { ...linkerResult, file: entity }
+												: linkerResult,
 										),
-									),
-								)(content),
-							);
-						}),
+										(entity: FileEntity) => {
+											writeStyleFile(entity);
+											cache.put(entity.sourcePath, {
+												...entity,
+												isEdit: false,
+											});
+
+											return entity;
+										},
+										tap((_entity: FileEntity) =>
+											done(
+												`Finished compiling styles for the ${bold(
+													output,
+												)} file.`,
+											),
+										),
+								  )(content)
+								: new Promise((resolve) => resolve(entity)),
+						),
 				);
 
 				const receivedFiles = files
@@ -131,33 +125,22 @@ export const styles = (
 					)
 					.map(({ value }) => value);
 
-				const receivedEditedFiles = receivedFiles.filter(
-					(entity) => entity.isEdit,
+				const injectors = receivedFiles.map(createPublicUrlInjector);
+
+				const html = injectors.reduce(
+					(html, injectInto) => injectInto(html),
+					content,
 				);
 
-				if (!receivedEditedFiles.length) {
-					const injectors = receivedFiles.map(createPublicUrlInjector);
-
-					const html = injectors.reduce(
-						(html, injectInto) => injectInto(html),
-						content,
-					);
-
-					if (criticalOptions === PluginState.Off) {
-						return html;
-					} else {
-						return separateCriticalCSS({
-							html,
-							buildDirectory: getEleventyOutputDirectory(output),
-							criticalOptions,
-						}).then(({ html }) => html);
-					}
+				if (criticalOptions === PluginState.Off) {
+					return html;
+				} else {
+					return separateCriticalCSS({
+						html,
+						buildDirectory: getEleventyOutputDirectory(output),
+						criticalOptions,
+					}).then(({ html }) => html);
 				}
-
-				receivedFiles.forEach((entity) => {
-					writeStyleFile(entity);
-					cache.put(entity.sourcePath, { ...entity, isEdit: false });
-				});
 			}
 
 			return content;

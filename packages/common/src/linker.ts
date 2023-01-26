@@ -69,7 +69,7 @@ export const linker = <Options>({
 				sourcePath: resolve(baseDirectory, normalizedSourceUrl),
 				outputPath: resolve(outputDirectory, publicUrl.slice(1)),
 				originalUrl: sourceUrl,
-				isEdit: false
+				isEdit: true
 			},
 		};
 	};
