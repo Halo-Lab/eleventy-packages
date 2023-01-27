@@ -1,12 +1,11 @@
 import { join, normalize } from 'path';
 
-import { pipe, tap } from '@fluss/core';
+import { isJust, pipe, tap } from '@fluss/core';
 import {
 	done,
 	bold,
 	start,
 	linker,
-	resolve,
 	promises,
 	FileEntity,
 	initMemoryCache,
@@ -79,42 +78,54 @@ export const styles = (
 						.map(
 							(linkerResult) =>
 								[
-									cache.get(linkerResult.file.originalUrl),
+									cache.get(linkerResult.file.sourcePath).toJSON().value,
 									linkerResult,
 								] as const,
 						)
 						.map(([entity, linkerResult]) =>
-							entity.map(resolve).extract(() =>
-								pipe(
-									tap(() => {
-										start(
-											`Start compiling styles for the ${bold(output)} file.`,
-										);
-									}),
-									createFileBundler(linkerResult),
-									writeStyleFile,
-									tap((entity: FileEntity) =>
-										cache.put(entity.originalUrl, entity),
-									),
-									tap((_entity: FileEntity) =>
-										done(
-											`Finished compiling styles for the ${bold(output)} file.`,
+							!entity || entity.isEdit
+								? pipe(
+										tap(() => {
+											start(
+												`Start compiling styles for the ${bold(output)} file.`,
+											);
+										}),
+										createFileBundler(
+											isJust(entity)
+												? { ...linkerResult, file: entity }
+												: linkerResult,
 										),
-									),
-								)(content),
-							),
+										(entity: FileEntity) => {
+											writeStyleFile(entity);
+											cache.put(entity.sourcePath, {
+												...entity,
+												isEdit: false,
+											});
+
+											return entity;
+										},
+										tap((_entity: FileEntity) =>
+											done(
+												`Finished compiling styles for the ${bold(
+													output,
+												)} file.`,
+											),
+										),
+								  )(content)
+								: new Promise((resolve) => resolve(entity)),
 						),
 				);
 
-				const injectors = files
+				const receivedFiles = files
 					.filter<PromiseFulfilledResult<FileEntity>>(
 						(
 							result: PromiseSettledResult<unknown>,
 						): result is PromiseFulfilledResult<FileEntity> =>
 							result.status === 'fulfilled',
 					)
-					.map(({ value }) => value)
-					.map(createPublicUrlInjector);
+					.map(({ value }) => value);
+
+				const injectors = receivedFiles.map(createPublicUrlInjector);
 
 				const html = injectors.reduce(
 					(html, injectInto) => injectInto(html),
@@ -151,9 +162,9 @@ export const styles = (
 						Debugger.object` Detected change relates to the ${{
 							file: entity.originalUrl,
 							imports: entity.urls,
-						}}. Removing that file from the memory cache...`;
+						}}. Updating memory cache...`;
 
-						cache.remove(entity.originalUrl);
+						cache.put(entity.sourcePath, { ...entity, isEdit: true });
 					}),
 			),
 	);

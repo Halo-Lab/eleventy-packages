@@ -1,6 +1,8 @@
 import mockFs from 'mock-fs';
 import { normalize, resolve, sep } from 'path';
 
+import { linker } from '@eleventy-packages/common'
+
 import {
 	bindLinkerWithStyles,
 	createFileBundler,
@@ -8,7 +10,6 @@ import {
 	findStyles,
 	writeStyleFile,
 } from '../src/bundle';
-import { linker } from '../../common/src/linker';
 
 const mockDataLinkerOptions = {
 	outputPath: `_site${sep}index.html`,
@@ -22,6 +23,8 @@ const mockDataHtmlFile = `
 				<link rel="stylesheet" href="main.scss"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"/>
 `;
+
+const getQuery = (url: string): string => url.match(/\?([^"]*)/)?.[1] || '';
 
 describe('findStyles', () => {
 	it('should return array of links', () => {
@@ -54,10 +57,12 @@ describe('createPublicUrlInjector', () => {
 
 		const result =
 			createPublicUrlInjector(mockDataUrlInjector)(mockDataHtmlFile);
+		const query = getQuery(result);
 
 		expect(typeof result).toBe('string');
+		expect(query).toHaveLength(11);
 		expect(result).toContain(
-			`<link rel="stylesheet" href="${mockDataUrlInjector.publicUrl}"/>`,
+			`<link rel="stylesheet" href="${mockDataUrlInjector.publicUrl}?${query}"/>`,
 		);
 		expect(result).toContain(
 			`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"/>`,
