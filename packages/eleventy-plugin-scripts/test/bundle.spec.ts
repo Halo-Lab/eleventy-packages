@@ -54,6 +54,8 @@ const mockDataNestedBundleFunctionOptions: {
 	},
 };
 
+const getQuery = (url: string): string => url.match(/\?([^"]*)/)?.[1] || '';
+
 describe('transformFile', () => {
 	beforeAll(() => {
 		mockFs({
@@ -96,9 +98,12 @@ describe('bundle', () => {
 			mockDataBundleFunctionOptions.options,
 		);
 
+		const query = getQuery(result);
+
+		expect(query).toHaveLength(11);
 		expect(result)
 			.toBe(`<script type="text/javascript" src="https:/cdn.jsdelivr.net/npm/@splidejs/splide@3.6/dist/js/splide.min.js"></script>
-<script type="text/javascript" src="/scripts/site.js"></script>`);
+<script type="text/javascript" src="/scripts/site.js?${query}"></script>`);
 	});
 
 	it('should return correct html with script links (as nested file)', async () => {
@@ -108,8 +113,11 @@ describe('bundle', () => {
 			mockDataNestedBundleFunctionOptions.options,
 		);
 
+		const query = getQuery(result);
+
+		expect(query).toHaveLength(11);
 		expect(result)
 			.toBe(`<script type="text/javascript" src="https:/cdn.jsdelivr.net/npm/@splidejs/splide@3.6/dist/js/splide.min.js"></script>
-<script type="text/javascript" src="/scripts/about/about.js"></script>`);
+<script type="text/javascript" src="/scripts/about/about.js?${query}"></script>`);
 	});
 });
