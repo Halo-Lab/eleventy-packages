@@ -1,10 +1,11 @@
 import { promises } from 'fs';
-import { basename, join, normalize, resolve, sep } from 'path';
+import { join, normalize, resolve, sep } from 'path';
 
 import { memoize, pipe, not } from '@fluss/core';
 import { build, BuildResult } from 'esbuild';
 import {
 	rip,
+	uid,
 	bold,
 	done,
 	oops,
@@ -132,7 +133,7 @@ export const bundle = async (
 		.then(
 			(validUrls) => {
 				const htmlWithScripts = validUrls.reduce(
-					(text, { input, output }) => text.replace(input, output),
+					(text, { input, output }) => text.replace(input, `${output}?${uid()}`),
 					html,
 				);
 

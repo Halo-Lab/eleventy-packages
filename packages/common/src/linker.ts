@@ -1,8 +1,7 @@
-import { sep, resolve, extname } from 'path';
+import { sep, resolve } from 'path';
 
 import { identity } from '@fluss/core';
 
-import { uid } from './extendedCrypto';
 import { UP_LEVEL_GLOB, URL_DELIMITER } from './constants';
 import { isAbsoluteURL, withLeadingSlash } from './url';
 
@@ -13,6 +12,7 @@ export interface FileEntity {
 	readonly sourcePath: string;
 	readonly outputPath: string;
 	readonly originalUrl: string;
+	readonly isEdit: boolean;
 }
 
 export type LinkerOptions<Options> = Options & {
@@ -60,22 +60,16 @@ export const linker = <Options>({
 			),
 		);
 
-		const extension = extname(publicUrl.split(URL_DELIMITER).at(-1) ?? '');
-
-		const publicUrlWithHash = publicUrl.replace(
-			extension,
-			`-${uid()}${extension}`,
-		);
-
 		return {
 			options,
 			file: {
 				data: '',
 				urls: [],
-				publicUrl: publicUrlWithHash,
+				publicUrl: publicUrl,
 				sourcePath: resolve(baseDirectory, normalizedSourceUrl),
-				outputPath: resolve(outputDirectory, publicUrlWithHash.slice(1)),
+				outputPath: resolve(outputDirectory, publicUrl.slice(1)),
 				originalUrl: sourceUrl,
+				isEdit: true
 			},
 		};
 	};

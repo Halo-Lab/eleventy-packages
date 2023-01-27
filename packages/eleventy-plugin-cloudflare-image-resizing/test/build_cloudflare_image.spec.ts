@@ -133,12 +133,16 @@ const mockDataCloudflare: Record<
 	}
 };
 
+const getQuery = (url: string): string => url.match(/\?([^"]*)/)?.[1] || '';
+
 describe('buildCloudflareImage', () => {
 	it('should return correct image url', () => {
-		const result = buildCloudflareImage(mockDataCloudflare.imageOptions);
+		const result = buildCloudflareImage(mockDataCloudflare.imageOptions) as string;
+		const query = getQuery(result);
 
-		expect(result).toBe(
-			`<img src="https://test.com/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/https://test.com/cloudflare-images/car.b62406a0fe1.jpg"   />`,
+		expect(query).toHaveLength(11);
+		expect(result).toMatch(
+			`<img src="https://test.com/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/https://test.com/cloudflare-images/car.b62406a0fe1.jpg?${query}"   />`,
 		);
 	});
 
@@ -153,40 +157,48 @@ describe('buildCloudflareImage', () => {
 	it('should return correct image url (test with attributes)', () => {
 		const result = buildCloudflareImage(
 			mockDataCloudflare.imageOptionsWithAttributes,
-		);
+		) as string;
+		const query = getQuery(result);
 
-		expect(result).toBe(
-			`<img src="/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/cloudflare-images/car.b62406a0fe1.jpg"  alt="myImage" width="5" toHTML  />`,
+		expect(query).toHaveLength(11);
+		expect(result).toMatch(
+			`<img src="/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/cloudflare-images/car.b62406a0fe1.jpg?${query}"  alt="myImage" width="5" toHTML  />`,
 		);
 	});
 
 	it('should return correct image url from local directory', () => {
 		const result = buildCloudflareImage(
 			mockDataCloudflare.imageOptionsDifBypass,
-		);
+		) as string;
+		const query = getQuery(result);
 
+		expect(query).toHaveLength(11);
 		expect(result).toBe(
-			`<img src="/cloudflare-images/car.b62406a0fe1.jpg"  alt="myImage" width="5" toHTML  />`,
+			`<img src="/cloudflare-images/car.b62406a0fe1.jpg?${query}"  alt="myImage" width="5" toHTML  />`,
 		);
 	});
 
 	it('should return correct image url as public internet url', () => {
 		const result = buildCloudflareImage(
 			mockDataCloudflare.imageOptionsWithPublicInternetUrl,
-		);
+		) as string;
+		const query = getQuery(result);
 
+		expect(query).toHaveLength(11);
 		expect(result).toBe(
-			`<img src="https://example.com"  alt="myImage" width="5" toHTML  />`,
+			`<img src="https://example.com?${query}"  alt="myImage" width="5" toHTML  />`,
 		);
 	});
 
 	it('should return correct image url as public internet url from cloudflare service', () => {
 		const result = buildCloudflareImage(
 			mockDataCloudflare.imageOptionsWithPublicInternetUrlDifBypass,
-		);
+		) as string;
+		const query = getQuery(result);
 
+		expect(query).toHaveLength(11);
 		expect(result).toBe(
-			`<img src="https://test.com/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/http://example.com"  alt="myImage" width="5" toHTML  />`,
+			`<img src="https://test.com/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/http://example.com?${query}"  alt="myImage" width="5" toHTML  />`,
 		);
 	});
 });
