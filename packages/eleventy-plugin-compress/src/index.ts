@@ -37,14 +37,16 @@ export const compress = (
 		config.addTransform(
 			'compress',
 			async (content: string, outputPath: string) => {
-				if (outputPath.endsWith('html')) {
+				const normalizedOutputPath = normalize(outputPath);
+
+				if (normalizedOutputPath.endsWith('html')) {
 					// We can safely extract name of the build directory,
 					// because it is first directory in _outputPath_.
-					buildDirectory ??= normalize(outputPath).split(sep)[0];
+					buildDirectory ??= normalizedOutputPath.split(sep)[0];
 
 					await compressHTMLWithLinks(
 						content,
-						outputPath,
+						normalizedOutputPath,
 						algorithm,
 						buildDirectory,
 					);

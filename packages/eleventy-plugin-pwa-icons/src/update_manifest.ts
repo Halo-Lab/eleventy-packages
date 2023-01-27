@@ -6,6 +6,7 @@ import { ManifestJsonIcon } from 'pwa-asset-generator/dist/models/result';
 import {
 	done,
 	oops,
+	mkdir,
 	withLeadingSlash,
 	DEFAULT_MANIFEST,
 	DEFAULT_SOURCE_DIRECTORY,
@@ -25,8 +26,10 @@ const updateManifest = async ({
 	icons,
 	pathToManifest,
 	pathToOutputManifest,
-}: UpdateManifestOptions) =>
-	promises
+}: UpdateManifestOptions) => {
+	await mkdir(pathToOutputManifest);
+
+	return promises
 		.readFile(pathToManifest, { encoding: 'utf-8' })
 		.then(JSON.parse)
 		.then((manifest) => ({
@@ -37,6 +40,7 @@ const updateManifest = async ({
 		.then((data) =>
 			promises.writeFile(pathToOutputManifest, data, { encoding: 'utf-8' }),
 		);
+}
 
 export const handleManifest = once(
 	async (
