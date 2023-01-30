@@ -1,6 +1,6 @@
 {
 	"name": "eleventy-plugin-pwa-icons",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"description": "Plugin for generating splash screen images and icons, favicons and mstile images.",
 	"main": "index.js",
 	"exports": {

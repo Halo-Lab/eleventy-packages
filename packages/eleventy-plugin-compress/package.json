@@ -1,6 +1,6 @@
 {
 	"name": "eleventy-plugin-compress",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "Plugin for compressing HTML, CSS and JavaScript from templates with brotli/gzip/deflate algorithms.",
 	"main": "index.js",
 	"exports": {
