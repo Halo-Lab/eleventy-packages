@@ -68,9 +68,10 @@ const extractCssFromLessResult = ({
  */
 const compileLess: Compiler = (options: Less.Options) => (path: string) =>
 	tryExecute<Promise<CompilerResult>, Error>(() =>
-		pipe(
-			(path: string) => readFile(path, { encoding: 'utf8' }),
-			pipe((data: string) => render(data, options), extractCssFromLessResult),
+		pipe((path: string) =>
+			readFile(path, { encoding: 'utf8' }).then(
+				pipe((data: string) => render(data, options), extractCssFromLessResult),
+			),
 		)(path),
 	).extract((error) => (oops(error), resolve({ css: '', urls: [] })));
 

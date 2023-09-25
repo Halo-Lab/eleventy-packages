@@ -133,7 +133,8 @@ export const bundle = async (
 		.then(
 			(validUrls) => {
 				const htmlWithScripts = validUrls.reduce(
-					(text, { input, output }) => text.replace(input, `${output}?${uid()}`),
+					(text, { input, output }) =>
+						text.replace(input, `${output}?${uid()}`),
 					html,
 				);
 

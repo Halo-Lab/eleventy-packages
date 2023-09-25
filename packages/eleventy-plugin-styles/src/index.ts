@@ -36,14 +36,14 @@ definePluginName('Styles');
 export const styles = (
 	config: Record<string, Function>,
 	{
-		sassOptions = {},
+		sassOptions = PluginState.Off,
 		lessOptions = PluginState.Off,
 		inputDirectory = join(DEFAULT_SOURCE_DIRECTORY, DEFAULT_STYLES_DIRECTORY),
 		cssnanoOptions = {},
 		addWatchTarget = true,
 		postcssPlugins = [],
 		criticalOptions = PluginState.Off,
-		purgeCSSOptions = {},
+		purgeCSSOptions = PluginState.Off,
 		publicDirectory = '',
 	}: StylesPluginOptions = {},
 ) => {

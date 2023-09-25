@@ -25,7 +25,7 @@ export const normalize = async ({
 	url: fromUrl,
 	css,
 	html,
-	purgeCSSOptions = {},
+	purgeCSSOptions = PluginState.Off,
 	cssnanoOptions = {},
 	postcssPlugins = [],
 }: NormalizeStepOptions) => {

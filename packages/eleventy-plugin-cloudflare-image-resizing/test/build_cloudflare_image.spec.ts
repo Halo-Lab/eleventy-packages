@@ -6,13 +6,14 @@ import {
 } from '../src/build_cloudflare_image';
 
 const mockDataCloudflare: Record<
-	'imageOptions' |
-	'imageOptionsWithCloudflareURL' |
-	'imageOptionsWithAttributes' |
-	'imageOptionsDifBypass' |
-	'imageOptionsWithPublicInternetUrl'|
-	'imageOptionsWithPublicInternetUrlDifBypass',
-	BuildCloudflareImageOptions> = {
+	| 'imageOptions'
+	| 'imageOptionsWithCloudflareURL'
+	| 'imageOptionsWithAttributes'
+	| 'imageOptionsDifBypass'
+	| 'imageOptionsWithPublicInternetUrl'
+	| 'imageOptionsWithPublicInternetUrlDifBypass',
+	BuildCloudflareImageOptions
+> = {
 	imageOptions: {
 		normalizedZone: 'https://test.com',
 		normalizedDomain: 'https://test.com/',
@@ -53,7 +54,7 @@ const mockDataCloudflare: Record<
 				.join(',') +
 			URL_DELIMITER +
 			(domain ? domain + URL_DELIMITER : '') +
-			originalURL
+			originalURL,
 	},
 	imageOptionsWithAttributes: {
 		normalizedZone: '',
@@ -130,14 +131,16 @@ const mockDataCloudflare: Record<
 			toHTML: true,
 			disabled: false,
 		},
-	}
+	},
 };
 
 const getQuery = (url: string): string => url.match(/\?([^"]*)/)?.[1] || '';
 
 describe('buildCloudflareImage', () => {
 	it('should return correct image url', () => {
-		const result = buildCloudflareImage(mockDataCloudflare.imageOptions) as string;
+		const result = buildCloudflareImage(
+			mockDataCloudflare.imageOptions,
+		) as string;
 		const query = getQuery(result);
 
 		expect(query).toHaveLength(11);
@@ -147,7 +150,9 @@ describe('buildCloudflareImage', () => {
 	});
 
 	it('should return correct image url (test with custom cloudflareURL)', () => {
-		const result = buildCloudflareImage(mockDataCloudflare.imageOptionsWithCloudflareURL);
+		const result = buildCloudflareImage(
+			mockDataCloudflare.imageOptionsWithCloudflareURL,
+		);
 
 		expect(result).toBe(
 			`<img src="http://localhost:8787/?image=https://test.com/cdn-cgi/image/anim=true,dpr=1,format=auto,quality=85/https://test.com/cloudflare-images/car.b62406a0fe1.jpg"   />`,

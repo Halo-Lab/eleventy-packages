@@ -40,7 +40,7 @@ const updateManifest = async ({
 		.then((data) =>
 			promises.writeFile(pathToOutputManifest, data, { encoding: 'utf-8' }),
 		);
-}
+};
 
 export const handleManifest = once(
 	async (
