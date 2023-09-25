@@ -4,6 +4,7 @@ import mockFs from 'mock-fs';
 
 import { linker } from '@eleventy-packages/common';
 
+import { PluginState } from '../src/types';
 import {
 	findStyles,
 	writeStyleFile,
@@ -11,7 +12,6 @@ import {
 	bindLinkerWithStyles,
 	createPublicUrlInjector,
 } from '../src/bundle';
-import { PluginState } from '../src/types';
 
 const mockDataLinkerOptions = {
 	outputPath: `_site${sep}index.html`,

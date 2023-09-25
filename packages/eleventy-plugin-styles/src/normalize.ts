@@ -1,7 +1,7 @@
 import cssnano from 'cssnano';
-import purgecss from '@fullhuman/postcss-purgecss';
 import autoprefixer from 'autoprefixer';
 import postcss, { AcceptedPlugin } from 'postcss';
+import purgecss from '@fullhuman/postcss-purgecss';
 
 import { StylesPluginOptions, PluginState } from './types';
 

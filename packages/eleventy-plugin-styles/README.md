@@ -118,11 +118,11 @@ module.exports = (eleventyConfig) => {
 };
 ```
 
-Plugin will assume that path style file is `src/styles/style.scss` 🎉 And after all procedures will put compiled file to `_site/style-[hash].css` and link in HTML will be changed to:
+Plugin will assume that path style file is `src/styles/style.scss` 🎉 And after all procedures will put compiled file to `_site/style.css` and link in HTML will be changed to:
 
 ```html
 <!-- If HTML file is in the same directory if style.css -->
-<link rel="stylesheet" href="/style-[hash].css" />
+<link rel="stylesheet" href="/style.css?[hash]" />
 ```
 
 > `_site` is used just for example. Actually [name of the directory will be up to you](https://www.11ty.dev/docs/config/#output-directory) - plugin will know about it.
@@ -149,7 +149,7 @@ module.exports = (eleventyConfig) => {
 };
 ```
 
-Given above example, stylesheet file will be placed into `_site/styles` directory, and its public path will be `styles/style-[hash].css`.
+Given above example, stylesheet file will be placed into `_site/styles` directory, and its public path will be `styles/style.css`.
 
 Pretty convenient, yes? 🙂
 
@@ -254,7 +254,11 @@ module.exports = (eleventyConfig) => {
 };
 ```
 
+By default, the plugin is disabled, but if you provide options (or an empty object `{}`), the plugin will be applied to the styles.
+
 > Avoid overriding `content` property and `css`, because they are used internally and that may cause unexpected results.
+
+> Note: If multiple pages in your project can reference the same style, when applying `purgeCSS`, it will remove styles that are not used on the pages (depending on the order of page compilation).
 
 ### cssnanoOptions
 

@@ -2,8 +2,8 @@ import { readFile } from 'fs/promises';
 import { resolve as resolvePath, normalize, sep } from 'path';
 
 import { render } from 'less';
-import { pipe, tryExecute } from '@fluss/core';
 import { compile, Options } from 'sass';
+import { pipe, tryExecute } from '@fluss/core';
 import {
 	oops,
 	resolve,
