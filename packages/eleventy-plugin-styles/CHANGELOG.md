@@ -12,7 +12,7 @@
 
 - Added query hash to style URL.
 
-## [1.4.4] - 2021-08-17
+## [1.4.4] - 2022-08-17
 
 ### Fixed
 

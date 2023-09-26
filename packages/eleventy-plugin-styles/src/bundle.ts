@@ -62,8 +62,8 @@ export const createPublicUrlInjector =
 	(html: string): string =>
 		html.replace(originalUrl, `${publicUrl}?${uid()}`);
 
-export const findStyles = (html: string) =>
-	rip(html, STYLESHEET_LINK_REGEXP, not(isRemoteLink));
+export const findStyles = (html: string, regex = STYLESHEET_LINK_REGEXP) =>
+	rip(html, regex, not(isRemoteLink));
 
 export const bindLinkerWithStyles =
 	<Options>(linker: Linker<Options>) =>
