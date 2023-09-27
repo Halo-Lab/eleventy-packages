@@ -1,4 +1,4 @@
-import { join, normalize } from 'path';
+import { join, normalize, resolve } from 'path';
 
 import { isJust, pipe, tap } from '@fluss/core';
 import {
@@ -150,22 +150,26 @@ export const styles = (
 	config.on('beforeWatch', (changedFiles: ReadonlyArray<string>) =>
 		changedFiles
 			.filter((relativePath) => /(sc|sa|le|c)ss$/.test(relativePath))
-			.map((cachedPath) =>
-				cache
-					.entries()
-					.filter(
-						([mainURL, { urls }]) =>
-							mainURL === cachedPath ||
-							urls.some((fileName) => cachedPath.endsWith(fileName)),
-					)
-					.forEach(([_originalUrl, entity]) => {
-						Debugger.object` Detected change relates to the ${{
-							file: entity.originalUrl,
-							imports: entity.urls,
-						}}. Updating memory cache...`;
+			.map(
+				pipe(
+					(mainURL: string) => resolve(mainURL),
+					(mainURL: string) =>
+						cache
+							.entries()
+							.filter(
+								([cachedPath, { urls }]) =>
+									mainURL === cachedPath ||
+									urls.some((fileName) => mainURL.endsWith(fileName)),
+							)
+							.forEach(([_originalUrl, entity]) => {
+								Debugger.object` Detected change relates to the ${{
+									file: entity.originalUrl,
+									imports: entity.urls,
+								}}. Updating memory cache...`;
 
-						cache.put(entity.sourcePath, { ...entity, isEdit: true });
-					}),
+								cache.put(entity.sourcePath, { ...entity, isEdit: true });
+							}),
+				),
 			),
 	);
 
