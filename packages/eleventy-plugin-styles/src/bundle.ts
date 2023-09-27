@@ -1,3 +1,4 @@
+import { extname } from 'path';
 import { writeFile } from 'fs/promises';
 
 import { not, awaitedTap } from '@fluss/core';
@@ -21,9 +22,11 @@ export const createFileBundler = ({
 	file,
 	options,
 }: LinkerResult<
-	Omit<NormalizeStepOptions, 'url' | 'css' | 'html'> & GetCompilerOptions
+	Omit<NormalizeStepOptions, 'url' | 'css' | 'html'> &
+		Omit<GetCompilerOptions, 'extension'>
 >) => {
 	const compile = getCompiler({
+		extension: extname(file.sourcePath).substring(1),
 		sassOptions: options.sassOptions,
 		lessOptions: options.lessOptions,
 	});
@@ -62,8 +65,8 @@ export const createPublicUrlInjector =
 	(html: string): string =>
 		html.replace(originalUrl, `${publicUrl}?${uid()}`);
 
-export const findStyles = (html: string) =>
-	rip(html, STYLESHEET_LINK_REGEXP, not(isRemoteLink));
+export const findStyles = (html: string, regex = STYLESHEET_LINK_REGEXP) =>
+	rip(html, regex, not(isRemoteLink));
 
 export const bindLinkerWithStyles =
 	<Options>(linker: Linker<Options>) =>

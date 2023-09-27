@@ -1,7 +1,7 @@
 import cssnano from 'cssnano';
-import purgecss from '@fullhuman/postcss-purgecss';
 import autoprefixer from 'autoprefixer';
 import postcss, { AcceptedPlugin } from 'postcss';
+import purgecss from '@fullhuman/postcss-purgecss';
 
 import { StylesPluginOptions, PluginState } from './types';
 
@@ -25,7 +25,7 @@ export const normalize = async ({
 	url: fromUrl,
 	css,
 	html,
-	purgeCSSOptions = {},
+	purgeCSSOptions = PluginState.Off,
 	cssnanoOptions = {},
 	postcssPlugins = [],
 }: NormalizeStepOptions) => {

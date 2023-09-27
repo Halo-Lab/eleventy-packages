@@ -23,7 +23,7 @@ module.exports = (config) => {
 			mode: 'img', // optional, default
 			directory: 'cloudflare-images', // optional, default
 			bypass: () => process.env.NODE_ENV !== 'production', // optional, default
-			cloudflareURL: () => zone + '/' + 'image' + originalURL // optional, usage example
+			cloudflareURL: () => zone + '/' + 'image' + originalURL, // optional, usage example
 		}),
 	);
 };
@@ -36,18 +36,18 @@ module.exports = (config) => {
    2. _url_ - shortcode outputs only final Cloudflare URL.
    3. _attributes_ - shortcode outputs `<img>` ready to use attributes as the object.
 3. _directory_ is the name of the directory under the _output_ which will contain referenced images.
-	 Plugin copies images from source to the _output_ directory by itself. **Don't use the _addPassthroughCopy_ option
-	 with images that are referenced by the plugin because you may end up with two copies.**
-4. _bypass_ is a function that determines which image URL should be returned either from the Cloudflare service (for 
-	 the production environment, by default) or from the local directory (see directory option). 
-   This function must return a boolean value. If true, a returned URL points to the Cloudflare service, otherwise - 
-	 the local directory.
+   Plugin copies images from source to the _output_ directory by itself. **Don't use the _addPassthroughCopy_ option
+   with images that are referenced by the plugin because you may end up with two copies.**
+4. _bypass_ is a function that determines which image URL should be returned either from the Cloudflare service (for
+   the production environment, by default) or from the local directory (see directory option).
+   This function must return a boolean value. If true, a returned URL points to the Cloudflare service, otherwise -
+   the local directory.
 5. _cloudflareURL_ is a function that allows you to customize your cloudflare URL.
-	 cloudflareURL must have the following arguments: 
-   * _zone_
-   * _domain_
-   * _options_ - cloudflare URL options like: format, quality, width, anim, etc.
-   * _originalURL_ - URL of your image
+   cloudflareURL must have the following arguments:
+   - _zone_
+   - _domain_
+   - _options_ - cloudflare URL options like: format, quality, width, anim, etc.
+   - _originalURL_ - URL of your image
 
 ### Shortcode has the following signature:
 
@@ -64,8 +64,8 @@ const result = cloudflareImage(url, options);
    4. _sizes_ - list of all required image widths for the _srcset_ attribute. (_densities_ shouldn't be defined)
    5. _attributes_ - a map of all additional `<img>` attributes.
    6. _domain_ is the domain that acts as a place from where images are taken.
-			It may be omitted, and in that case, it will be implying that images are hosted on the current domain (which serves
-			the whole website).
+      It may be omitted, and in that case, it will be implying that images are hosted on the current domain (which serves
+      the whole website).
 
 > _srcset_ attribute if defined in the _attributes_ is not used if _densities_ or _sizes_ is provided.
 

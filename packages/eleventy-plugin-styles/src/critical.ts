@@ -3,6 +3,12 @@ import { generate } from 'critical';
 
 import { URL_DELIMITER } from '@eleventy-packages/common';
 
+import { findStyles } from './bundle';
+import {
+	CLEAR_STYLE_LINK_REGEXP,
+	STYLESHEET_LINK_WITH_HASH_REGEXP,
+} from './constants';
+
 /** Object that is passed to rebase function in critical package. */
 export interface Asset {
 	readonly url: string;
@@ -55,7 +61,11 @@ export const separateCriticalCSS = ({
 	criticalOptions,
 }: CriticalCreatorOptions): Promise<CriticalResult> =>
 	generate({
-		html,
+		html: findStyles(html, STYLESHEET_LINK_WITH_HASH_REGEXP).reduce(
+			(html, link) =>
+				html.replace(link, link.match(CLEAR_STYLE_LINK_REGEXP)?.[1] || link),
+			html,
+		),
 		base: buildDirectory,
 		inline: true,
 		extract: true,

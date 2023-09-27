@@ -1,4 +1,4 @@
-import { join, normalize } from 'path';
+import { join, normalize, resolve as resolvePath } from 'path';
 
 import { isJust, pipe, tap } from '@fluss/core';
 import {
@@ -37,13 +37,13 @@ export const styles = (
 	config: Record<string, Function>,
 	{
 		sassOptions = {},
-		lessOptions = PluginState.Off,
+		lessOptions = {},
 		inputDirectory = join(DEFAULT_SOURCE_DIRECTORY, DEFAULT_STYLES_DIRECTORY),
 		cssnanoOptions = {},
 		addWatchTarget = true,
 		postcssPlugins = [],
 		criticalOptions = PluginState.Off,
-		purgeCSSOptions = {},
+		purgeCSSOptions = PluginState.Off,
 		publicDirectory = '',
 	}: StylesPluginOptions = {},
 ) => {
@@ -150,22 +150,26 @@ export const styles = (
 	config.on('beforeWatch', (changedFiles: ReadonlyArray<string>) =>
 		changedFiles
 			.filter((relativePath) => /(sc|sa|le|c)ss$/.test(relativePath))
-			.map((cachedPath) =>
-				cache
-					.entries()
-					.filter(
-						([mainURL, { urls }]) =>
-							mainURL === cachedPath ||
-							urls.some((fileName) => cachedPath.endsWith(fileName)),
-					)
-					.forEach(([_originalUrl, entity]) => {
-						Debugger.object` Detected change relates to the ${{
-							file: entity.originalUrl,
-							imports: entity.urls,
-						}}. Updating memory cache...`;
+			.map(
+				pipe(
+					(mainURL: string) => resolvePath(mainURL),
+					(mainURL: string) =>
+						cache
+							.entries()
+							.filter(
+								([cachedPath, { urls }]) =>
+									mainURL === cachedPath ||
+									urls.some((fileName) => mainURL.endsWith(fileName)),
+							)
+							.forEach(([_originalUrl, entity]) => {
+								Debugger.object` Detected change relates to the ${{
+									file: entity.originalUrl,
+									imports: entity.urls,
+								}}. Updating memory cache...`;
 
-						cache.put(entity.sourcePath, { ...entity, isEdit: true });
-					}),
+								cache.put(entity.sourcePath, { ...entity, isEdit: true });
+							}),
+				),
 			),
 	);
 

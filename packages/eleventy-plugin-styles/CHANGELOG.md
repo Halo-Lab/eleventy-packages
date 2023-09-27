@@ -1,4 +1,34 @@
-# [1.4.1] - 2021-12-24
+## [1.5.4] - 2023-01-30
+
+### Changed
+
+- Changed the style compilation functionality. Now style files are created relative to the style path and without a hash in the name.
+
+### Fixed
+
+- Resolved the issue of deleting old style files.
+
+### Added
+
+- Added query hash to style URL.
+
+## [1.4.4] - 2022-08-17
+
+### Fixed
+
+- Resolved the path issue for non-English characters.
+
+### Added
+
+- Added testing for plugin functionality.
+
+## [1.4.2 - 1.4.3] - 2022-08-10
+
+### Fixed
+
+- Resolved the issue with folder/file path creation (also fixed for Windows). Closed issue [#9](https://github.com/Halo-Lab/eleventy-packages/issues/9).
+
+## [1.4.1] - 2021-12-24
 
 ### Fixed
 
