@@ -1,4 +1,4 @@
-import { join, normalize, resolve } from 'path';
+import { join, normalize, resolve as resolvePath } from 'path';
 
 import { isJust, pipe, tap } from '@fluss/core';
 import {
@@ -36,8 +36,8 @@ definePluginName('Styles');
 export const styles = (
 	config: Record<string, Function>,
 	{
-		sassOptions = PluginState.Off,
-		lessOptions = PluginState.Off,
+		sassOptions = {},
+		lessOptions = {},
 		inputDirectory = join(DEFAULT_SOURCE_DIRECTORY, DEFAULT_STYLES_DIRECTORY),
 		cssnanoOptions = {},
 		addWatchTarget = true,
@@ -152,7 +152,7 @@ export const styles = (
 			.filter((relativePath) => /(sc|sa|le|c)ss$/.test(relativePath))
 			.map(
 				pipe(
-					(mainURL: string) => resolve(mainURL),
+					(mainURL: string) => resolvePath(mainURL),
 					(mainURL: string) =>
 						cache
 							.entries()

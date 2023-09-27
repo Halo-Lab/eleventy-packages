@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import { resolve as resolvePath, normalize, sep } from 'path';
+import { normalize, resolve as resolvePath, sep } from 'path';
 
 import { render } from 'less';
 import { pipe } from '@fluss/core';
@@ -11,6 +11,7 @@ import { PluginState } from './types';
 export enum Language {
 	CSS = 'css',
 	SASS = 'sass',
+	SCSS = 'scss',
 	LESS = 'less',
 }
 
@@ -89,16 +90,19 @@ const LanguageHandler = {
 } as const;
 
 export interface GetCompilerOptions {
+	readonly extension: string;
 	readonly lessOptions: Less.Options | PluginState.Off;
 	readonly sassOptions: Options<'sync'> | PluginState.Off;
 }
 
 export const getCompiler = ({
+	extension,
 	sassOptions,
 	lessOptions,
 }: GetCompilerOptions): ReturnType<Compiler> =>
+	(extension === Language.SASS || extension === Language.SCSS) &&
 	sassOptions !== PluginState.Off
 		? LanguageHandler[Language.SASS](sassOptions)
-		: lessOptions !== PluginState.Off
+		: extension === Language.LESS && lessOptions !== PluginState.Off
 		? LanguageHandler[Language.LESS](lessOptions)
 		: LanguageHandler[Language.CSS]({});

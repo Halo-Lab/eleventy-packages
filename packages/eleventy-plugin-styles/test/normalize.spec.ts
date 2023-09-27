@@ -1,10 +1,9 @@
-import { normalize as normalizePath, resolve, sep } from 'path';
+import { extname, normalize as normalizePath, resolve, sep } from 'path';
 
 import mockFs from 'mock-fs';
 
 import { linker } from '@eleventy-packages/common';
 
-import { PluginState } from '../src/types';
 import { normalize } from '../src/normalize';
 import { getCompiler } from '../src/compile';
 import { bindLinkerWithStyles, findStyles } from '../src/bundle';
@@ -38,8 +37,6 @@ const mockDataStylesResultArr = [
 		extension: 'css',
 		linkerOptions: {
 			...mockDataLinkerOptions,
-			sassOptions: PluginState.Off,
-			lessOptions: PluginState.Off,
 			purgeCSSOptions: {},
 		},
 	},
@@ -53,7 +50,17 @@ const mockDataStylesResultArr = [
 		extension: 'scss',
 		linkerOptions: {
 			...mockDataLinkerOptions,
-			lessOptions: PluginState.Off,
+		},
+	},
+	{
+		style: `
+$variable: red
+
+div 
+  color: $variable`,
+		extension: 'sass',
+		linkerOptions: {
+			...mockDataLinkerOptions,
 		},
 	},
 	{
@@ -70,7 +77,6 @@ const mockDataStylesResultArr = [
 		extension: 'less',
 		linkerOptions: {
 			...mockDataLinkerOptions,
-			sassOptions: PluginState.Off,
 			purgeCSSOptions: {
 				safelist: {
 					deep: [/^__/],
@@ -99,6 +105,7 @@ describe('normalize', () => {
 			const { options, file } = linkerResult;
 
 			const compile = getCompiler({
+				extension: extname(linkerResult.file.sourcePath).substring(1),
 				sassOptions: options.sassOptions,
 				lessOptions: options.lessOptions,
 			});
@@ -123,6 +130,11 @@ describe('normalize', () => {
 					expect(normalizePath(urls[0])).toBe(
 						`${mockDataLinkerOptions.baseDirectory}${sep}main.scss`,
 					);
+					expect(result.css).toBe('div{color:red}');
+
+					break;
+				}
+				case 'sass': {
 					expect(result.css).toBe('div{color:red}');
 
 					break;

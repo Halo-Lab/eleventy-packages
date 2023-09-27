@@ -4,7 +4,6 @@ import mockFs from 'mock-fs';
 
 import { linker } from '@eleventy-packages/common';
 
-import { PluginState } from '../src/types';
 import {
 	findStyles,
 	writeStyleFile,
@@ -36,11 +35,6 @@ const mockDataStylesResultArr = [
 		    color: red;
 		  }`,
 		extension: 'css',
-		linkerOptions: {
-			...mockDataLinkerOptions,
-			sassOptions: PluginState.Off,
-			lessOptions: PluginState.Off,
-		},
 	},
 	{
 		style: `
@@ -50,10 +44,14 @@ const mockDataStylesResultArr = [
 			  color: $variable;
 			}`,
 		extension: 'scss',
-		linkerOptions: {
-			...mockDataLinkerOptions,
-			lessOptions: PluginState.Off,
-		},
+	},
+	{
+		style: `
+$variable: red
+
+a
+  color: $variable`,
+		extension: 'sass',
 	},
 	{
 		style: `
@@ -64,10 +62,6 @@ const mockDataStylesResultArr = [
 			}
 		`,
 		extension: 'less',
-		linkerOptions: {
-			...mockDataLinkerOptions,
-			sassOptions: PluginState.Off,
-		},
 	},
 ];
 
@@ -118,18 +112,19 @@ describe('createPublicUrlInjector', () => {
 });
 
 describe('createFileBundler', () => {
-	// Test with 3 extensions css, scss, less
+	// Test with 4 extensions css, scss, sass, less
 	for (const mockDataStylesResult of mockDataStylesResultArr) {
-		const { style, extension, linkerOptions } = mockDataStylesResult;
+		const { style, extension } = mockDataStylesResult;
 
 		it(`should compile file, return object with urls path, css data and other properties (${extension})`, async () => {
 			mockFs({
 				node_modules: mockFs.load(resolve('node_modules')),
-				[`${linkerOptions.baseDirectory}${sep}main.${extension}`]: style,
+				[`${mockDataLinkerOptions.baseDirectory}${sep}main.${extension}`]:
+					style,
 			});
 
 			const newMockDataHtmlFile = mockDataHtmlFile.replace('scss', extension);
-			const linkerResult = bindLinkerWithStyles(linker(linkerOptions))(
+			const linkerResult = bindLinkerWithStyles(linker(mockDataLinkerOptions))(
 				findStyles(newMockDataHtmlFile),
 			)[0];
 
@@ -138,7 +133,7 @@ describe('createFileBundler', () => {
 			if (extension === 'scss') {
 				expect(result.urls).toHaveLength(1);
 				expect(normalize(result.urls[0])).toBe(
-					`${linkerOptions.baseDirectory}${sep}main.${extension}`,
+					`${mockDataLinkerOptions.baseDirectory}${sep}main.${extension}`,
 				);
 			}
 			expect(result.data).toBe('a{color:red}');

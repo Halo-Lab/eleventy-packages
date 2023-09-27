@@ -1,10 +1,9 @@
-import { normalize as normalizePath, resolve, sep } from 'path';
+import { extname, normalize as normalizePath, resolve, sep } from 'path';
 
 import mockFs from 'mock-fs';
 
 import { linker } from '@eleventy-packages/common';
 
-import { PluginState } from '../src/types';
 import { getCompiler } from '../src/compile';
 import { normalize } from '../src/normalize';
 import { bindLinkerWithStyles, findStyles } from '../src/bundle';
@@ -32,11 +31,6 @@ const mockDataStylesResultArr = [
 		    color: red;
 		  }`,
 		extension: 'css',
-		linkerOptions: {
-			...mockDataLinkerOptions,
-			sassOptions: PluginState.Off,
-			lessOptions: PluginState.Off,
-		},
 	},
 	{
 		style: `
@@ -46,10 +40,14 @@ const mockDataStylesResultArr = [
 			  color: $variable;
 			}`,
 		extension: 'scss',
-		linkerOptions: {
-			...mockDataLinkerOptions,
-			lessOptions: PluginState.Off,
-		},
+	},
+	{
+		style: `
+$variable: red
+
+a 
+  color: $variable`,
+		extension: 'sass',
 	},
 	{
 		style: `
@@ -60,16 +58,12 @@ const mockDataStylesResultArr = [
 			}
 		`,
 		extension: 'less',
-		linkerOptions: {
-			...mockDataLinkerOptions,
-			sassOptions: PluginState.Off,
-		},
 	},
 ];
 
 describe('getCompiler', () => {
 	for (const mockDataStylesResult of mockDataStylesResultArr) {
-		const { style, extension, linkerOptions } = mockDataStylesResult;
+		const { style, extension } = mockDataStylesResult;
 
 		it(`should compile file, return object with urls path, css data and other properties (${extension})`, async () => {
 			mockFs({
@@ -78,17 +72,18 @@ describe('getCompiler', () => {
 			});
 
 			const newMockDataHtmlFile = mockDataHtmlFile.replace('scss', extension);
-			const linkerResult = bindLinkerWithStyles(linker(linkerOptions))(
+			const linkerResult = bindLinkerWithStyles(linker(mockDataLinkerOptions))(
 				findStyles(newMockDataHtmlFile),
 			)[0];
 
 			const { css, urls } = await getCompiler({
-				lessOptions: linkerOptions.lessOptions,
-				sassOptions: linkerOptions.sassOptions,
+				extension: extname(linkerResult.file.sourcePath).substring(1),
+				lessOptions: mockDataLinkerOptions.lessOptions,
+				sassOptions: mockDataLinkerOptions.sassOptions,
 			})(linkerResult.file.sourcePath);
 
 			const result = await normalize({
-				...linkerOptions,
+				...mockDataLinkerOptions,
 				css,
 				url: linkerResult.file.sourcePath,
 				html: newMockDataHtmlFile,
