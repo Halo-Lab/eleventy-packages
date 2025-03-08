@@ -75,6 +75,7 @@ describe('createFileBundler', () => {
 		mockFs({
 			node_modules: mockFs.load(resolve('node_modules')),
 			[`${mockDataLinkerOptions.baseDirectory}${sep}main.scss`]: '',
+			'package.json': mockFs.load(resolve('package.json')),
 		});
 	});
 
@@ -102,6 +103,7 @@ describe('writeStyleFile', () => {
 		mockFs({
 			node_modules: mockFs.load(resolve('node_modules')),
 			[`${mockDataLinkerOptions.baseDirectory}${sep}main.scss`]: '',
+			'package.json': mockFs.load(resolve('package.json')),
 		});
 	});
 
